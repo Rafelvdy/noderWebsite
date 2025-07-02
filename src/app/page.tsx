@@ -82,6 +82,7 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false); // Prevent multiple loads
   const titleRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
   let server: THREE.Group | null = null;
   useEffect(() => {
 
@@ -115,6 +116,30 @@ export default function Home() {
           return split;
         }
       });
+
+      gsap.to(titleRef.current, {
+        y: 300,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "bottom center",
+          end: "150% center",
+          scrub: 1,
+          markers: true,
+        }
+      })
+
+      gsap.to(subtitleRef.current, {
+        y: 300,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "bottom center",
+          end: "150% center",
+          scrub: 1,
+          markers: true,
+        }
+      })
     });
   }, []);
   
@@ -188,18 +213,20 @@ export default function Home() {
           delay: 1.0
         });
 
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "center center",
-          end: "200% center",
-          scrub: 1,
-          markers: false,
-          onUpdate: (self) => {
-            if (server) {
-              server.rotation.y = -0.5 + (self.progress * Math.PI * 2);
-            }
-          }
-        });
+        // ScrollTrigger.create({
+        //   trigger: containerRef.current,
+        //   start: "center center",
+        //   end: "200% center",
+        //   scrub: 1,
+        //   markers: false,
+        //   onUpdate: (self) => {
+        //     if (server) {
+        //       server.rotation.y = -0.5 + (self.progress * Math.PI * 2);
+        //     }
+        //   }
+        // });
+
+      
 
         console.log('Model loaded successfully', gltf.animations);
       },
@@ -250,6 +277,16 @@ export default function Home() {
 
     composer.addPass(verticalBlurPass);
 
+    gsap.to(verticalBlurPass.uniforms.blurHeight, {
+      value: 0,
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "bottom center",
+        end: "150% center",
+        scrub: 1,
+        markers: true,
+      }
+    })
     containerRef.current.appendChild(renderer.domElement);
 
     //light
@@ -383,7 +420,7 @@ export default function Home() {
           <div className={styles.HeroTitle} ref={titleRef}>
             <h1 className="split">THE MOST EFFICIENT NODES ON SOLANA</h1>
           </div>
-          <div className={styles.HeroSubtitle}>
+          <div className={styles.HeroSubtitle} ref={subtitleRef}>
             <h2 className="split">The first fully owned, performance-optimized RPC infrastructure built for Web3.</h2>
           </div>
 
