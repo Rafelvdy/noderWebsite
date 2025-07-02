@@ -254,10 +254,14 @@ export default function Home() {
       preserveDrawingBuffer: false, // Reduce memory usage
       failIfMajorPerformanceCaveat: false
     });
+    
+    // Set white background for the renderer to ensure proper blur effect
+    renderer.setClearColor(0xffffff, 0);
 
     
-    
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Optimize pixel ratio for mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
@@ -322,7 +326,9 @@ export default function Home() {
         containerHeight
       );
 
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Optimize pixel ratio for mobile devices in resize handler
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     }
 
     const resizeObserver = new ResizeObserver(() => {
