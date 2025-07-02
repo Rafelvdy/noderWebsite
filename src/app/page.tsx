@@ -122,7 +122,7 @@ export default function Home() {
         opacity: 0,
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "bottom center",
+          start: "bottom 82%",
           end: "150% center",
           scrub: 1,
           markers: true,
