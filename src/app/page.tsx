@@ -118,19 +118,6 @@ export default function Home() {
       });
 
       gsap.to(titleRef.current, {
-        y: 300,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "bottom 82%",
-          end: "150% center",
-          scrub: 1,
-          markers: true,
-        }
-      })
-
-      gsap.to(subtitleRef.current, {
-        y: 300,
         opacity: 0,
         scrollTrigger: {
           trigger: containerRef.current,
@@ -140,6 +127,29 @@ export default function Home() {
           markers: true,
         }
       })
+
+      gsap.to(subtitleRef.current, {
+        opacity: 0,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "130% center",
+          end: "150% center",
+          scrub: 1,
+          markers: true,
+        }
+      })
+
+      // gsap.to(containerRef.current, {
+      //   height: "30%",
+      //   scrollTrigger: {
+      //     trigger: containerRef.current,
+      //     start: "130% center",
+      //     end: "150% center",
+      //     scrub: 1,
+      //     markers: true,
+      //   }
+      // })
+
     });
   }, []);
   
