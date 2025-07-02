@@ -10,6 +10,7 @@ gsap.registerPlugin(SplitText);
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     document.fonts.ready.then(() => {
       gsap.set(".split", { opacity: 1 });
@@ -41,7 +42,7 @@ export default function Home() {
     // Initialize Three.js scene
     const camera = new THREE.PerspectiveCamera(
       20,
-      window.innerWidth / window.innerHeight,
+      containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
       1000
     );
@@ -54,7 +55,12 @@ export default function Home() {
     loader.load('/models/server_racking_system.glb',
       function (gltf) {
         server = gltf.scene;
-        server.position.set(8, 0, 0);
+
+        const box = new THREE.Box3().setFromObject(server);
+        const center = box.getCenter(new THREE.Vector3());
+        server.position.sub(center);
+
+        server.position.x = 8;
         server.rotation.y = Math.PI;
         scene.add(server);
 
@@ -80,7 +86,7 @@ export default function Home() {
     );
 
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     containerRef.current.appendChild(renderer.domElement);
 
     //light
@@ -96,6 +102,18 @@ export default function Home() {
       renderer.render(scene, camera);
     }
     reRender3D();
+
+    window.addEventListener('resize', onWindowResize, false);
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    return () => {
+      window.removeEventListener('resize', onWindowResize);
+    }
   }, []);
 
   return (
