@@ -23,7 +23,7 @@ export default function Home() {
 
     // Initialize Lenis
     const lenis = new Lenis()
-    function raf(time: any) {
+    function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
       lenis.on("scroll", ScrollTrigger.update);
@@ -202,10 +202,8 @@ export default function Home() {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+    const resizeObserver = new ResizeObserver(() => {
         onContainerResize();
-      }
     });
     
     resizeObserver.observe(containerRef.current);
