@@ -5,25 +5,30 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Lenis from "lenis";
 
 gsap.registerPlugin(SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  //   // Initialize Lenis
-  // const lenis = new Lenis({
-  //   autoRaf: true,
-  // });
-
-  // // Listen for the scroll event and log the event data
-  // lenis.on('scroll', (e) => {
-  //   console.log(e);
-  // });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false); // Prevent multiple loads
-
+  const titleRef = useRef<HTMLDivElement>(null);
+  let server: THREE.Group | null = null;
   useEffect(() => {
+
+    
+
+    // Initialize Lenis
+    const lenis = new Lenis()
+    function raf(time: any) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+      lenis.on("scroll", ScrollTrigger.update);
+    }
+    requestAnimationFrame(raf);
     document.fonts.ready.then(() => {
       gsap.set(".split", { opacity: 1 });
   
@@ -51,6 +56,7 @@ export default function Home() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    
     // Track if component is still mounted
     let mounted = true;
     let animationId: number;
@@ -65,7 +71,7 @@ export default function Home() {
     camera.position.z = 13;
 
     const scene = new THREE.Scene();
-    let server: THREE.Group | null = null;
+    
     
     const loader = new GLTFLoader();
     
@@ -116,6 +122,19 @@ export default function Home() {
           delay: 0.3
         });
 
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "center center",
+          end: "200% center",
+          scrub: 1,
+          markers: true,
+          onUpdate: (self) => {
+            if (server) {
+              server.rotation.y = -0.5 + (self.progress * Math.PI * 2);
+            }
+          }
+        });
+
         console.log('Model loaded successfully', gltf.animations);
       },
       function (progress) {
@@ -142,6 +161,8 @@ export default function Home() {
       preserveDrawingBuffer: false, // Reduce memory usage
       failIfMajorPerformanceCaveat: false
     });
+
+    
     
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -157,7 +178,7 @@ export default function Home() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
     scene.add(ambientLight);
 
-    const topLight = new THREE.DirectionalLight(0xffffff, 1);
+    const topLight = new THREE.DirectionalLight(0xffffff, 10);
     topLight.position.set(500,500,500);
     scene.add(topLight);
 
@@ -246,7 +267,7 @@ export default function Home() {
     <div className={styles.Container}>
       <main>
         <div className={styles.HeroContent}>
-          <div className={styles.HeroTitle}>
+          <div className={styles.HeroTitle} ref={titleRef}>
             <h1 className="split">The Most Efficient Nodes on Solana.</h1>
           </div>
           <div className={styles.Container3D} ref={containerRef}></div>
