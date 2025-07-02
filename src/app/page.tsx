@@ -127,7 +127,7 @@ export default function Home() {
           start: "center center",
           end: "200% center",
           scrub: 1,
-          markers: true,
+          markers: false,
           onUpdate: (self) => {
             if (server) {
               server.rotation.y = -0.5 + (self.progress * Math.PI * 2);
