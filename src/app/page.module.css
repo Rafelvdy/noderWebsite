@@ -1,8 +1,82 @@
 .Container3D {
-    position: fixed;
+    position: relative;
+    margin-top: 50px;
     inset: 0;
     /* background-color: red; */
     z-index: 100;
     pointer-events: none;
-    display: none;
+    /* display: none; */
 }
+
+.HeroContainer {
+    background: #F9FAFB;
+    height: 100dvh;
+    width: 100dvw;
+}
+
+.HeroContent {
+    /* background: red; */
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* margin-top: 100px; */
+}
+
+.HeroTitle {
+    /* background: blue; */
+    width: 400px;
+    height: 250px;
+    margin-top: 100px;
+}
+
+.HeroTitle h1 {
+    font-size: 48px;
+    font-weight: 700;
+    font-family: var(--font-inter);
+    color: #0F0F0F;
+    text-align: center;
+}
+
+.HeroSubtitle {
+    /* background: green; */
+    height: 80px;
+    width: 360px;
+}
+
+.HeroSubtitle h2 {
+    font-size: 14px;
+    font-weight: 400;
+    font-family: var(--font-space-grotesk);
+    color: #0F0F0F;
+    text-align: center;
+}
+
+.HeroButton {
+    /* background: yellow; */
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.HeroButton button {
+    background: #7F5AF0;
+    border: 2px solid #C4B5FD;
+    color: #F9FAFB;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-ibm-plex-mono);
+    border-radius: 10px;
+    height: 60px;
+    width: 160px;
+}
+
+.split {
+    opacity: 0;
+    will-change: transform;
+}
+
