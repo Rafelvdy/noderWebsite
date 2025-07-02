@@ -248,7 +248,7 @@ export default function Home() {
     );
 
     const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
+      alpha: false, 
       antialias: true, 
       powerPreference: "high-performance",
       preserveDrawingBuffer: false, // Reduce memory usage
@@ -256,7 +256,7 @@ export default function Home() {
     });
     
     // Set white background for the renderer to ensure proper blur effect
-    renderer.setClearColor(0xffffff, 0);
+    renderer.setClearColor(0xffffff, 1);
 
     
     // Optimize pixel ratio for mobile devices
