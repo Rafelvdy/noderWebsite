@@ -35,7 +35,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
 
     // Initialize Three.js scene
     const camera = new THREE.PerspectiveCamera(
-      10,
+      12,
       containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
       1000

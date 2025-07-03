@@ -257,4 +257,5 @@ const resizeObserver = new ResizeObserver((entries) => {
 - ResizeObserver is essential for real-time container monitoring
 - Zero hardcoded values approach is mandatory for future flexibility 
 - **NEW**: When changing ref usage, must update ALL references including ScrollTrigger dependency checks
-- **NEW**: Always test ScrollTrigger conditions after changing component refs or structure 
+- **NEW**: Always test ScrollTrigger conditions after changing component refs or structure
+- **NEW**: **Server rotation clipping fix**: Narrow camera FOV (10°) caused server to get cut off during rotation. Fixed by increasing FOV to 20° to accommodate model's changing dimensions during 360° rotation 
