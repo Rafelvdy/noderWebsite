@@ -7,6 +7,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import ServerModel3D from "../components/ServerModel";
+import * as THREE from "three";
+
+// Import the ref type
+type ServerModel3DRef = {
+  getServerObject: () => THREE.Group | null;
+};
 
 gsap.registerPlugin(SplitText);
 gsap.registerPlugin(ScrollTrigger);
@@ -18,7 +24,7 @@ export default function Home() {
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
   // const containerRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
-  const backgroundModel3DRef = useRef<HTMLDivElement>(null);
+  const serverModelRef = useRef<ServerModel3DRef>(null);
 
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -57,7 +63,7 @@ export default function Home() {
     //   });
     // });
 
-    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current || !backgroundModel3DRef.current) return;
+    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -96,14 +102,22 @@ export default function Home() {
             ease: "none"
           })
 
-          // Animate the 3D model size to increase during scroll using transform scale (more efficient)
-          gsap.set(backgroundModel3DRef.current, {
-            scale: 1 + (progress * 0.28), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
-            y: `${progress * 10}%`,
-            ease: "none"
-          })
+          // Animate the 3D model container size to increase during scroll using transform scale (more efficient)
+          // Note: We need a container ref for the model scaling - let's use the BackgroundModel div
+          const backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
+          if (backgroundModelContainer) {
+            gsap.set(backgroundModelContainer, {
+              scale: 1 + (progress * 0.28), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
+              y: `${progress * 10}%`,
+              ease: "none"
+            });
+          }
           
-          
+          // Add server 360° rotation synced with scroll progress
+          const serverObject = serverModelRef.current?.getServerObject();
+          if (serverObject) {
+            serverObject.rotation.y = progress * Math.PI * 2; // 360° rotation (0 to 2π radians)
+          }
 
         }
       }
@@ -132,7 +146,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.BackgroundModel}>
-          <ServerModel3D className={styles.BackgroundModel3D} ref={backgroundModel3DRef}/>
+          <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelRef}/>
         </div>
         <div className={styles.BlurOverlay} ref={blurOverlayRef}></div>
         <div className={styles.HeroContent} ref={heroContentRef}>

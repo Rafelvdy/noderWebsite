@@ -1,4 +1,4 @@
-import { useEffect, useRef, forwardRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
@@ -10,25 +10,21 @@ interface ServerModel3DProps {
   style?: React.CSSProperties;
 }
 
-const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ className, style }, ref) => {
+interface ServerModel3DRef {
+  getServerObject: () => THREE.Group | null;
+}
+
+const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
-  // const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const serverRef = useRef<THREE.Group | null>(null);
 
+  // Expose server object to parent component
+  useImperativeHandle(ref, () => ({
+    getServerObject: () => serverRef.current
+  }), []);
 
-  // const tl = gsap.timeline({
-  //   scrollTrigger: {
-  //     trigger: heroRef.current,
-  //     start: "top top",
-  //     end: "bottom top",
-  //     scrub: 1,
-  //     pin: true,
-  //     anticipatePin: 1,
-      
-      
-  //   }
-  // })
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -60,6 +56,7 @@ const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ classNam
         if (!mounted) return;
 
         server = gltf.scene;
+        serverRef.current = server; // Store server reference for parent access
 
         // Optimize model for better performance
         server.traverse((child) => {
@@ -95,6 +92,8 @@ const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ classNam
           ease: "expo.out",
           delay: 1.0
         });
+
+        
 
         console.log('Model loaded successfully', gltf.animations);
       },
@@ -188,6 +187,7 @@ const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ classNam
     return () => {
       mounted = false;
       modelLoadedRef.current = false;
+      serverRef.current = null; // Clear server reference
 
       if (animationId) {
         cancelAnimationFrame(animationId);
@@ -233,11 +233,7 @@ const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ classNam
 
   const setRefs = (element: HTMLDivElement | null) => {
     containerRef.current = element;
-    if (typeof ref === 'function') {
-      ref(element);
-    } else if (ref) {
-      ref.current = element;
-    }
+    // Note: imperative handle ref is managed by useImperativeHandle, not here
   };
 
   return (
