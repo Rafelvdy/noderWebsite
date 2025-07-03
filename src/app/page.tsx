@@ -22,10 +22,12 @@ export default function Home() {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
-  // const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
   const serverModelRef = useRef<ServerModel3DRef>(null);
-
+  const serverModelFeatRef = useRef<ServerModel3DRef>(null);
+  const featuresSectionRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     // Initialize Lenis smooth scrolling
     const lenis = new Lenis();
@@ -40,30 +42,9 @@ export default function Home() {
     }
     requestAnimationFrame(raf);
 
-    // Initialize text animations when fonts are ready
-    // document.fonts.ready.then(() => {
-    //   gsap.set(".split", { opacity: 1 });
-
-    //   let split;
-    //   SplitText.create(".split", {
-    //     type: "words,lines",
-    //     linesClass: "line",
-    //     autoSplit: true,
-    //     mask: "lines",
-    //     onSplit: (self) => {
-    //       split = gsap.from(self.lines, {
-    //         duration: 0.5,
-    //         yPercent: 100,
-    //         opacity: 0,
-    //         stagger: 0.1,
-    //         ease: "expo.out"
-    //       });
-    //       return split;
-    //     }
-    //   });
-    // });
-
     if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) return;
+
+    const backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -73,11 +54,11 @@ export default function Home() {
         scrub: 1,
         pin: true,
         anticipatePin: 1,
-        markers: true,
+        markers: false,
         onUpdate: (self) => {
           const progress = self.progress;
-
           const slideDistance = progress * 100;
+
           gsap.set(heroTitleRef.current, {
             x: `-${slideDistance*1.5}%`,
             opacity: 1 - progress,
@@ -90,11 +71,6 @@ export default function Home() {
             ease: "none"
           })
 
-          // gsap.set(containerRef.current, {
-          //   height: `${100 + progress*100}%`,
-          //   ease: "none"
-          // })
-
           // Animate both blur and white overlay to disappear
           gsap.set(blurOverlayRef.current, {
             backdropFilter: `blur(${2 - (progress * 2)}px)`, // From 2px to 0px
@@ -104,11 +80,9 @@ export default function Home() {
 
           // Animate the 3D model container size to increase during scroll using transform scale (more efficient)
           // Note: We need a container ref for the model scaling - let's use the BackgroundModel div
-          const backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
           if (backgroundModelContainer) {
             gsap.set(backgroundModelContainer, {
-              scale: 1 + (progress * 0.28), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
-              y: `${progress * 10}%`,
+              scale: 1 + (progress * 0.28), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428),
               ease: "none"
             });
           }
@@ -120,31 +94,37 @@ export default function Home() {
           }
 
         }
-      }
+      }      
     });
 
     gsap.set(heroTitleRef.current, {
       x: 0
     });
 
+    // gsap.set(featuresSectionRef.current, {
+    //   y: "100%"
+    // });
+
     return () => {
       tl.kill();
+      // tl2.kill();
       ScrollTrigger.getAll().forEach(trigger => {
         trigger.kill();
       });
     }
   }, []);
-
+  
   return (
     <main>
-      <section className={styles.HeroSection} ref={heroRef}>
-        <div className={styles.MobileNav}>
+      <div className={styles.MobileNav}>
           <div className={styles.SocialsContainer}>
             <a href="https://discord.gg/A8ANRdfMWJ" target="_blank" rel="noopener noreferrer"><FaDiscord className={styles.SocialIcon} id={styles.Discord} /></a>
             <FaTelegram className={styles.SocialIcon} id={styles.Telegram} />
             <FaTwitter className={styles.SocialIcon} id={styles.Twitter} />
           </div>
         </div>
+      <section className={styles.HeroSection} ref={heroRef}>
+        
         <div className={styles.BackgroundModel}>
           <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelRef}/>
         </div>
@@ -160,16 +140,14 @@ export default function Home() {
               The first fully owned, performance-optimized RPC infrastructure built for Web3
             </div>
           </div>
-          {/* <div className={styles.HeroTitle} ref={heroTitleRef}>
-            <h1 className="split">THE MOST EFFICIENT NODES ON SOLANA</h1>
-            <div className={styles.HeroSubtitle} ref={heroSubtitleRef}>
-            <h2>The first fully owned, performance-optimized RPC infrastructure built for Web3</h2>
-            </div>
-          </div> */}
           
         </div>
       </section>
-      <section className={styles.FeaturesSection}></section>
+      <section className={styles.FeaturesSection} ref={featuresSectionRef}>
+        <div className={styles.BackgroundModel}>
+          <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelFeatRef}/>
+        </div>
+      </section>
     </main>
   );
 }

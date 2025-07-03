@@ -121,7 +121,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
       failIfMajorPerformanceCaveat: false
     });
 
-    renderer.setClearColor(0xffffff, 1);
+    renderer.setClearColor(0xffffff, 0);
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
