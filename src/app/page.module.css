@@ -13,6 +13,7 @@
     align-items: center;
     position: fixed;
     z-index: 100;
+    /* background: green; */
 }
 
 .SocialsContainer {
@@ -68,6 +69,7 @@
 }
 
 .BackgroundModel {
+    /* background: red; */
     position: absolute;
     top: 0;
     left: 0;
@@ -81,6 +83,7 @@
 }
 
 .BackgroundModel3D {
+    /* background: blue; */
     position: relative;
     width: 70%;
     height: 70%;
@@ -88,6 +91,18 @@
     z-index: 2;
     transform-origin: center center;
     will-change: transform;
+}
+
+@media (min-width: 641px) {
+    .BackgroundModel3D {
+        margin-top: 0 !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .BackgroundModel {
+        margin-top: 100px;
+    }
 }
 
 .BlurOverlay {
@@ -145,8 +160,14 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    max-width: 550px;
 }
 
+@media (min-width: 1025px) {
+    .HeroSubtitle {
+        font-size: clamp(12px, 3.2vw, 15px);
+    }
+}
 .SolanaGradient {
     background: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
     background-clip: text;
