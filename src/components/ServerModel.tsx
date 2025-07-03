@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
@@ -10,7 +10,7 @@ interface ServerModel3DProps {
   style?: React.CSSProperties;
 }
 
-export default function ServerModel3D({ className, style }: ServerModel3DProps) {
+const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ className, style }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -156,20 +156,26 @@ export default function ServerModel3D({ className, style }: ServerModel3DProps) 
     };
     reRender3D();
 
-    // Handle resize
+    // Handle resize with throttling to prevent excessive calls during animations
+    let resizeTimeout: NodeJS.Timeout;
     function onContainerResize() {
       if (!containerRef.current || !mounted) return;
 
-      const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight;
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (!containerRef.current || !mounted) return;
 
-      camera.aspect = containerWidth / containerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(containerWidth, containerHeight);
-      composer.setSize(containerWidth, containerHeight);
+        const containerWidth = containerRef.current.clientWidth;
+        const containerHeight = containerRef.current.clientHeight;
 
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+        camera.aspect = containerWidth / containerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(containerWidth, containerHeight);
+        composer.setSize(containerWidth, containerHeight);
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+      }, 16); // Throttle to ~60fps
     }
 
     const resizeObserver = new ResizeObserver(() => {
@@ -187,6 +193,7 @@ export default function ServerModel3D({ className, style }: ServerModel3DProps) 
         cancelAnimationFrame(animationId);
       }
 
+      clearTimeout(resizeTimeout);
       resizeObserver.disconnect();
 
       if (server) {
@@ -224,11 +231,24 @@ export default function ServerModel3D({ className, style }: ServerModel3DProps) 
     };
   }, []);
 
+  const setRefs = (element: HTMLDivElement | null) => {
+    containerRef.current = element;
+    if (typeof ref === 'function') {
+      ref(element);
+    } else if (ref) {
+      ref.current = element;
+    }
+  };
+
   return (
     <div 
-      ref={containerRef} 
+      ref={setRefs} 
       className={className}
       style={style}
     />
   );
-}
+});
+
+ServerModel3D.displayName = 'ServerModel3D';
+
+export default ServerModel3D;

@@ -18,6 +18,7 @@ export default function Home() {
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
+  const backgroundModel3DRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -56,7 +57,7 @@ export default function Home() {
     //   });
     // });
 
-    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) return;
+    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current || !backgroundModel3DRef.current) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -94,6 +95,12 @@ export default function Home() {
             background: `rgba(255, 255, 255, ${0.3 - (progress * 0.3)})`, // From 0.3 to 0 opacity
             ease: "none"
           })
+
+          // Animate the 3D model size to increase during scroll using transform scale (more efficient)
+          gsap.set(backgroundModel3DRef.current, {
+            scale: 1 + (progress * 0.428), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
+            ease: "none"
+          })
           
           
 
@@ -124,7 +131,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.BackgroundModel}>
-          <ServerModel3D className={styles.BackgroundModel3D}/>
+          <ServerModel3D className={styles.BackgroundModel3D} ref={backgroundModel3DRef}/>
         </div>
         <div className={styles.BlurOverlay} ref={blurOverlayRef}></div>
         <div className={styles.HeroContent} ref={heroContentRef}>
