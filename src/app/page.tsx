@@ -30,6 +30,57 @@ export default function Home() {
   const featuresSectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
  
+  // Animation function for server model entrance
+  const animateServerEntrance = () => {
+    const serverObject = serverModelRef.current?.getServerObject();
+    
+    if (serverObject) {
+      // Animate model entrance with correct Three.js properties
+      gsap.to(serverObject.position, {
+        duration: 1.2,
+        x: 0,
+        ease: "expo.out",
+      });
+
+      gsap.to(serverObject.rotation, {
+        duration: 1.2,
+        y: -0.5,
+        ease: "expo.out",
+      });
+    }
+  };
+
+  const animateServerFeatEntrance = () => {
+    const serverObject = serverModelFeatRef.current?.getServerObject();
+
+    if (serverObject) {
+      gsap.to(serverObject.position, {
+        scrollTrigger: {
+          trigger: featuresSectionRef.current,
+          start: "top bottom",
+          end: "top center",
+          scrub: 1,
+          markers: true
+        },
+        duration: 1.2,
+        x: 0,
+        ease: "expo.out",
+      });
+
+      gsap.to(serverObject.rotation, {
+        scrollTrigger: {
+          trigger: featuresSectionRef.current,
+          start: "10% bottom",
+          end: "bottom top",
+          scrub: 1,
+          markers: true
+        },
+        y: -0.5,
+        ease: "expo.out",
+      });
+      
+    }
+  }
 
   
   useEffect(() => {
@@ -58,6 +109,7 @@ export default function Home() {
 
     const backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
     const backgroundModel = document.querySelector(`.${styles.BackgroundModel}`);
+    // const serverObject = serverModelRef.current?.getServerObject();
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -129,9 +181,6 @@ export default function Home() {
       x: 0
     });
 
-    // gsap.set(featuresSectionRef.current, {
-    //   y: "100%"
-    // });
 
     return () => {
       tl.kill();
@@ -154,7 +203,11 @@ export default function Home() {
       <section className={styles.HeroSection} ref={heroRef}>
         
         <div className={styles.BackgroundModel}>
-          <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelRef}/>
+          <ServerModel3D 
+            className={styles.BackgroundModel3D} 
+            ref={serverModelRef}
+            onModelLoaded={animateServerEntrance}
+          />
         </div>
         <div className={styles.BlurOverlay} ref={blurOverlayRef}></div>
         <div className={styles.HeroContent} ref={heroContentRef}>
@@ -173,7 +226,7 @@ export default function Home() {
       </section>
       <section className={styles.FeaturesSection} ref={featuresSectionRef}>
         <div className={styles.BackgroundModel}>
-          <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelFeatRef}/>
+          <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/>
         </div>
       </section>
     </main>

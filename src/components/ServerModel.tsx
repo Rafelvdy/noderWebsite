@@ -1,20 +1,20 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { gsap } from "gsap";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 
 interface ServerModel3DProps {
   className?: string;
   style?: React.CSSProperties;
+  onModelLoaded?: () => void;
 }
 
 interface ServerModel3DRef {
   getServerObject: () => THREE.Group | null;
 }
 
-const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style }, ref) => {
+const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style, onModelLoaded }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
   // const heroRef = useRef<HTMLDivElement>(null);
@@ -75,27 +75,15 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
         server.position.sub(center);
 
         server.position.x = 8;
-        server.rotation.y = Math.PI;
+        server.rotation.y = 0;
         scene.add(server);
 
-        // Animate model entrance
-        gsap.to(server.position, {
-          duration: 1.2,
-          x: 0,
-          ease: "expo.out",
-          delay: 1.0
-        });
-
-        gsap.to(server.rotation, {
-          duration: 1.2,
-          y: -0.5,
-          ease: "expo.out",
-          delay: 1.0
-        });
-
-        
-
         console.log('Model loaded successfully', gltf.animations);
+        
+        // Notify parent component that model is loaded and ready for animation
+        if (onModelLoaded) {
+          onModelLoaded();
+        }
       },
       function (progress) {
         console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
