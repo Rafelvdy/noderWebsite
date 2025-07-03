@@ -98,7 +98,8 @@ export default function Home() {
 
           // Animate the 3D model size to increase during scroll using transform scale (more efficient)
           gsap.set(backgroundModel3DRef.current, {
-            scale: 1 + (progress * 0.428), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
+            scale: 1 + (progress * 0.28), // From 1.0 to 1.428 (70% to 100% of container: 100/70 = 1.428)
+            y: `${progress * 10}%`,
             ease: "none"
           })
           
