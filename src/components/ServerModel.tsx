@@ -17,7 +17,7 @@ interface ServerModel3DRef {
 const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
-  const heroRef = useRef<HTMLDivElement>(null);
+  // const heroRef = useRef<HTMLDivElement>(null);
   const serverRef = useRef<THREE.Group | null>(null);
 
   // Expose server object to parent component
