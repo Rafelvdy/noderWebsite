@@ -13,6 +13,21 @@ interface ServerModel3DProps {
 export default function ServerModel3D({ className, style }: ServerModel3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+
+  // const tl = gsap.timeline({
+  //   scrollTrigger: {
+  //     trigger: heroRef.current,
+  //     start: "top top",
+  //     end: "bottom top",
+  //     scrub: 1,
+  //     pin: true,
+  //     anticipatePin: 1,
+      
+      
+  //   }
+  // })
   
   useEffect(() => {
     if (!containerRef.current) return;

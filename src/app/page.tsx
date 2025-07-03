@@ -16,6 +16,8 @@ export default function Home() {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const blurOverlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -54,7 +56,7 @@ export default function Home() {
     //   });
     // });
 
-    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current) return;
+    if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -80,6 +82,21 @@ export default function Home() {
             opacity: 1 - progress,
             ease: "none"
           })
+
+          // gsap.set(containerRef.current, {
+          //   height: `${100 + progress*100}%`,
+          //   ease: "none"
+          // })
+
+          // Animate both blur and white overlay to disappear
+          gsap.set(blurOverlayRef.current, {
+            backdropFilter: `blur(${2 - (progress * 2)}px)`, // From 2px to 0px
+            background: `rgba(255, 255, 255, ${0.3 - (progress * 0.3)})`, // From 0.3 to 0 opacity
+            ease: "none"
+          })
+          
+          
+
         }
       }
     });
@@ -109,7 +126,7 @@ export default function Home() {
         <div className={styles.BackgroundModel}>
           <ServerModel3D className={styles.BackgroundModel3D}/>
         </div>
-        <div className={styles.BlurOverlay}></div>
+        <div className={styles.BlurOverlay} ref={blurOverlayRef}></div>
         <div className={styles.HeroContent} ref={heroContentRef}>
           <button className={styles.HeroButton}></button>
           <div className={styles.HeroTextContainer}>
