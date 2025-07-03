@@ -22,7 +22,7 @@ export default function Home() {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  // const containerRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
   const serverModelRef = useRef<ServerModel3DRef>(null);
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
