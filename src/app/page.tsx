@@ -23,28 +23,34 @@ export default function Home() {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
-  // const containerRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
   const serverModelRef = useRef<ServerModel3DRef>(null);
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
- 
+  const backgroundModelRef = useRef<HTMLDivElement>(null);
+
   // Animation function for server model entrance
   const animateServerEntrance = () => {
     const serverObject = serverModelRef.current?.getServerObject();
     
     if (serverObject) {
       // Animate model entrance with correct Three.js properties
-      gsap.to(serverObject.position, {
+      // gsap.to(serverObject.position, {
+      //   duration: 1.2,
+      //   x: 0,
+      //   ease: "expo.out",
+      // });
+
+      gsap.to(backgroundModelRef.current, {
         duration: 1.2,
-        x: 0,
+        left: "0%",
         ease: "expo.out",
       });
 
       gsap.to(serverObject.rotation, {
         duration: 1.2,
-        y: -0.5,
+        y: 0,
         ease: "expo.out",
       });
     }
@@ -202,7 +208,7 @@ export default function Home() {
         </div>
       <section className={styles.HeroSection} ref={heroRef}>
         
-        <div className={styles.BackgroundModel}>
+        <div className={styles.BackgroundModel} ref={backgroundModelRef}>
           <ServerModel3D 
             className={styles.BackgroundModel3D} 
             ref={serverModelRef}

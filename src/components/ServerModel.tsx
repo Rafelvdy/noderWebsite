@@ -74,8 +74,8 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
         const center = box.getCenter(new THREE.Vector3());
         server.position.sub(center);
 
-        server.position.x = 8;
-        server.rotation.y = 0;
+        server.position.x = 0;
+        server.rotation.y = 5;
         scene.add(server);
 
         console.log('Model loaded successfully', gltf.animations);
