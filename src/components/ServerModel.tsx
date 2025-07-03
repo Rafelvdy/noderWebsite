@@ -13,7 +13,7 @@ interface ServerModel3DProps {
 const ServerModel3D = forwardRef<HTMLDivElement, ServerModel3DProps>(({ className, style }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
-  const heroRef = useRef<HTMLDivElement>(null);
+  // const heroRef = useRef<HTMLDivElement>(null);
 
 
   // const tl = gsap.timeline({
