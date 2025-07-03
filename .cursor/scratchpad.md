@@ -101,6 +101,13 @@
   - Test on various devices to ensure smooth performance
   - **Quality Check**: Rotation should feel natural and precisely synced with scroll progress
 
+- [x] **Task 0.4**: Implement desktop offset centering animation
+  - Success criteria: On desktop (>1024px), server model smoothly transitions from right-aligned to center-aligned during scroll
+  - **SOLUTION**: Move entire `.BackgroundModel` container using `x` transform (-25%) to work with existing CSS offset
+  - **Performance**: Direct property setting using `gsap.set()` within existing onUpdate callback
+  - **Synchronized**: Perfect sync with rotation, scaling, and text animations
+  - **Status**: ✅ COMPLETED - Simple container movement approach working effectively
+
 ### Phase 1: Fix Renderer-Container Alignment 🎯 **CRITICAL**
 - [ ] **Task 1.1**: Update renderer to use container dimensions instead of window dimensions
   - Success criteria: Renderer canvas matches Container3D dimensions exactly, regardless of container size
@@ -192,6 +199,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 - [x] Task 0.1: Expose server object (ref/imperative handle) ✅
 - [x] Task 0.2: Add rotation to ScrollTrigger onUpdate ✅  
 - [x] Task 0.3: Performance testing and optimization ✅
+- [x] Task 0.4: Implement desktop offset centering animation ✅
 
 ### In Progress
 - [x] Analysis complete ✅

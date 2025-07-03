@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
@@ -8,6 +8,7 @@ import Lenis from "lenis";
 import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import ServerModel3D from "../components/ServerModel";
 import * as THREE from "three";
+import * as React from "react";
 
 // Import the ref type
 type ServerModel3DRef = {
@@ -27,6 +28,9 @@ export default function Home() {
   const serverModelRef = useRef<ServerModel3DRef>(null);
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+ 
+
   
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -42,9 +46,18 @@ export default function Home() {
     }
     requestAnimationFrame(raf);
 
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1023);
+    }
+
+    window.addEventListener('resize', handleResize);
+
+      
+
     if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) return;
 
     const backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
+    const backgroundModel = document.querySelector(`.${styles.BackgroundModel}`);
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -91,6 +104,21 @@ export default function Home() {
           const serverObject = serverModelRef.current?.getServerObject();
           if (serverObject) {
             serverObject.rotation.y = progress * Math.PI * 2; // 360° rotation (0 to 2π radians)
+            if (window.innerWidth >= 1024) {
+              // Simple approach: Move the entire container leftward to center it
+              // This works with the existing CSS offset instead of fighting it
+              if (backgroundModel) {
+                // Calculate how much to move left based on scroll progress
+                // Start at 0 (stays right-aligned), end at desired centering offset
+                const centeringOffset = progress * 25; // Adjust this value for centering effect
+                
+                gsap.set(backgroundModel, {
+                  // x: `-${centeringOffset}%`,
+                  transform: `translateX(-${centeringOffset}%)`,
+                  ease: "none"
+                });
+              }
+            }
           }
 
         }
@@ -116,7 +144,7 @@ export default function Home() {
   
   return (
     <main>
-      <div className={styles.MobileNav}>
+      <div className={styles.MobileNav} style={{visibility: isMobile ? 'visible' : 'hidden'}}>
           <div className={styles.SocialsContainer}>
             <a href="https://discord.gg/A8ANRdfMWJ" target="_blank" rel="noopener noreferrer"><FaDiscord className={styles.SocialIcon} id={styles.Discord} /></a>
             <FaTelegram className={styles.SocialIcon} id={styles.Telegram} />

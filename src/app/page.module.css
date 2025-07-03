@@ -16,6 +16,14 @@
     /* background: green; */
 }
 
+.DesktopNav {
+    width: 100%;
+    height: 100px;
+    /* background: red; */
+    position: fixed;
+    z-index: 100;
+}
+
 .SocialsContainer {
     /* background: green; */
     height: 100%;
@@ -99,9 +107,11 @@
     }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
     .BackgroundModel {
         margin-top: 100px;
+        justify-content: flex-end;
+        margin-left: 10%;
     }
 }
 
@@ -122,7 +132,7 @@
     z-index: 3;
     width: 100%;
     height: 40%;
-    /* background-color: red; */
+    /* background-color: green; */
     padding: 1rem;
     overflow: hidden;
     display: flex;
@@ -148,7 +158,6 @@
 }
 
 .HeroSubtitle {
-    /* background: green; */
     width: 100%;
     height: 80px;
 
@@ -163,9 +172,31 @@
     max-width: 550px;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
+    .HeroTitle {
+        font-size: clamp(15px, 4vw, 55px);
+        max-width: 700px;
+    }
+    
     .HeroSubtitle {
         font-size: clamp(12px, 3.2vw, 15px);
+    }
+
+    .HeroContent {
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .HeroTextContainer {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1339px) {
+    .HeroTitle {
+        font-size: clamp(20px, 9vw, 60px);
+        max-width: 700px;
+        
     }
 }
 .SolanaGradient {
