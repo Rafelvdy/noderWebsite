@@ -29,19 +29,13 @@ export default function Home() {
   const featuresSectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
+  const backgroundModelFeatRef = useRef<HTMLDivElement>(null);
 
   // Animation function for server model entrance
   const animateServerEntrance = () => {
     const serverObject = serverModelRef.current?.getServerObject();
     
     if (serverObject) {
-      // Animate model entrance with correct Three.js properties
-      // gsap.to(serverObject.position, {
-      //   duration: 1.2,
-      //   x: 0,
-      //   ease: "expo.out",
-      // });
-
       gsap.to(backgroundModelRef.current, {
         duration: 1.2,
         left: "0%",
@@ -60,18 +54,19 @@ export default function Home() {
     const serverObject = serverModelFeatRef.current?.getServerObject();
 
     if (serverObject) {
-      gsap.to(serverObject.position, {
+
+      gsap.to(backgroundModelFeatRef.current, {
         scrollTrigger: {
           trigger: featuresSectionRef.current,
-          start: "top bottom",
-          end: "top center",
+          start: "30% bottom",
+          end: "30% center",
           scrub: 1,
-          markers: true
+          
+          markers: false,
         },
-        duration: 1.2,
-        x: 0,
+        left: "0%",
         ease: "expo.out",
-      });
+      })
 
       gsap.to(serverObject.rotation, {
         scrollTrigger: {
@@ -79,7 +74,7 @@ export default function Home() {
           start: "10% bottom",
           end: "bottom top",
           scrub: 1,
-          markers: true
+          markers: false
         },
         y: -0.5,
         ease: "expo.out",
@@ -231,7 +226,7 @@ export default function Home() {
         </div>
       </section>
       <section className={styles.FeaturesSection} ref={featuresSectionRef}>
-        <div className={styles.BackgroundModel}>
+        <div className={styles.BackgroundModel} ref={backgroundModelFeatRef}>
           <ServerModel3D className={styles.BackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/>
         </div>
       </section>
