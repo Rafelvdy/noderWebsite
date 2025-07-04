@@ -236,7 +236,24 @@ export default function Home() {
       }
     })
 
+    const PrimaryDescriptionsplit = SplitText.create(".split", {
+      type: "lines",
+      lineClass: "line",
+      autoSplit: true,
+      mask: "lines",
+      // onSplit: (self) => {
+      //   split = gsap.from(self.lines, {
+      //     duration: 1,
+      //     yPercent: 100,
+      //     opacity: 0,
+      //     stagger: 0.1,
+      //     ease: "none",
+      //   });
+      //   return split;
+      // }
+    })
     const FeatTl = gsap.timeline({
+      
       scrollTrigger: {
         trigger: featuresSectionRef.current,
         start: "top top",
@@ -245,8 +262,20 @@ export default function Home() {
         pin: true,
         anticipatePin: 1,
         markers: true,
+        // onUpdate: (self) => {
+        //   const progress = self.progress;
+        //   const progressPercent = progress * 100;
+        // }
       }
-    })
+    });
+
+    // Add split text animation at 20% of the timeline
+    FeatTl.to(PrimaryDescriptionsplit.lines, {
+      yPercent: -100,
+      opacity: 0,
+      stagger: 0.02, // Reduced for scrub timeline
+      ease: "none"
+    }, 0.2) // Position at 20% of timeline (0.2 out of 1.0)
 
     // Cleanup function
     return () => {
@@ -326,9 +355,9 @@ export default function Home() {
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
-              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3>Centralized infra introduces single points of failure, performance bottlednecks, and censorship risk.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlednecks, and censorship risk.</h3></div>
               <div className={styles.FeaturesCardTitle}><h2>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
-              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3>Most "decentralized" projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most "decentralized" projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
           {/* <ServerModel3D className={styles.FeaturesBackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/> */}
