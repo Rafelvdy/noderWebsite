@@ -29,9 +29,6 @@ export default function Home() {
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
   const backgroundModelFeatRef = useRef<HTMLDivElement>(null);
-  const backgroundStrip1Ref = useRef<HTMLDivElement>(null);
-  const backgroundStrip2Ref = useRef<HTMLDivElement>(null);
-  const backgroundStrip3Ref = useRef<HTMLDivElement>(null);
   const featuresCardRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   
@@ -236,6 +233,18 @@ export default function Home() {
         start: "top center",
         end: "bottom bottom",
         scrub: 1,
+      }
+    })
+
+    const FeatTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: featuresSectionRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        markers: true,
       }
     })
 
