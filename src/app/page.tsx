@@ -32,7 +32,7 @@ export default function Home() {
   const backgroundStrip1Ref = useRef<HTMLDivElement>(null);
   const backgroundStrip2Ref = useRef<HTMLDivElement>(null);
   const backgroundStrip3Ref = useRef<HTMLDivElement>(null);
-  
+  const featuresCardRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   
   // Refs for caching DOM elements and objects
@@ -223,6 +223,22 @@ export default function Home() {
 
     animationsRef.current.mainTimeline = mainTl;
 
+    gsap.set(featuresCardRef.current, {
+      transform: "translateX(100%)",
+      opacity: 0,
+    })
+
+    gsap.to(featuresCardRef.current, {
+      x: 0,
+      opacity: 1,
+      scrollTrigger: {
+        trigger: featuresSectionRef.current,
+        start: "top center",
+        end: "bottom bottom",
+        scrub: 1,
+      }
+    })
+
     // Cleanup function
     return () => {
       // Cancel RAF
@@ -289,25 +305,26 @@ export default function Home() {
         </div>
       </section>
       
-      <section className={styles.AboutSection} ref={aboutSectionRef}>
+      {/* <section className={styles.AboutSection} ref={aboutSectionRef}>
         <div className={styles.BackgroundContainer}>
           <div className={styles.BackgroundStrip} id={styles.BackgroundStrip1} ref={backgroundStrip1Ref}></div>
           <div className={styles.BackgroundStrip} id={styles.BackgroundStrip2} ref={backgroundStrip2Ref}></div>
           <div className={styles.BackgroundStrip} id={styles.BackgroundStrip3} ref={backgroundStrip3Ref}></div>
         </div>
-      </section>
+      </section> */}
       
-      {/* <section className={styles.FeaturesSection} ref={featuresSectionRef}>
+      <section className={styles.FeaturesSection} ref={featuresSectionRef}>
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
-          <div className={styles.FeaturesCard}>
+          <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
-              <div className={styles.FeaturesCardTitle}></div>
-              <div className={styles.FeaturesCardDescription}></div>
+              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3>Centralized infra introduces single points of failure, performance bottlednecks, and censorship risk.</h3></div>
+              <div className={styles.FeaturesCardTitle}><h2>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
+              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3>Most "decentralized" projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
-          <ServerModel3D className={styles.FeaturesBackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/>
+          {/* <ServerModel3D className={styles.FeaturesBackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/> */}
         </div>
-      </section> */}
+      </section>
     </main>
   );
 }
