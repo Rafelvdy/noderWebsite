@@ -371,7 +371,7 @@
 }
 
 .ComparisonTableHeader h1 {
-    font-size: 6vw;
+    font-size: clamp(20px, 6vw, 30px);
     text-align: center;
     font-family: var(--font-space-grotesk);
     font-weight: 700;
@@ -433,10 +433,11 @@
     justify-content: flex-start;
     /* color: #4A4AFF; */
     color: #6B7280;
+    overflow: hidden;
 }
 
 .CompetitorName h2 {
-    font-size: 5vw;
+    font-size: clamp(20px, 5vw, 20px);
     font-family: var(--font-space-grotesk);
     font-weight: 700;
     margin-left: 10px;
@@ -483,7 +484,7 @@
     color: black;
     font-family: var(--font-space-grotesk);
     font-weight: 700;
-    font-size: 3vw;
+    font-size: clamp(12px, 3vw, 14px);
 }
 
 .SpeedBarFill {
@@ -525,17 +526,37 @@
 }
 
 .MultiplierBackground {
-    width: 350%;
-    height: 350%;
+    width: 1000%;
+    height: 1000%;
     background:
     conic-gradient(at 2px,black 75%, #6B7280 0)
     10px/calc(10px + 2px) 12px;
     transform: rotate(45deg);
     position: absolute;
-    top: -150%;
-    left: -130%;
+    top: -450%;
+    left: -450%;
     z-index: 1;
 }
+
+@media (min-width: 1302px) {
+    .MultiplierBackground {
+        height: 1200%;
+        width: 1200%;
+        top: -550%;
+        left: -550%;
+    }
+}
+
+@media (min-width: 1632px) {
+    .MultiplierBackground {
+        height: 1900%;
+        width: 1900%;
+        top: -900%;
+        left: -900%; 
+    }
+}
+
+
 
 .MultiplierTextContainer {
     /* background: black; */
@@ -552,7 +573,7 @@
 }
 
 .MultiplierTextContainer h2 {
-    font-size: 10vw;
+    font-size: clamp(20px, 10vw, 40px);
     font-family: var(--font-space-grotesk);
     font-weight: 700;
     color: white;
@@ -582,7 +603,7 @@
     font-family: var(--font-space-grotesk);
     font-weight: 700;
     letter-spacing: 1px;
-    font-size: 4.5vw;
+    font-size: clamp(12px, 4.5vw, 25px);
     color: black    ;
     display: flex;
     align-items: center;
