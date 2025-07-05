@@ -26,7 +26,7 @@ export default function Home() {
   const serverModelRef = useRef<ServerModel3DRef>(null);
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
-  const aboutSectionRef = useRef<HTMLDivElement>(null);
+  // const aboutSectionRef = useRef<HTMLDivElement>(null);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
   const backgroundModelFeatRef = useRef<HTMLDivElement>(null);
   const featuresCardRef = useRef<HTMLDivElement>(null);
@@ -116,6 +116,9 @@ export default function Home() {
       });
     }
   }, []);
+
+
+
 
   useEffect(() => {
     // Cache DOM elements early
@@ -236,47 +239,6 @@ export default function Home() {
       }
     })
 
-    const PrimaryDescriptionsplit = SplitText.create(".split", {
-      type: "lines",
-      lineClass: "line",
-      autoSplit: true,
-      mask: "lines",
-      // onSplit: (self) => {
-      //   split = gsap.from(self.lines, {
-      //     duration: 1,
-      //     yPercent: 100,
-      //     opacity: 0,
-      //     stagger: 0.1,
-      //     ease: "none",
-      //   });
-      //   return split;
-      // }
-    })
-    const FeatTl = gsap.timeline({
-      
-      scrollTrigger: {
-        trigger: featuresSectionRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-        markers: true,
-        // onUpdate: (self) => {
-        //   const progress = self.progress;
-        //   const progressPercent = progress * 100;
-        // }
-      }
-    });
-
-    // Add split text animation at 20% of the timeline
-    FeatTl.to(PrimaryDescriptionsplit.lines, {
-      yPercent: -100,
-      opacity: 0,
-      stagger: 0.02, // Reduced for scrub timeline
-      ease: "none"
-    }, 0.2) // Position at 20% of timeline (0.2 out of 1.0)
-
     // Cleanup function
     return () => {
       // Cancel RAF
@@ -355,12 +317,97 @@ export default function Home() {
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
-              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlednecks, and censorship risk.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
               <div className={styles.FeaturesCardTitle}><h2>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
-              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most "decentralized" projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most &quot;decentralized&quot; projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
           {/* <ServerModel3D className={styles.FeaturesBackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/> */}
+        </div>
+      </section>
+
+      <section className={styles.ComparisonTableSection}>
+        <div className={styles.ComparisonTableContainer}>
+          <div className={styles.ComparisonTableHeader}>
+            <h1>Our Average Confirmation Latency</h1>
+          </div>
+          <div className={styles.ComparisonTableBody}>
+            <div className={styles.ComparisonRow} id={styles.NoderRow}>
+              <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+              <div className={styles.ComparisonRowContent}>
+                <div className={styles.CompetitorName} id={styles.NoderName}>
+                  <h2>Noder</h2>
+                </div>
+                <div className={styles.CompetitorData}>
+                  <div className={styles.SpeedBar}>
+                    <div className={styles.SpeedBarFill} id={styles.HeliusFill}></div>
+                  </div>
+                </div>
+                <div className={styles.CompetitorTimeContainer}>
+                  <div className={styles.CompetitorTime}>Xs</div>
+                </div>
+              </div>
+              </div>
+            </div>
+
+            <div className={styles.ComparisonRow}>
+              <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+              <div className={styles.ComparisonRowContent}>
+                <div className={styles.CompetitorName}>
+                  <h2>Competitor T</h2>
+                </div>
+                <div className={styles.CompetitorData}>
+                  <div className={styles.SpeedBar}>
+                    <div className={styles.SpeedBarFill} id={styles.CompetitorTFill}></div>
+                  </div>
+                </div>
+                <div className={styles.CompetitorTimeContainer}>
+                  <div className={styles.CompetitorTime}>1.28s</div>
+                </div>
+              </div>
+              </div>
+            </div>
+
+            <div className={styles.ComparisonRow}>
+              <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+              <div className={styles.ComparisonRowContent}>
+                <div className={styles.CompetitorName}>
+                  <h2>Competitor Q</h2>
+                </div>
+                <div className={styles.CompetitorData}>
+                  <div className={styles.SpeedBar}>
+                    <div className={styles.SpeedBarFill} id={styles.CompetitorQFill}></div>
+                  </div>
+                </div>
+                <div className={styles.CompetitorTimeContainer}>
+                  <div className={styles.CompetitorTime}>4.81s</div>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div className={styles.ComparisonTableFooter}>
+              <div className={styles.MultiplierContainer}>
+                <div className={styles.MultiplierBackground}></div>
+              </div>
+              <div className={styles.MultiplierTextContainer}>
+                {/* <h2><span>10x</span></h2> */}
+                <h2>?x</h2>
+              </div>
+              <div className={styles.MultiplierSubTextContainer}>
+                FASTER THAN THE COMPETITION
+              </div>
+            </div>
+          </div>
+         
         </div>
       </section>
     </main>
