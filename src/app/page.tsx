@@ -27,10 +27,10 @@ export default function Home() {
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
   const comparisonTableRef = useRef<HTMLDivElement>(null);
-  // const aboutSectionRef = useRef<HTMLDivElement>(null);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
   const backgroundModelFeatRef = useRef<HTMLDivElement>(null);
   const featuresCardRef = useRef<HTMLDivElement>(null);
+  const featuresCardTitleRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const spacerLine1Ref = useRef<HTMLDivElement>(null);
   const spacerLine2Ref = useRef<HTMLDivElement>(null);
@@ -48,9 +48,8 @@ export default function Home() {
   const competitorQFillRef = useRef<HTMLDivElement>(null);
   const competitorTime2Ref = useRef<HTMLDivElement>(null);
   const competitorTime3Ref = useRef<HTMLDivElement>(null);
-  // const competitorTime2Ref = useRef<HTMLDivElement>(null);
-  // const competitorTime3Ref = useRef<HTMLDivElement>(null);
-  // Refs for caching DOM elements and objects
+
+
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
     backgroundModel: Element | null;
@@ -137,6 +136,7 @@ export default function Home() {
     }
   }, []);
 
+  
   
 
 
@@ -244,63 +244,89 @@ export default function Home() {
 
     animationsRef.current.mainTimeline = mainTl;
 
-    gsap.set(featuresCardRef.current, {
-      transform: "translateX(100%)",
-      opacity: 0,
-    })
-
-    gsap.to(featuresCardRef.current, {
-      x: 0,
-      opacity: 1,
-      scrollTrigger: {
-        trigger: featuresSectionRef.current,
-        start: "top center",
-        end: "+=50%",
-        scrub: true,
-      }
-    })
-
-    let split;
-    SplitText.create(".split", {
-      type: "words,lines",
-      linesClass: "line",
-      autoSplit: true,
-      mask: "lines",
-      onSplit: (self) => {
-        split = gsap.from(self.lines, {
-          duration: 0.6,
-          yPercent: 100,
-          opacity: 0,
-          stagger: 0.1,
-          ease: "expo.out",
-        });
-        return split;
-      }
-    });
-
-
-    const FeaturesTextTL = gsap.timeline({
+    const featuresTL = gsap.timeline({
       scrollTrigger: {
         trigger: featuresSectionRef.current,
         start: "top top",
         end: "+=200%",
         pin: true,
-        scrub: false,
-        toggleActions: "play none none reverse",
+        scrub: true,
       }
     })
+    
+    // featuresTL
+    //   .to(comparisonTableRef.current, {
+    //     yPercent: 100,
+    //     ease: "none",
+    //     duration: 0.3,
+    //   }, 0.9)
 
-    FeaturesTextTL.fromTo(".split", {
-      y: 100,
-      opacity: 0,
-    }, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "expo.out",
-      stagger: 0.1,
-    }, "-=1.5")
+    // gsap.set(featuresCardRef.current, {
+    //   transform: "translateX(100%)",
+    //   opacity: 0,
+    // })
 
+    // gsap.to(featuresCardRef.current, {
+    //   x: 0,
+    //   opacity: 1,
+    //   scrollTrigger: {
+    //     trigger: featuresSectionRef.current,
+    //     start: "top center",
+    //     end: "+=50%",
+    //     scrub: true,
+    //   }
+    // })
+
+    // let split;
+    // SplitText.create(".split", {
+    //   type: "words,lines",
+    //   linesClass: "line",
+    //   autoSplit: true,
+    //   mask: "lines",
+    //   onSplit: (self) => {
+    //     split = gsap.from(self.lines, {
+    //       duration: 0.6,
+    //       yPercent: 100,
+    //       opacity: 0,
+    //       stagger: 0.1,
+    //       ease: "expo.out",
+    //     });
+    //     return split;
+    //   }
+    // });
+
+
+    // const FeaturesTextTL = gsap.timeline({
+    //   scrollTrigger: {
+    //     trigger: featuresSectionRef.current,
+    //     start: "top top",
+    //     end: "+=200%",
+    //     pin: true,
+    //     scrub: false,
+    //     toggleActions: "play none none reverse",
+    //   }
+    // })
+
+    // FeaturesTextTL.fromTo(".split", {
+    //   y: 100,
+    //   opacity: 0,
+    // }, {
+    //   y: 0,
+    //   opacity: 1,
+    //   duration: 0.8,
+    //   ease: "expo.out",
+    //   stagger: 0.1,
+    // }, "-=1.5")
+    // gsap.set(comparisonTableRef.current, {
+    //   scrollTrigger: {
+    //     trigger: comparisonTableRef.current,
+    //     start: "top bottom",
+    //     end: "bottom bottom",
+    //     scrub: true,
+    //     markers: true,
+    //   },
+    //   yPercent: 100,
+    // })
     
 
     const ComparisonTableTL = gsap.timeline({
@@ -509,24 +535,15 @@ export default function Home() {
         </div>
       </section>
       
-      {/* <section className={styles.AboutSection} ref={aboutSectionRef}>
-        <div className={styles.BackgroundContainer}>
-          <div className={styles.BackgroundStrip} id={styles.BackgroundStrip1} ref={backgroundStrip1Ref}></div>
-          <div className={styles.BackgroundStrip} id={styles.BackgroundStrip2} ref={backgroundStrip2Ref}></div>
-          <div className={styles.BackgroundStrip} id={styles.BackgroundStrip3} ref={backgroundStrip3Ref}></div>
-        </div>
-      </section> */}
-      
       <section className={styles.FeaturesSection} ref={featuresSectionRef}>
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
               <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
-              <div className={styles.FeaturesCardTitle}><h2>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
+              <div className={styles.FeaturesCardTitle}><h2 ref={featuresCardTitleRef}>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
               <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most &quot;decentralized&quot; projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
-          {/* <ServerModel3D className={styles.FeaturesBackgroundModel3D} ref={serverModelFeatRef} onModelLoaded={animateServerFeatEntrance}/> */}
         </div>
       </section>
 
@@ -551,7 +568,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-``                  <div className={styles.CompetitorTime} ref={competitorTime1Ref}>0.00s</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime1Ref}>0.00s</div>
                 </div>
               </div>
               </div>
@@ -572,7 +589,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime} ref={competitorTime2Ref}>1.28s</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime2Ref}>0.00s</div>
                 </div>
               </div>
               </div>
@@ -593,7 +610,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime} ref={competitorTime3Ref}>4.81s</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime3Ref}>0.00s</div>
                 </div>
               </div>
               </div>
