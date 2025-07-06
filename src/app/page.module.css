@@ -353,7 +353,7 @@
 
 .ComparisonTableSection {
     background: black;
-    height: 100dvh;
+    min-height: 100dvh;
     width: 100%;
     overflow: hidden;
     position: relative;
