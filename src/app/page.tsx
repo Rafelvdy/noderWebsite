@@ -361,8 +361,8 @@ export default function Home() {
       }, 0.50)
       .to(multiplierSubTextRef.current, {
         height: "30%",
-        ease: "none",
-        duration: 0.1,
+        ease: "power2.out",
+        duration: 0.2,
       }, 0.50)
       
       
