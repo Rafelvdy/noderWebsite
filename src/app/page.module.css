@@ -510,10 +510,9 @@
 .SpeedBarFill {
     background: #4A4AFF;
     height: 100%;
-    transition: width 0.5s ease-in-out;
 }
 
-#HeliusFill {
+#NoderFill {
     width: 25.6%;
 }
 

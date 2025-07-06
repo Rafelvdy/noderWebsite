@@ -43,6 +43,11 @@ export default function Home() {
   const spacerLine9Ref = useRef<HTMLDivElement>(null);
   const competitorTime1Ref = useRef<HTMLDivElement>(null);
   const multiplierSubTextRef = useRef<HTMLDivElement>(null);
+  const noderSpeedBarRef = useRef<HTMLDivElement>(null);
+  const competitorTFillRef = useRef<HTMLDivElement>(null);
+  const competitorQFillRef = useRef<HTMLDivElement>(null);
+  const competitorTime2Ref = useRef<HTMLDivElement>(null);
+  const competitorTime3Ref = useRef<HTMLDivElement>(null);
   // const competitorTime2Ref = useRef<HTMLDivElement>(null);
   // const competitorTime3Ref = useRef<HTMLDivElement>(null);
   // Refs for caching DOM elements and objects
@@ -304,7 +309,7 @@ export default function Home() {
         start: "top top",
         end: "+=300%",
         pin: true,
-        scrub: true,
+        scrub: false,
       }
     });
     
@@ -313,79 +318,116 @@ export default function Home() {
       .to(spacerLine1Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.15,
+        duration: 0.3,
       }, 0.1)
       .to(spacerLine2Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.1,
+        duration: 0.25,
       }, 0.15)
       .to(spacerLine3Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.05,
+        duration: 0.2,
       }, 0.25)
 
       //Second row
       .to(spacerLine4Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.15,
+        duration: 0.3,
       }, 0.25)
       .to(spacerLine5Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.1,
+        duration: 0.25,
       }, 0.30)
       .to(spacerLine6Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.05,
+        duration: 0.2,
       }, 0.35)
 
       //Third row
       .to(spacerLine7Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.15,
+        duration: 0.3,
       }, 0.40)
       .to(spacerLine8Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.1,
+        duration: 0.25,
       }, 0.45)
       .to(spacerLine9Ref.current, {
         yPercent: -100,
         ease: "none",
-        duration: 0.05,
+        duration: 0.2,
       }, 0.50)
       .to(multiplierSubTextRef.current, {
         height: "30%",
         ease: "power2.out",
-        duration: 0.2,
+        duration: 0.5,
       }, 0.50)
+      // Separate non-scrubbed countup animation - triggers when first row is revealed
+      .to({ value: 0 }, {
+        value: 0.32,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate: function() {
+          const currentValue = Math.round(this.targets()[0].value * 100) / 100;
+          if (competitorTime1Ref.current) {
+            competitorTime1Ref.current.textContent = `${currentValue.toFixed(2)}s`;
+            const fillPercentage = (currentValue/3) * 100;
+            if (noderSpeedBarRef.current) {
+              noderSpeedBarRef.current.style.width = `${fillPercentage}%`;
+            }
+          }
+        }
+      }, ">")
+      .to({ value: 0 }, {
+        value: 1.28,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate: function() {
+          const currentValue = Math.round(this.targets()[0].value * 100) / 100;
+          if (competitorTime2Ref.current) {
+            competitorTime2Ref.current.textContent = `${currentValue.toFixed(2)}s`;
+            const fillPercentage = (currentValue/3) * 100;
+            if (competitorTFillRef.current) {
+              competitorTFillRef.current.style.width = `${fillPercentage}%`;
+            }
+          }
+        }
+      }, "<")
+      .to({ value: 0 }, {
+        value: 2.5,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate: function() {  
+          const currentValue = Math.round(this.targets()[0].value * 100) / 100;
+          if (competitorTime3Ref.current) {
+            competitorTime3Ref.current.textContent = `${currentValue.toFixed(2)}s`;
+            const fillPercentage = (currentValue/3) * 100;
+            if (competitorQFillRef.current) {
+              competitorQFillRef.current.style.width = `${fillPercentage}%`;
+            }
+          }
+        }
+      }, "<")
       
       
 
-    // Separate non-scrubbed countup animation - triggers when first row is revealed
-    const counterObj = { value: 0 };
-    gsap.to(counterObj, {
-      value: 0.32,
-      duration: 1.2,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: comparisonTableRef.current,
-        start: "center center", // Trigger when first row is revealed
-        toggleActions: "play none none reverse",
-        markers: false
-      },
-      onUpdate: function() {
-        const currentValue = Math.round(counterObj.value * 100) / 100;
-        if (competitorTime1Ref.current) {
-          competitorTime1Ref.current.textContent = `${currentValue.toFixed(2)}s`;
-        }
-      }
-    });
+    gsap.set(noderSpeedBarRef.current, {
+      width: "0%",
+    })
+
+    gsap.set(competitorTFillRef.current, {
+      width: "0%",
+    })
+    gsap.set(competitorQFillRef.current, {
+      width: "0%",
+    })
 
     gsap.set(multiplierSubTextRef.current, {
       height: "0%",
@@ -505,7 +547,7 @@ export default function Home() {
                 </div>
                 <div className={styles.CompetitorData}>
                   <div className={styles.SpeedBar}>
-                    <div className={styles.SpeedBarFill} id={styles.HeliusFill}></div>
+                    <div className={styles.SpeedBarFill} id={styles.NoderFill} ref={noderSpeedBarRef}></div>
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
@@ -526,11 +568,11 @@ export default function Home() {
                 </div>
                 <div className={styles.CompetitorData}>
                   <div className={styles.SpeedBar}>
-                    <div className={styles.SpeedBarFill} id={styles.CompetitorTFill}></div>
+                    <div className={styles.SpeedBarFill} id={styles.CompetitorTFill} ref={competitorTFillRef}></div>
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime}>1.28s</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime2Ref}>1.28s</div>
                 </div>
               </div>
               </div>
@@ -547,11 +589,11 @@ export default function Home() {
                 </div>
                 <div className={styles.CompetitorData}>
                   <div className={styles.SpeedBar}>
-                    <div className={styles.SpeedBarFill} id={styles.CompetitorQFill}></div>
+                    <div className={styles.SpeedBarFill} id={styles.CompetitorQFill} ref={competitorQFillRef}></div>
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime}>4.81s</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime3Ref}>4.81s</div>
                 </div>
               </div>
               </div>
@@ -569,7 +611,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-         
         </div>
       </section>
     </main>
