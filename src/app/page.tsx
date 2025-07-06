@@ -42,6 +42,7 @@ export default function Home() {
   const spacerLine8Ref = useRef<HTMLDivElement>(null);
   const spacerLine9Ref = useRef<HTMLDivElement>(null);
   const competitorTime1Ref = useRef<HTMLDivElement>(null);
+  const multiplierSubTextRef = useRef<HTMLDivElement>(null);
   // const competitorTime2Ref = useRef<HTMLDivElement>(null);
   // const competitorTime3Ref = useRef<HTMLDivElement>(null);
   // Refs for caching DOM elements and objects
@@ -358,18 +359,41 @@ export default function Home() {
         ease: "none",
         duration: 0.05,
       }, 0.50)
-
-      .to(competitorTime1Ref.current, {
-        value: 1,
-        duration: 1,
-        ease: "power2.out",
-        onUpdate: (self) => {
-          const currentValue = Math.round(self.target.textContent * 100)/ 100;
-          if (competitorTime1Ref.current) {
-            competitorTime1Ref.current.textContent = `${currentValue}s`;
-          }
-        }
+      .to(multiplierSubTextRef.current, {
+        height: "30%",
+        ease: "none",
+        duration: 0.1,
       }, 0.50)
+      
+      
+
+    // Separate non-scrubbed countup animation - triggers when first row is revealed
+    const counterObj = { value: 0 };
+    gsap.to(counterObj, {
+      value: 0.32,
+      duration: 1.2,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: comparisonTableRef.current,
+        start: "center center", // Trigger when first row is revealed
+        toggleActions: "play none none reverse",
+        markers: false
+      },
+      onUpdate: function() {
+        const currentValue = Math.round(counterObj.value * 100) / 100;
+        if (competitorTime1Ref.current) {
+          competitorTime1Ref.current.textContent = `${currentValue.toFixed(2)}s`;
+        }
+      }
+    });
+
+    gsap.set(multiplierSubTextRef.current, {
+      height: "0%",
+    })
+
+    
+
+    
 
     // // Store the timeline reference to avoid unused variable warning
     // animationsRef.current.comparisonTimeline = ComparisonTableTL;
@@ -485,7 +509,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime} ref={competitorTime1Ref}>Xs</div>
+``                  <div className={styles.CompetitorTime} ref={competitorTime1Ref}>0.00s</div>
                 </div>
               </div>
               </div>
@@ -540,7 +564,7 @@ export default function Home() {
                 {/* <h2><span>10x</span></h2> */}
                 <h2>?x</h2>
               </div>
-              <div className={styles.MultiplierSubTextContainer}>
+              <div className={styles.MultiplierSubTextContainer} ref={multiplierSubTextRef}>
                 FASTER THAN THE COMPETITION
               </div>
             </div>

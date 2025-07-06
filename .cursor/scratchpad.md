@@ -232,10 +232,10 @@ const resizeObserver = new ResizeObserver((entries) => {
 
 ## Current Status / Progress Tracking
 
-**Last Updated**: **CRITICAL BUG FIXED** - ScrollTrigger functionality restored, rotation animation working
-**Current Phase**: **Phase 0 COMPLETED** ✅ - Server Rotation Animation fully functional
-**Next Milestone**: Phase 1 or user verification of rotation animation working
-**Implementation Status**: ✅ Server object exposed, ✅ Rotation synced with scroll, ✅ ScrollTrigger working
+**Last Updated**: **COMPETITOR TIME ANIMATION FIXED** - Count up animation now working properly
+**Current Phase**: **Phase 0 COMPLETED** ✅ - Server Rotation Animation fully functional + Bug fixes
+**Next Milestone**: Phase 1 or user verification of all animations working
+**Implementation Status**: ✅ Server object exposed, ✅ Rotation synced with scroll, ✅ ScrollTrigger working, ✅ Competitor time count up fixed
 
 ## Executor's Feedback or Assistance Requests
 
@@ -253,9 +253,22 @@ const resizeObserver = new ResizeObserver((entries) => {
 - ✅ **Compatibility**: All existing animations working (title, subtitle, blur, scaling)
 - ✅ **ScrollTrigger**: Restored full functionality after critical bug fix
 
+**Competitor Time Count Up Animation Fixed & Improved**:
+- ❌ **Issue Found**: Animation was targeting non-existent `value` property on DOM element 
+- ❌ **Logic Error**: Trying to read "Xs" string as number resulted in NaN
+- ❌ **UX Issue**: Scrub-based countup jerked back and forth with scroll position
+- ✅ **Fix Applied**: Changed to animate proper object `{ value: 0 }` instead of DOM element
+- ✅ **Target Value**: Set to 0.32s (competitive time vs 1.28s and 4.81s from competitors)
+- ✅ **Display Logic**: Fixed to use `counterObj.value` and `toFixed(2)` for consistent formatting
+- ✅ **Initial State**: Updated HTML from "Xs" to "0.00s" for better UX
+- ✅ **Animation Separation**: Removed countup from scrubbed timeline, created separate ScrollTrigger
+- ✅ **Smooth Playback**: Uses `toggleActions: "play none none reverse"` for one-time smooth animation
+- ✅ **Smart Timing**: Triggers when first row is revealed (`start: "25% center"`)
+
 **Ready for User Testing**: 
 - All GSAP animations should now work properly
 - Server should rotate 360° during hero scroll
+- Competitor time should count up from 0.00s to 0.32s during comparison table animation
 - All existing animations (sliding, scaling, blur) preserved
 - **Please test scrolling functionality** to confirm everything works as expected
 
@@ -266,4 +279,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 - Zero hardcoded values approach is mandatory for future flexibility 
 - **NEW**: When changing ref usage, must update ALL references including ScrollTrigger dependency checks
 - **NEW**: Always test ScrollTrigger conditions after changing component refs or structure
-- **NEW**: **Server rotation clipping fix**: Narrow camera FOV (10°) caused server to get cut off during rotation. Fixed by increasing FOV to 20° to accommodate model's changing dimensions during 360° rotation 
+- **NEW**: **Server rotation clipping fix**: Narrow camera FOV (10°) caused server to get cut off during rotation. Fixed by increasing FOV to 20° to accommodate model's changing dimensions during 360° rotation
+- **NEW**: **GSAP DOM Animation Error**: Never animate non-existent properties on DOM elements. Instead of `element.value`, animate objects like `{ value: 0 }` and update DOM in `onUpdate` callback
+- **NEW**: **String/Number Type Safety**: Always validate data types when reading from DOM. `textContent` returns strings, not numbers - attempting math operations results in NaN
+- **NEW**: **Scrub vs Non-Scrub Animation Mixing**: Cannot mix scrub-based and non-scrub animations in the same timeline. Use separate ScrollTriggers with `toggleActions` for one-time animations that should trigger at specific scroll points but not be tied to scroll position 
