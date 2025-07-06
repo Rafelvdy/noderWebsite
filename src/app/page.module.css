@@ -261,6 +261,7 @@
     /* box-shadow: 0 10px 30px rgba(0,0,0,0.3); */
     transform: translateX(100%);
     opacity: 0;
+    overflow: hidden;
     
 }
 
@@ -273,6 +274,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -332,6 +334,21 @@
     justify-content: center;
     max-width: 95%;
     text-align: center;
+}
+
+#PrimaryDescription {
+    opacity: 1;
+}
+
+#SecondaryDescription {
+    overflow: hidden;
+    background: red;
+    height: fit-content !important;
+}
+
+#SecondaryDescription h3 {
+    opacity: 1;
+    transform: translateY(70%);
 }
 
 .ComparisonTableSection {
@@ -408,7 +425,9 @@
 .SpacerLine {
     background: white;
     width: 33.3%;
-    height: 0%;
+    height: 100%;
+    z-index: 10;
+    transform-origin: top;
 }
 
 .ComparisonRowContent {

@@ -26,12 +26,24 @@ export default function Home() {
   const serverModelRef = useRef<ServerModel3DRef>(null);
   const serverModelFeatRef = useRef<ServerModel3DRef>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
+  const comparisonTableRef = useRef<HTMLDivElement>(null);
   // const aboutSectionRef = useRef<HTMLDivElement>(null);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
   const backgroundModelFeatRef = useRef<HTMLDivElement>(null);
   const featuresCardRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  
+  const spacerLine1Ref = useRef<HTMLDivElement>(null);
+  const spacerLine2Ref = useRef<HTMLDivElement>(null);
+  const spacerLine3Ref = useRef<HTMLDivElement>(null);
+  const spacerLine4Ref = useRef<HTMLDivElement>(null);
+  const spacerLine5Ref = useRef<HTMLDivElement>(null);
+  const spacerLine6Ref = useRef<HTMLDivElement>(null);
+  const spacerLine7Ref = useRef<HTMLDivElement>(null);
+  const spacerLine8Ref = useRef<HTMLDivElement>(null);
+  const spacerLine9Ref = useRef<HTMLDivElement>(null);
+  const competitorTime1Ref = useRef<HTMLDivElement>(null);
+  // const competitorTime2Ref = useRef<HTMLDivElement>(null);
+  // const competitorTime3Ref = useRef<HTMLDivElement>(null);
   // Refs for caching DOM elements and objects
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -45,10 +57,12 @@ export default function Home() {
 
   const animationsRef = useRef<{
     mainTimeline: gsap.core.Timeline | null;
+    comparisonTimeline: gsap.core.Timeline | null;
     lenis: Lenis | null;
     rafId: number | null;
   }>({
     mainTimeline: null,
+    comparisonTimeline: null,
     lenis: null,
     rafId: null
   });
@@ -117,6 +131,7 @@ export default function Home() {
     }
   }, []);
 
+  
 
 
 
@@ -234,10 +249,130 @@ export default function Home() {
       scrollTrigger: {
         trigger: featuresSectionRef.current,
         start: "top center",
-        end: "bottom bottom",
-        scrub: 1,
+        end: "+=50%",
+        scrub: true,
       }
     })
+
+    let split;
+    SplitText.create(".split", {
+      type: "words,lines",
+      linesClass: "line",
+      autoSplit: true,
+      mask: "lines",
+      onSplit: (self) => {
+        split = gsap.from(self.lines, {
+          duration: 0.6,
+          yPercent: 100,
+          opacity: 0,
+          stagger: 0.1,
+          ease: "expo.out",
+        });
+        return split;
+      }
+    });
+
+
+    const FeaturesTextTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: featuresSectionRef.current,
+        start: "top top",
+        end: "+=200%",
+        pin: true,
+        scrub: false,
+        toggleActions: "play none none reverse",
+      }
+    })
+
+    FeaturesTextTL.fromTo(".split", {
+      y: 100,
+      opacity: 0,
+    }, {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: "expo.out",
+      stagger: 0.1,
+    }, "-=1.5")
+
+    
+
+    const ComparisonTableTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: comparisonTableRef.current,
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        scrub: true,
+      }
+    });
+    
+    ComparisonTableTL
+      //First row
+      .to(spacerLine1Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.15,
+      }, 0.1)
+      .to(spacerLine2Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.1,
+      }, 0.15)
+      .to(spacerLine3Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.05,
+      }, 0.25)
+
+      //Second row
+      .to(spacerLine4Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.15,
+      }, 0.25)
+      .to(spacerLine5Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.1,
+      }, 0.30)
+      .to(spacerLine6Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.05,
+      }, 0.35)
+
+      //Third row
+      .to(spacerLine7Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.15,
+      }, 0.40)
+      .to(spacerLine8Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.1,
+      }, 0.45)
+      .to(spacerLine9Ref.current, {
+        yPercent: -100,
+        ease: "none",
+        duration: 0.05,
+      }, 0.50)
+
+      .to(competitorTime1Ref.current, {
+        value: 1,
+        duration: 1,
+        ease: "power2.out",
+        onUpdate: (self) => {
+          const currentValue = Math.round(self.target.textContent * 100)/ 100;
+          if (competitorTime1Ref.current) {
+            competitorTime1Ref.current.textContent = `${currentValue}s`;
+          }
+        }
+      }, 0.50)
+
+    // // Store the timeline reference to avoid unused variable warning
+    // animationsRef.current.comparisonTimeline = ComparisonTableTL;
 
     // Cleanup function
     return () => {
@@ -246,9 +381,12 @@ export default function Home() {
         cancelAnimationFrame(animationsRef.current.rafId);
       }
       
-      // Kill timeline
+      // Kill timelines
       if (animationsRef.current.mainTimeline) {
         animationsRef.current.mainTimeline.kill();
+      }
+      if (animationsRef.current.comparisonTimeline) {
+        animationsRef.current.comparisonTimeline.kill();
       }
       
       // Destroy lenis
@@ -326,7 +464,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.ComparisonTableSection}>
+      <section className={styles.ComparisonTableSection} ref={comparisonTableRef}>
         <div className={styles.ComparisonTableContainer}>
           <div className={styles.ComparisonTableHeader}>
             <h1>Our Average Confirmation Latency</h1>
@@ -334,9 +472,9 @@ export default function Home() {
           <div className={styles.ComparisonTableBody}>
             <div className={styles.ComparisonRow} id={styles.NoderRow}>
               <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
-                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine1} ref={spacerLine1Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine2} ref={spacerLine2Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine3} ref={spacerLine3Ref}></div>
               <div className={styles.ComparisonRowContent}>
                 <div className={styles.CompetitorName} id={styles.NoderName}>
                   <h2>Noder</h2>
@@ -347,7 +485,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.CompetitorTimeContainer}>
-                  <div className={styles.CompetitorTime}>Xs</div>
+                  <div className={styles.CompetitorTime} ref={competitorTime1Ref}>Xs</div>
                 </div>
               </div>
               </div>
@@ -355,9 +493,9 @@ export default function Home() {
 
             <div className={styles.ComparisonRow}>
               <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
-                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine4} ref={spacerLine4Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine5} ref={spacerLine5Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine6} ref={spacerLine6Ref}></div>
               <div className={styles.ComparisonRowContent}>
                 <div className={styles.CompetitorName}>
                   <h2>Competitor T</h2>
@@ -376,9 +514,9 @@ export default function Home() {
 
             <div className={styles.ComparisonRow}>
               <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
-                <div className={styles.SpacerLine} id={styles.SpacerLine1}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine2}></div>
-                <div className={styles.SpacerLine} id={styles.SpacerLine3}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine7} ref={spacerLine7Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine8} ref={spacerLine8Ref}></div>
+                <div className={styles.SpacerLine} id={styles.SpacerLine9} ref={spacerLine9Ref}></div>
               <div className={styles.ComparisonRowContent}>
                 <div className={styles.CompetitorName}>
                   <h2>Competitor Q</h2>
