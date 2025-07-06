@@ -342,7 +342,7 @@
 
 #SecondaryDescription {
     overflow: hidden;
-    background: red;
+    /* background: red; */
     height: fit-content !important;
 }
 
@@ -428,6 +428,7 @@
     height: 100%;
     z-index: 10;
     transform-origin: top;
+    
 }
 
 .ComparisonRowContent {
