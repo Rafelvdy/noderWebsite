@@ -408,7 +408,7 @@ export default function Home() {
         end: "200% bottom",
         pin: true,
         scrub: true,
-        markers: true,
+        markers: false,
       }
     })
 
@@ -428,7 +428,7 @@ export default function Home() {
         end: "100% bottom",
         pin: true,
         scrub: false,
-        markers: true,
+        markers: false,
       }
     });
     
