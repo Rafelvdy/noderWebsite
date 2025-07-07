@@ -359,9 +359,9 @@ export default function Home() {
     const ComparisonTableTL = gsap.timeline({
       scrollTrigger: {
         trigger: comparisonTableRef.current,
-        start: "top top",
+        start: "top center",
         end: "100% bottom",
-        pin: true,
+        pin: false,
         scrub: false,
         markers: false,
       }
