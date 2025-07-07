@@ -143,11 +143,31 @@ export default function Home() {
 
 
   useEffect(() => {
+    // CRITICAL: Force scroll to top before any animations initialize
+    // This prevents browser scroll restoration and ensures clean starting state
+    if (typeof window !== 'undefined') {
+      // Disable browser scroll restoration
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      
+      // Force immediate scroll to top
+      window.scrollTo(0, 0);
+      
+      // Also set document scroll position for compatibility
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+
     // Cache DOM elements early
     cachedElements.current.backgroundModelContainer = document.querySelector(`.${styles.BackgroundModel3D}`);
     cachedElements.current.backgroundModel = document.querySelector(`.${styles.BackgroundModel}`);
     
     const lenis = new Lenis();
+    
+    // Force Lenis to start at top position
+    lenis.scrollTo(0, { immediate: true });
+    
     lenis.on('scroll', () => {
       ScrollTrigger.update();
     });
@@ -157,9 +177,20 @@ export default function Home() {
     }
     requestAnimationFrame(raf);
 
+    // Store lenis reference for cleanup
+    animationsRef.current.lenis = lenis;
+
     // Set initial mobile state
     setIsMobile(window.innerWidth <= 1023);
     window.addEventListener('resize', handleResize);
+
+    // Safety: Restore scroll restoration on page unload
+    const handleBeforeUnload = () => {
+      if (typeof window !== 'undefined' && 'scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     // Early return if required elements are not available
     if (!heroRef.current || !heroContentRef.current || !heroTitleRef.current || !blurOverlayRef.current) {
@@ -530,6 +561,11 @@ export default function Home() {
 
     // Cleanup function
     return () => {
+      // Restore browser scroll restoration
+      if (typeof window !== 'undefined' && 'scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
+      
       // Cancel RAF
       if (animationsRef.current.rafId) {
         cancelAnimationFrame(animationsRef.current.rafId);
@@ -553,6 +589,7 @@ export default function Home() {
       
       // Remove event listeners
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       
       // Clear cached elements
       cachedElements.current = {
