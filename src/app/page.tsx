@@ -48,6 +48,7 @@ export default function Home() {
   const competitorQFillRef = useRef<HTMLDivElement>(null);
   const competitorTime2Ref = useRef<HTMLDivElement>(null);
   const competitorTime3Ref = useRef<HTMLDivElement>(null);
+  const socialProofSectionRef = useRef<HTMLDivElement>(null);
 
 
   const cachedElements = useRef<{
@@ -253,6 +254,38 @@ export default function Home() {
         scrub: true,
       }
     })
+
+    // const split = SplitText.create(featuresCardTitleRef.current, {
+    //   type: "words",
+    //   wordsClass: "Word",
+    //   mask: "lines",
+    //   autoSplit: true,
+    //   onSplit: (self) => {
+    //     gsap.set(self.words, {
+    //       display: "inline-block",
+    //       width: "auto",
+    //       height: "auto",
+    //       margin: "0.2em 0.1em",
+    //     })
+    //   }
+    // });
+    
+
+    // gsap.set(split.words, { 
+    //   opacity: 0, 
+    //   y: 100,
+    // });
+
+    // featuresTL
+    //   .to(split.words, {
+    //     opacity: 1,
+    //     y: 0,
+    //     rotate: 0,
+    //     duration: 0.8,
+    //     ease: "expo.out",
+    //     stagger: 0.1,
+    //   })
+
     
     // featuresTL
     //   .to(comparisonTableRef.current, {
@@ -540,7 +573,7 @@ export default function Home() {
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
               <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
-              <div className={styles.FeaturesCardTitle}><h2 ref={featuresCardTitleRef}>WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
+              <div className={styles.FeaturesCardTitle} ref={featuresCardTitleRef} ><h2> WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
               <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most &quot;decentralized&quot; projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
@@ -627,6 +660,30 @@ export default function Home() {
                 FASTER THAN THE COMPETITION
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      
+      <section className={styles.SocialProofSection} ref={socialProofSectionRef}>
+        <div className={styles.SocialProofContent}>
+          <div className={styles.SocialProofTitleContainer}>
+            <h1 className={styles.SocialProofTitle}>Trusted by leading builders in Web3.</h1>
+          </div>
+          <div className={styles.VerticalLogoCarouselContainer}>
+            <div className={styles.LogoCarousel}>
+              <div className={styles.LogoCarouselStrip}>
+
+              </div>
+              <div className={styles.LogoCarouselStrip}>
+                
+              </div>
+              <div className={styles.LogoCarouselStrip}>
+                
+              </div>
+            </div>
+          </div>
+          <div className={styles.TestimonialContainer}>
+
           </div>
         </div>
       </section>
