@@ -647,28 +647,27 @@
     overflow: hidden;
 }
 
-.VerticalLogoCarouselContainer {
-    /* background: black; */
+.LogosCarousel {
     width: 100%;
-    height: 250px;
-    padding: 1rem;
-}
-
-.LogoCarousel {
-    /* background: red; */
-    width: 100%;
-    height: 100%;
+    height: 200px;
+    background: black;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
 }
 
-.LogoCarouselStrip {
-    width: 33.3%;
+.LogoSlide {
+    width: 100%;
     height: 100%;
-    border-right: 1px solid #E5E7EB;
-    border-left: 1px solid #E5E7EB;
+    white-space: nowrap;
+    display: flex;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background: red;
+    border: 1px solid white;
 }
 
 
@@ -695,13 +694,14 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    margin-top: 80px;
+    overflow: hidden;
 }
 
 .DifferencesTitleContainer {
     /* background: red; */
     width: 100%;
     height: fit-content;
+    margin-top: 80px;
 }
 
 .DifferencesTitle {
@@ -788,3 +788,97 @@
     color: #4A4AFF !important;
     overflow: hidden;
 }
+
+.CTASection {
+    min-height: 100dvh;
+    height: 100dvh;
+    width: 100%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CTAContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.CTATextContainer {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.CTATitle {
+    font-family: var(--font-inter);
+    font-size: clamp(24px, 8vw, 64px);
+    line-height: 1.1;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.CTARegularText {
+    font-weight: 400;
+    display: inline;
+}
+
+.CTABoldText {
+    font-weight: 700;
+    display: inline;
+    border-bottom: 1px solid #c1c1c1;
+    border-right: 1px solid #c1c1c1;
+    padding-right: 5px;
+}
+
+.CTABoldText:hover {
+    content: "DEPLOY NODE";
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 480px) {
+    .CTATitle {
+        font-size: clamp(20px, 9vw, 32px);
+        line-height: 1.2;
+    }
+    
+    .CTAContent {
+        padding: 1rem;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 481px) and (max-width: 768px) {
+    .CTATitle {
+        font-size: clamp(28px, 7vw, 48px);
+    }
+}
+
+/* Desktop adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .CTATitle {
+        font-size: clamp(36px, 6vw, 56px);
+    }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1025px) {
+    .CTATitle {
+        font-size: clamp(48px, 5vw, 64px);
+    }
+    
+    .CTATextContainer {
+        max-width: 1000px;
+    }
+}
+
+

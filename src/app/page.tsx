@@ -57,6 +57,7 @@ export default function Home() {
   const DifferencesTitleRef1 = useRef<HTMLDivElement>(null);
   const DifferencesTitleRef2 = useRef<HTMLDivElement>(null);
   const DifferencesSubtitleRef = useRef<HTMLDivElement>(null);
+  const DifferencesAccordionContainerRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -554,6 +555,11 @@ export default function Home() {
       }
     })
 
+    
+    gsap.set(DifferencesAccordionContainerRef.current, {
+      width: "0%",
+    })
+
     ScrollTrigger.create({
       trigger: DifferencesSectionRef.current,
       start: "top top",
@@ -564,7 +570,11 @@ export default function Home() {
           ease: "expo.out",
         })
 
-        
+        gsap.to(DifferencesAccordionContainerRef.current, {
+          width: "100%",
+          duration: 1,
+          ease: "expo.out",
+        })
       }
     })
 
@@ -594,7 +604,37 @@ export default function Home() {
         });
       }
     })
+   
 
+    // DifferencesAccordionTL
+    //   .to(PerformanceAccordionRef.current, {
+    //     height: "33.3%",
+    //     duration: 0.1,
+    //     ease: "expo.out",
+    //   }, 1)
+    //   .set(PerformanceAccordionRef.current, {
+    //     height: "10%",
+    //   }, 2)
+    //   .to(SovereigntyAccordionRef.current, {
+    //     height: "33.3%",
+    //     duration: 0.1,
+    //     ease: "expo.out",
+    //   }, 2)
+    //   .set(SovereigntyAccordionRef.current, {
+    //     height: "10%",
+    //   }, 3)
+    //   .to(SecurityAccordionRef.current, {
+    //     height: "40%",
+    //     duration: 0.1,
+    //     ease: "expo.out",
+    //   }, 4)
+    //   .set(SecurityAccordionRef.current, {
+    //     height: "10%",
+    //   }, 5)
+      
+      
+      
+      
     // // Store the timeline reference to avoid unused variable warning
     // animationsRef.current.comparisonTimeline = ComparisonTableTL;
 
@@ -774,17 +814,18 @@ export default function Home() {
           <div className={styles.SocialProofTitleContainer}>
             <h1 className={styles.SocialProofTitle} ref={socialProofTitleRef}>Trusted by leading builders in Web3.</h1>
           </div>
-          <div className={styles.VerticalLogoCarouselContainer}>
-            <div className={styles.LogoCarousel}>
-              <div className={styles.LogoCarouselStrip}>
-
-              </div>
-              <div className={styles.LogoCarouselStrip}>
-                
-              </div>
-              <div className={styles.LogoCarouselStrip}>
-                
-              </div>
+          <div className={styles.LogosCarousel}>
+            <div className={styles.LogoSlide}>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
+              <div className={styles.logo}></div>
             </div>
           </div>
           <div className={styles.TestimonialContainer}>
@@ -803,7 +844,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className={styles.DifferencesAccordionContainer}>
+          <div className={styles.DifferencesAccordionContainer} ref={DifferencesAccordionContainerRef}>
 
             <div className={styles.DifferencesAccordionItem} ref={PerformanceAccordionRef}>
               <div className={styles.DifferencesAccordionItemTitle}>
@@ -850,6 +891,21 @@ export default function Home() {
           </div>
         </div>
 
+      </section>
+
+      <section className={styles.CTASection}>
+        <div className={styles.CTAContent}>
+          <div className={styles.CTATextContainer}>
+            <h1 className={styles.CTATitle}>
+              <span className={styles.CTARegularText}>Get started with noder</span>
+              <br />
+              <span className={styles.CTARegularText}>and </span>
+              <span className={styles.CTABoldText}>DEPLOY</span>
+              <br />
+              <span className={styles.CTARegularText}>In seconds.</span>
+            </h1>
+          </div>
+        </div>
       </section>
     </main>
   );
