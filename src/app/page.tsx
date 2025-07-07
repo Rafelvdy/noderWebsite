@@ -255,36 +255,29 @@ export default function Home() {
       }
     })
 
-    // const split = SplitText.create(featuresCardTitleRef.current, {
-    //   type: "words",
-    //   wordsClass: "Word",
-    //   mask: "lines",
-    //   autoSplit: true,
-    //   onSplit: (self) => {
-    //     gsap.set(self.words, {
-    //       display: "inline-block",
-    //       width: "auto",
-    //       height: "auto",
-    //       margin: "0.2em 0.1em",
-    //     })
-    //   }
-    // });
+    const split = SplitText.create(featuresCardTitleRef.current, {
+      type: "words",
+      wordsClass: "Word",
+      mask: "lines",
+      autoSplit: true,
+    });
     
 
-    // gsap.set(split.words, { 
-    //   opacity: 0, 
-    //   y: 100,
-    // });
+    gsap.set(split.words, { 
+      opacity: 0, 
+      y: 100,
+      rotate: -60,
+    });
 
-    // featuresTL
-    //   .to(split.words, {
-    //     opacity: 1,
-    //     y: 0,
-    //     rotate: 0,
-    //     duration: 0.8,
-    //     ease: "expo.out",
-    //     stagger: 0.1,
-    //   })
+    featuresTL
+      .to(split.words, {
+        opacity: 1,
+        y: 0,
+        rotate: 0,
+        duration: 0.3,
+        ease: "expo.out",
+        stagger: 0.05,
+      })
 
     
     // featuresTL
