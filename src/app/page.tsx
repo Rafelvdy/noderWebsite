@@ -53,6 +53,10 @@ export default function Home() {
   const PerformanceAccordionRef = useRef<HTMLDivElement>(null);
   const SovereigntyAccordionRef = useRef<HTMLDivElement>(null);
   const SecurityAccordionRef = useRef<HTMLDivElement>(null);
+  const DifferencesSectionRef = useRef<HTMLDivElement>(null);
+  const DifferencesTitleRef1 = useRef<HTMLDivElement>(null);
+  const DifferencesTitleRef2 = useRef<HTMLDivElement>(null);
+  const DifferencesSubtitleRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -140,7 +144,7 @@ export default function Home() {
     }
   }, []);
 
-  
+
   
 
 
@@ -314,79 +318,7 @@ export default function Home() {
       })
 
     
-    // featuresTL
-    //   .to(comparisonTableRef.current, {
-    //     yPercent: 100,
-    //     ease: "none",
-    //     duration: 0.3,
-    //   }, 0.9)
-
-    // gsap.set(featuresCardRef.current, {
-    //   transform: "translateX(100%)",
-    //   opacity: 0,
-    // })
-
-    // gsap.to(featuresCardRef.current, {
-    //   x: 0,
-    //   opacity: 1,
-    //   scrollTrigger: {
-    //     trigger: featuresSectionRef.current,
-    //     start: "top center",
-    //     end: "+=50%",
-    //     scrub: true,
-    //   }
-    // })
-
-    // let split;
-    // SplitText.create(".split", {
-    //   type: "words,lines",
-    //   linesClass: "line",
-    //   autoSplit: true,
-    //   mask: "lines",
-    //   onSplit: (self) => {
-    //     split = gsap.from(self.lines, {
-    //       duration: 0.6,
-    //       yPercent: 100,
-    //       opacity: 0,
-    //       stagger: 0.1,
-    //       ease: "expo.out",
-    //     });
-    //     return split;
-    //   }
-    // });
-
-
-    // const FeaturesTextTL = gsap.timeline({
-    //   scrollTrigger: {
-    //     trigger: featuresSectionRef.current,
-    //     start: "top top",
-    //     end: "+=200%",
-    //     pin: true,
-    //     scrub: false,
-    //     toggleActions: "play none none reverse",
-    //   }
-    // })
-
-    // FeaturesTextTL.fromTo(".split", {
-    //   y: 100,
-    //   opacity: 0,
-    // }, {
-    //   y: 0,
-    //   opacity: 1,
-    //   duration: 0.8,
-    //   ease: "expo.out",
-    //   stagger: 0.1,
-    // }, "-=1.5")
-    // gsap.set(comparisonTableRef.current, {
-    //   scrollTrigger: {
-    //     trigger: comparisonTableRef.current,
-    //     start: "top bottom",
-    //     end: "bottom bottom",
-    //     scrub: true,
-    //     markers: true,
-    //   },
-    //   yPercent: 100,
-    // })
+   
 
     gsap.set(socialProofTitleRef.current, { opacity: 1 });
     const SocialProofSplit = SplitText.create(socialProofTitleRef.current, {
@@ -555,9 +487,113 @@ export default function Home() {
       height: "0%",
     })
 
-    
 
-    
+    gsap.set(PerformanceAccordionRef.current, {
+      height: "10%",
+    })
+
+    gsap.set(SovereigntyAccordionRef.current, {
+      height: "10%",
+    })
+
+    gsap.set(SecurityAccordionRef.current, {
+      height: "10%",
+    })
+
+    const DifferencesTitleSplit1 = SplitText.create(DifferencesTitleRef1.current, {
+      type: "lines",
+      linesClass: "line",
+      autoSplit: true,
+      mask: "lines",
+      onSplit: (self) => {
+        gsap.set(self.lines, {
+          yPercent: -100,          
+        })
+      }
+    })
+
+    const DifferencesTitleSplit2 = SplitText.create(DifferencesTitleRef2.current, {
+      type: "lines",
+      linesClass: "line",
+      autoSplit: true,
+      mask: "lines",
+      onSplit: (self) => {
+        gsap.set(self.lines, {
+          yPercent: 100,
+        })
+      }
+    })
+
+    // Setup scramble text for differences subtitle
+    const DifferencesSubtitleSplit = SplitText.create(DifferencesSubtitleRef.current, {
+      type: "chars",
+      charsClass: "char",
+    })
+
+    DifferencesSubtitleSplit.chars.forEach((char) => (char as any).orig = char.textContent)
+
+    const upperAndLowerCase = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const getRandomLetter = () => upperAndLowerCase[Math.floor(Math.random() * upperAndLowerCase.length)];
+
+    // Set initial scrambled state
+    gsap.set(DifferencesSubtitleSplit.chars, {
+      textContent: function() {
+        return getRandomLetter();
+      }
+    });
+
+    ScrollTrigger.create({
+      trigger: DifferencesSectionRef.current,
+      start: "top center",
+      onEnter: () => {
+        gsap.to(DifferencesTitleSplit1.lines, {
+          yPercent: 0,
+          duration: 0.8,
+          ease: "expo.out",
+        })
+      }
+    })
+
+    ScrollTrigger.create({
+      trigger: DifferencesSectionRef.current,
+      start: "top top",
+      onEnter: () => {
+        gsap.to(DifferencesTitleSplit2.lines, {
+          yPercent: 0,
+          duration: 0.5,
+          ease: "expo.out",
+        })
+
+        
+      }
+    })
+
+    // Scramble text animation for differences subtitle
+    ScrollTrigger.create({
+      trigger: DifferencesSectionRef.current,
+      start: "top center",
+      onEnter: () => {
+        // Animate each character with scramble effect
+        DifferencesSubtitleSplit.chars.forEach((char, index) => {
+          gsap.to(char, {
+            duration: 0.01 + (index * 0.001), // Stagger the animation
+            ease: "none",
+            repeat: 8, // Number of scramble iterations
+            yoyo: false,
+            onUpdate: function() {
+              if (this.progress() < 0.8) {
+                char.textContent = getRandomLetter();
+              } else {
+                char.textContent = (char as any).orig;
+              }
+            },
+            onComplete: function() {
+              char.textContent = (char as any).orig;
+            }
+          });
+        });
+      }
+    })
 
     // // Store the timeline reference to avoid unused variable warning
     // animationsRef.current.comparisonTimeline = ComparisonTableTL;
@@ -757,13 +793,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.DifferencesSection}>
+      <section className={styles.DifferencesSection} ref={DifferencesSectionRef}>
         <div className={styles.DifferencesContent}>
           <div className={styles.DifferencesTitleContainer}>
-            <h1 className={styles.DifferencesTitle}>OWN YOUR OWN INFRASTRUCTURE.</h1>
-            <h1 className={styles.DifferencesTitle}>MAXIMISE YOUR EDGE.</h1>
+            <h1 className={styles.DifferencesTitle} ref={DifferencesTitleRef1}>OWN YOUR OWN INFRASTRUCTURE.</h1>
+            <h1 className={styles.DifferencesTitle} ref={DifferencesTitleRef2}>MAXIMISE YOUR EDGE.</h1>
             <div className={styles.DifferencesSubtitle}>
-              <h2>{"["}We give you the speed, privacy, and control to scale Web3 without compromise.{"]"}</h2>
+              <h2 ref={DifferencesSubtitleRef}>{"["}We give you the speed, privacy, and control to scale Web3 without compromise.{"]"}</h2>
             </div>
           </div>
 
