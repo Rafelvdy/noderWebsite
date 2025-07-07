@@ -366,9 +366,10 @@ export default function Home() {
       scrollTrigger: {
         trigger: comparisonTableRef.current,
         start: "top top",
-        end: "+=300%",
+        end: "110% bottom",
         pin: true,
         scrub: false,
+        markers: true,
       }
     });
     
