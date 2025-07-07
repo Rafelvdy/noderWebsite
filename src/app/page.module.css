@@ -658,10 +658,60 @@
     font-family: var(--font-inter);
     font-weight: 700;
     color: black;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    text-align: left;
+    display: block;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.1;
+    opacity: 0;
+    will-change: transform;
+    overflow: hidden;
+    padding: 1rem;
+}
+
+/* SplitText line masking fixes */
+.SocialProofTitle .line {
+    overflow: hidden !important;
+    position: relative;
+    display: block;
+    height: auto !important;
+    line-height: 1.1;
+    /* Prevent any scrolling behavior */
+    overscroll-behavior: none;
+    scroll-behavior: auto;
+}
+
+.SocialProofTitle .line > div {
+    overflow: hidden !important;
+    position: relative;
+    height: auto !important;
+    transform-origin: center bottom;
+    will-change: transform;
+    /* Prevent scrolling within line content */
+    overscroll-behavior: none;
+}
+
+
+
+/* Responsive adjustments for line breaking */
+@media (max-width: 768px) {
+    .SocialProofTitle {
+        max-width: 350px;
+        font-size: 9vw;
+    }
+}
+
+@media (min-width: 1024px) {
+    .SocialProofTitle {
+        max-width: 500px;
+        font-size: 6vw;
+    }
+}
+
+@media (min-width: 1440px) {
+    .SocialProofTitle {
+        max-width: 650px;
+        font-size: 5vw;
+    }
 }
 
 .VerticalLogoCarouselContainer {

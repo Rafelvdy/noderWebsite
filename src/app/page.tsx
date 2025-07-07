@@ -49,7 +49,7 @@ export default function Home() {
   const competitorTime2Ref = useRef<HTMLDivElement>(null);
   const competitorTime3Ref = useRef<HTMLDivElement>(null);
   const socialProofSectionRef = useRef<HTMLDivElement>(null);
-
+  const socialProofTitleRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -360,13 +360,48 @@ export default function Home() {
     //   },
     //   yPercent: 100,
     // })
-    
+
+    gsap.set(socialProofTitleRef.current, { opacity: 1 });
+    const SocialProofSplit = SplitText.create(socialProofTitleRef.current, {
+      type: "lines",
+      linesClass: "line",
+      autoSplit: true,
+      onSplit: (self) => {
+        console.log('SplitText created:', self.lines.length, 'lines'); // Debug log
+        gsap.set(self.lines, {
+          yPercent: 100,
+          opacity: 0,
+          overflow: "hidden",
+          position: "relative",
+        })
+      }
+    })
+
+    const SocialProofTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: socialProofSectionRef.current,
+        start: "top top",
+        end: "200% bottom",
+        pin: true,
+        scrub: true,
+        markers: true,
+      }
+    })
+
+    SocialProofTL
+      .to(SocialProofSplit.lines, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.3,
+        ease: "expo.out",
+        stagger: 0.15,
+      })
 
     const ComparisonTableTL = gsap.timeline({
       scrollTrigger: {
         trigger: comparisonTableRef.current,
         start: "top top",
-        end: "110% bottom",
+        end: "100% bottom",
         pin: true,
         scrub: false,
         markers: true,
@@ -668,7 +703,7 @@ export default function Home() {
       <section className={styles.SocialProofSection} ref={socialProofSectionRef}>
         <div className={styles.SocialProofContent}>
           <div className={styles.SocialProofTitleContainer}>
-            <h1 className={styles.SocialProofTitle}>Trusted by leading builders in Web3.</h1>
+            <h1 className={styles.SocialProofTitle} ref={socialProofTitleRef}>Trusted by leading builders in Web3.</h1>
           </div>
           <div className={styles.VerticalLogoCarouselContainer}>
             <div className={styles.LogoCarousel}>
