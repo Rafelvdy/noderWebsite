@@ -677,3 +677,114 @@
     width: 100%;
     height: 175px;
 }
+
+
+
+
+.DifferencesSection {
+    background: white;
+    min-height: 100dvh;
+    width: 100%;
+}
+
+.DifferencesContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin-top: 80px;
+}
+
+.DifferencesTitleContainer {
+    /* background: red; */
+    width: 100%;
+    height: fit-content;
+}
+
+.DifferencesTitle {
+    font-size: 6vw;
+    text-align: center;
+    font-family: var(--font-inter);
+    font-weight: 700;
+    color: black;
+    display: block;
+    text-align: left;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.DifferencesSubtitle {
+    font-size: 3.5vw;
+    text-align: left;
+    font-family: var(--font-space-grotesk);
+    font-weight: 400;
+}
+
+.DifferencesAccordionContainer {
+    width: 100%;
+    height: 400px;
+    /* background: red; */
+}
+
+.DifferencesAccordionItem {
+    width: 100%;
+    height: 33.3%;
+    /* background: blue; */
+    border-bottom: 1px solid #E5E7EB;
+    overflow: hidden;
+}
+
+.DifferencesAccordionItemTitle {
+    /* background: red; */
+    width: 100%;
+    min-height: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.DifferencesAccordionItemTitleText {
+    font-size: 7vw;
+    font-family: var(--font-space-grotesk);
+}
+
+.DifferencesAccordionItemContent {
+    /* background: green; */
+    width: 100%;
+    min-height: 80%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.AccordionBox {
+    background: #4A4AFF;
+    color: #E5E5FF;
+    width: 45%;
+    height: 75%;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;   
+}
+
+.AccordionBoxText {
+    font-size: 3vw;
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+   
+}
+
+#AccordionBoxInverted {
+    background: #E5E5FF !important;
+    color: #4A4AFF !important;
+    overflow: hidden;
+}

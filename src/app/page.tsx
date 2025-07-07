@@ -50,6 +50,9 @@ export default function Home() {
   const competitorTime3Ref = useRef<HTMLDivElement>(null);
   const socialProofSectionRef = useRef<HTMLDivElement>(null);
   const socialProofTitleRef = useRef<HTMLDivElement>(null);
+  const PerformanceAccordionRef = useRef<HTMLDivElement>(null);
+  const SovereigntyAccordionRef = useRef<HTMLDivElement>(null);
+  const SecurityAccordionRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -297,7 +300,7 @@ export default function Home() {
     gsap.set(split.words, { 
       opacity: 0, 
       y: 100,
-      rotate: -60,
+      rotate: -45,
     });
 
     featuresTL
@@ -628,7 +631,7 @@ export default function Home() {
               <span>THE MOST EFFICIENT NODES ON <span className={styles.SolanaGradient}>SOLANA</span></span>
             </div>
             <div className={styles.HeroSubtitle} ref={heroSubtitleRef}>
-              The first fully owned, performance-optimized RPC infrastructure built for Web3
+              {"["}The first fully owned, performance-optimized RPC infrastructure built for Web3{"]"}
             </div>
           </div>
         </div>
@@ -752,6 +755,65 @@ export default function Home() {
 
           </div>
         </div>
+      </section>
+
+      <section className={styles.DifferencesSection}>
+        <div className={styles.DifferencesContent}>
+          <div className={styles.DifferencesTitleContainer}>
+            <h1 className={styles.DifferencesTitle}>OWN YOUR OWN INFRASTRUCTURE.</h1>
+            <h1 className={styles.DifferencesTitle}>MAXIMISE YOUR EDGE.</h1>
+            <div className={styles.DifferencesSubtitle}>
+              <h2>{"["}We give you the speed, privacy, and control to scale Web3 without compromise.{"]"}</h2>
+            </div>
+          </div>
+
+          <div className={styles.DifferencesAccordionContainer}>
+
+            <div className={styles.DifferencesAccordionItem} ref={PerformanceAccordionRef}>
+              <div className={styles.DifferencesAccordionItemTitle}>
+                <h2 className={styles.DifferencesAccordionItemTitleText}>Performance</h2>
+              </div>
+              <div className={styles.DifferencesAccordionItemContent}>
+                <div className={styles.AccordionBox}>
+                  <h3 className={styles.AccordionBoxText}>{"//"} Low-latency RPCs</h3>
+                </div>
+                <div className={styles.AccordionBox} id={styles.AccordionBoxInverted}>
+                <h3 className={styles.AccordionBoxText}>{"//"} Optimized hardware routing</h3>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.DifferencesAccordionItem} ref={SovereigntyAccordionRef}>
+            <div className={styles.DifferencesAccordionItemTitle}>
+                <h2 className={styles.DifferencesAccordionItemTitleText}>Sovereignty</h2>
+              </div>
+              <div className={styles.DifferencesAccordionItemContent}>
+                <div className={styles.AccordionBox}>
+                  <h3 className={styles.AccordionBoxText}>{"//"} Fully owned nodes</h3>
+                </div>
+                <div className={styles.AccordionBox} id={styles.AccordionBoxInverted}>
+                <h3 className={styles.AccordionBoxText}>{"//"} No third-party dependencies</h3>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.DifferencesAccordionItem} ref={SecurityAccordionRef}>
+              <div className={styles.DifferencesAccordionItemTitle}>
+                <h2 className={styles.DifferencesAccordionItemTitleText}>Security</h2>
+              </div>
+              <div className={styles.DifferencesAccordionItemContent}>
+                <div className={styles.AccordionBox}>
+                  <h3 className={styles.AccordionBoxText}>{"//"} Real decentralization; your information stays yours</h3>
+                </div>
+                <div className={styles.AccordionBox} id={styles.AccordionBoxInverted}>
+                <h3 className={styles.AccordionBoxText}>{"//"} Something else</h3>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </section>
     </main>
   );
