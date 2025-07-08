@@ -161,9 +161,8 @@
 
 .HeroSubtitle {
     width: 100%;
-    height: 80px;
-
-    font-size: clamp(14px, 3.5vw, 18px);
+    height: fit-content;
+    font-size: clamp(14px, 3.5vw, 16px);
     font-family: var(--font-space-grotesk);
     font-weight: 400;
     text-align: center;
@@ -172,6 +171,7 @@
     align-items: flex-start;
     justify-content: center;
     max-width: 550px;
+    overflow: hidden;
 }
 
 @media (min-width: 1024px) {
@@ -637,7 +637,7 @@
 }
 
 .SocialProofTitle {
-    font-size: 8vw;
+    font-size: clamp(20px, 8vw, 45px);
     text-align: center;
     font-family: var(--font-inter);
     font-weight: 700;
@@ -645,6 +645,7 @@
     display: block;
     text-align: left;
     overflow: hidden;
+    max-width: 500px;
 }
 
 .LogosCarousel {
@@ -684,10 +685,14 @@
     background: white;
     min-height: 100dvh;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .DifferencesContent {
     width: 100%;
+    max-width: 768px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -705,7 +710,7 @@
 }
 
 .DifferencesTitle {
-    font-size: 6vw;
+    font-size: clamp(15px, 6vw, 25px);
     text-align: center;
     font-family: var(--font-inter);
     font-weight: 700;
@@ -717,7 +722,7 @@
 }
 
 .DifferencesSubtitle {
-    font-size: 3.5vw;
+    font-size: clamp(10px, 3.5vw, 12px);
     text-align: left;
     font-family: var(--font-space-grotesk);
     font-weight: 400;
@@ -731,7 +736,7 @@
 
 .DifferencesAccordionItem {
     width: 100%;
-    height: 10%;
+    height: fit-content;
     /* background: blue; */
     border-bottom: 1px solid #E5E7EB;
     overflow: hidden;
@@ -740,7 +745,7 @@
 .DifferencesAccordionItemTitle {
     /* background: red; */
     width: 100%;
-    min-height: 25%;
+    height: fit-content;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -748,19 +753,21 @@
 }
 
 .DifferencesAccordionItemTitleText {
-    font-size: 7vw;
+    font-size: clamp(20px, 7vw, 30px);
     font-family: var(--font-space-grotesk);
+    padding: 1rem;
 }
 
 .DifferencesAccordionItemContent {
     /* background: green; */
     width: 100%;
-    min-height: 80%;
-    padding: 1rem;
+    height: 0%;
+    
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: row;
+    overflow: hidden;
 }
 
 .AccordionBox {
@@ -824,7 +831,7 @@
     line-height: 1.1;
     color: #000;
     margin: 0;
-    padding: 0;
+    padding: 1rem;
 }
 
 .CTARegularText {
@@ -838,11 +845,12 @@
     border-bottom: 1px solid #c1c1c1;
     border-right: 1px solid #c1c1c1;
     padding-right: 5px;
+    width: fit-content;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.CTABoldText:hover {
-    content: "DEPLOY NODE";
-}
+
+
 
 /* Mobile-first responsive adjustments */
 @media (max-width: 480px) {

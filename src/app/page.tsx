@@ -58,6 +58,8 @@ export default function Home() {
   const DifferencesTitleRef2 = useRef<HTMLDivElement>(null);
   const DifferencesSubtitleRef = useRef<HTMLDivElement>(null);
   const DifferencesAccordionContainerRef = useRef<HTMLDivElement>(null);
+  const CTABoldTextRef = useRef<HTMLDivElement>(null);
+  const CTABoldTextSpanRef = useRef<HTMLSpanElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -330,7 +332,7 @@ export default function Home() {
         console.log('SplitText created:', self.lines.length, 'lines'); // Debug log
         gsap.set(self.lines, {
           yPercent: 100,
-          opacity: 0,
+          opacity: 1,
           overflow: "hidden",
           position: "relative",
         })
@@ -488,18 +490,28 @@ export default function Home() {
       height: "0%",
     })
 
+    // Instead of setting accordion item heights, set content heights to 0
+    // The titles will now always be visible due to CSS min-height
+    if (PerformanceAccordionRef.current) {
+      const contentEl = PerformanceAccordionRef.current.querySelector(`.${styles.DifferencesAccordionItemContent}`);
+      if (contentEl) {
+        gsap.set(contentEl, { height: 0 });
+      }
+    }
 
-    gsap.set(PerformanceAccordionRef.current, {
-      height: "10%",
-    })
+    if (SovereigntyAccordionRef.current) {
+      const contentEl = SovereigntyAccordionRef.current.querySelector(`.${styles.DifferencesAccordionItemContent}`);
+      if (contentEl) {
+        gsap.set(contentEl, { height: 0 });
+      }
+    }
 
-    gsap.set(SovereigntyAccordionRef.current, {
-      height: "10%",
-    })
-
-    gsap.set(SecurityAccordionRef.current, {
-      height: "10%",
-    })
+    if (SecurityAccordionRef.current) {
+      const contentEl = SecurityAccordionRef.current.querySelector(`.${styles.DifferencesAccordionItemContent}`);
+      if (contentEl) {
+        gsap.set(contentEl, { height: 0 });
+      }
+    }
 
     const DifferencesTitleSplit1 = SplitText.create(DifferencesTitleRef1.current, {
       type: "lines",
@@ -604,39 +616,32 @@ export default function Home() {
         });
       }
     })
-   
 
-    // DifferencesAccordionTL
-    //   .to(PerformanceAccordionRef.current, {
-    //     height: "33.3%",
-    //     duration: 0.1,
-    //     ease: "expo.out",
-    //   }, 1)
-    //   .set(PerformanceAccordionRef.current, {
-    //     height: "10%",
-    //   }, 2)
-    //   .to(SovereigntyAccordionRef.current, {
-    //     height: "33.3%",
-    //     duration: 0.1,
-    //     ease: "expo.out",
-    //   }, 2)
-    //   .set(SovereigntyAccordionRef.current, {
-    //     height: "10%",
-    //   }, 3)
-    //   .to(SecurityAccordionRef.current, {
-    //     height: "40%",
-    //     duration: 0.1,
-    //     ease: "expo.out",
-    //   }, 4)
-    //   .set(SecurityAccordionRef.current, {
-    //     height: "10%",
-    //   }, 5)
-      
-      
-      
-      
-    // // Store the timeline reference to avoid unused variable warning
-    // animationsRef.current.comparisonTimeline = ComparisonTableTL;
+    // const CTAButtonTL = gsap.timeline({
+    //   trigger: CTABoldTextRef.current,
+    //   onMouseEnter: () => {
+    //     console.log("Mouse entered")
+    //     gsap.to(CTABoldTextSpanRef.current, {
+    //       transform: "translateY(100%)",
+    //     })
+    //   }
+    // })
+
+    CTABoldTextRef.current?.addEventListener("mouseenter", () => {
+      console.log("Mouse entered")
+      gsap.to(CTABoldTextSpanRef.current, {
+        yPercent: 100,
+      })
+    })
+
+    // const CTAButtonTL = gsap.timeline({
+    //   onMouseEnter: () => {
+    //     gsap.to(CTABoldTextRef.current, {
+    //       width: ""
+    //     })
+    //   }
+    // })
+   
 
     // Cleanup function
     return () => {
@@ -845,11 +850,11 @@ export default function Home() {
           </div>
 
           <div className={styles.DifferencesAccordionContainer} ref={DifferencesAccordionContainerRef}>
-
+            <div className={styles.DifferencesAccordionItemTitle}>
+              <h2 className={styles.DifferencesAccordionItemTitleText}>01/    Performance</h2>
+            </div>
             <div className={styles.DifferencesAccordionItem} ref={PerformanceAccordionRef}>
-              <div className={styles.DifferencesAccordionItemTitle}>
-                <h2 className={styles.DifferencesAccordionItemTitleText}>Performance</h2>
-              </div>
+              
               <div className={styles.DifferencesAccordionItemContent}>
                 <div className={styles.AccordionBox}>
                   <h3 className={styles.AccordionBoxText}>{"//"} Low-latency RPCs</h3>
@@ -861,8 +866,8 @@ export default function Home() {
             </div>
 
             <div className={styles.DifferencesAccordionItem} ref={SovereigntyAccordionRef}>
-            <div className={styles.DifferencesAccordionItemTitle}>
-                <h2 className={styles.DifferencesAccordionItemTitleText}>Sovereignty</h2>
+              <div className={styles.DifferencesAccordionItemTitle}>
+                <h2 className={styles.DifferencesAccordionItemTitleText}>02/    Sovereignty</h2>
               </div>
               <div className={styles.DifferencesAccordionItemContent}>
                 <div className={styles.AccordionBox}>
@@ -876,7 +881,7 @@ export default function Home() {
 
             <div className={styles.DifferencesAccordionItem} ref={SecurityAccordionRef}>
               <div className={styles.DifferencesAccordionItemTitle}>
-                <h2 className={styles.DifferencesAccordionItemTitleText}>Security</h2>
+                <h2 className={styles.DifferencesAccordionItemTitleText}>03/    Security</h2>
               </div>
               <div className={styles.DifferencesAccordionItemContent}>
                 <div className={styles.AccordionBox}>
@@ -900,7 +905,10 @@ export default function Home() {
               <span className={styles.CTARegularText}>Get started with noder</span>
               <br />
               <span className={styles.CTARegularText}>and </span>
-              <span className={styles.CTABoldText}>DEPLOY</span>
+              <br />
+              <div className={styles.CTABoldText} ref={CTABoldTextRef}>
+                <span ref={CTABoldTextSpanRef}>DEPLOY</span>
+              </div>
               <br />
               <span className={styles.CTARegularText}>In seconds.</span>
             </h1>
