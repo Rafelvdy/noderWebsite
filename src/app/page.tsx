@@ -63,6 +63,7 @@ export default function Home() {
   const CTABoldTextSpanRef = useRef<HTMLSpanElement>(null);
   const secondaryDescriptionRef = useRef<HTMLDivElement>(null);
   const primaryDescriptionRef = useRef<HTMLDivElement>(null);
+  const serverModelContainerRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -295,7 +296,7 @@ export default function Home() {
         start: "top top",
         end: "bottom top",
         scrub: true,
-        markers: true,
+        markers: false,
         onUpdate: (self) => {
           const progress = self.progress;
           gsap.set(backgroundModelRef.current, {
@@ -318,6 +319,23 @@ export default function Home() {
         scrub: true,
       }
     })
+
+
+    if (serverModelContainerRef.current) {
+      gsap.set(serverModelContainerRef.current, {
+        y: "100%",
+      })
+
+      gsap.to(serverModelContainerRef.current, {
+        scrollTrigger: {
+          trigger: featuresSectionRef.current,
+          start: "top top",
+        },
+        y: "0%",
+        duration: 1.2,
+        ease: "power2.out",
+      })
+    }
 
     const split = SplitText.create(featuresCardTitleRef.current, {
       type: "words",
@@ -765,7 +783,7 @@ export default function Home() {
       
       <section className={styles.FeaturesSection} ref={featuresSectionRef}>
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
-          <div className={styles.ServerModelContainer} style={{display: isMobile ? "none" : "flex"}}>
+          <div className={styles.ServerModelContainer} style={{display: isMobile ? "none" : "flex"}} ref={serverModelContainerRef}>
             <ServerModel3D 
               className={styles.FeaturesBackgroundModel3D} 
               ref={serverModelFeatRef}
