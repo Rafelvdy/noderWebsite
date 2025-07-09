@@ -238,37 +238,23 @@
     }
 
     .FeaturesCard {
-        margin-left: 25%;
         overflow: hidden;
     }
 }
 
 
 .FeaturesBackgroundModel3D {
-    /* background: blue; */
+    /* background: red; */  
     position: relative;
-    width: 50%;
-    height: 50%;
+    width: 80%;
+    height: 80%;
     z-index: 2;
     transform-origin: center center;
     will-change: transform;
+    overflow: hidden;
 }
 
-.FeaturesCard {
-    /* background: #626367; */
-    width: 300px;
-    height: 100%;
-    border-radius: 10px;
-    /* box-shadow: 0 10px 30px rgba(0,0,0,0.3); */
-    /* transform: translateX(100%); */
-    opacity: 1;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    
-}
+
 
 .FeaturesCardContent {
     /* background: black; */
@@ -291,6 +277,29 @@
 
     .FeaturesCard {
         width: 500px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .FeaturesBackgroundModel {
+        align-items: center;
+        justify-content: center;
+        /* background: black; */
+        gap: 0px;
+    }
+
+    .ServerModelContainer {
+        position: relative;
+        /* background: blue; */
+        height: 80%;
+        width: 40vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .FeaturesCard {
+        /* background: red; */  
     }
 }
 

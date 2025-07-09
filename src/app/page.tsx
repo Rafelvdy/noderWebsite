@@ -288,6 +288,26 @@ export default function Home() {
     });
 
     animationsRef.current.mainTimeline = mainTl;
+    
+    if (window.innerWidth >= 1024) {    
+      ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        markers: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          gsap.set(backgroundModelRef.current, {
+            x: `${-25 - (progress * 100)}%`,
+            scale: 1 - (progress * 0.5),
+            // opacity: 1 - progress,
+            ease: "expo.out",
+
+          })
+        }
+      });
+    }
 
     const featuresTL = gsap.timeline({
       scrollTrigger: {
@@ -745,6 +765,12 @@ export default function Home() {
       
       <section className={styles.FeaturesSection} ref={featuresSectionRef}>
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
+          <div className={styles.ServerModelContainer} style={{display: isMobile ? "none" : "flex"}}>
+            <ServerModel3D 
+              className={styles.FeaturesBackgroundModel3D} 
+              ref={serverModelFeatRef}
+            />
+          </div>
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
               <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription} ref={secondaryDescriptionRef}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
