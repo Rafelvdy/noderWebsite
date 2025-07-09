@@ -277,7 +277,7 @@ export default function Home() {
               isExpanded = true;
             }
             // Contract on upward scroll when near top
-            else if (direction === -1 && scrollY < 50 && isExpanded) {
+            else if (direction === -1 && isExpanded) {
               console.log('Contracting mobile nav');
               mobileNavExpandTimeline?.reverse();
               isExpanded = false;
