@@ -21,6 +21,7 @@ interface SplitTextChar extends HTMLElement {
   orig?: string | null;
 }
 
+
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export default function Home() {
@@ -69,6 +70,10 @@ export default function Home() {
   const secondaryDescriptionRef = useRef<HTMLDivElement>(null);
   const primaryDescriptionRef = useRef<HTMLDivElement>(null);
   const serverModelContainerRef = useRef<HTMLDivElement>(null);
+  const discordRef = useRef<HTMLAnchorElement>(null);
+  const telegramRef = useRef<HTMLAnchorElement>(null);
+  const twitterRef = useRef<HTMLAnchorElement>(null);
+
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -145,10 +150,11 @@ export default function Home() {
       gsap.to(serverObject.rotation, {
         scrollTrigger: {
           trigger: featuresSectionRef.current,
-          start: "10% bottom",
+          start: "top bottom",
           end: "bottom top",
           scrub: 1,
-          markers: false
+          markers: false,
+          
         },
         y: -0.5,
         ease: "expo.out",
@@ -202,6 +208,11 @@ export default function Home() {
     // Capture animation references for cleanup
     const currentAnimations = animationsRef.current;
 
+    // Mobile Navigation variables
+    let mobileNavExpandTimeline: gsap.core.Timeline | null = null;
+    let mobileNavScrollTrigger: ScrollTrigger | null = null;
+    let isExpanded = false;
+
     // Set initial mobile state
     setIsMobile(window.innerWidth <= 1023);
     window.addEventListener('resize', handleResize);
@@ -221,6 +232,60 @@ export default function Home() {
 
     // Set initial state
     gsap.set(heroTitleRef.current, { x: 0 });
+
+    // Wait for DOM to be ready and then setup mobile navigation
+    requestAnimationFrame(() => {
+      // Mobile Navigation Expansion Logic - check window width directly to avoid race condition
+      if (window.innerWidth <= 1023) {        
+        // Create the expansion timeline
+        mobileNavExpandTimeline = gsap.timeline({ paused: true });
+        
+        mobileNavExpandTimeline
+          .to(discordRef.current, {
+            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+            duration: 0.4,
+            ease: 'power2.out'
+          }, 0)
+          .to(telegramRef.current, {
+            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+            duration: 0.4,
+            ease: 'power2.out'
+          }, 0)
+          .to(twitterRef.current, {
+            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+            duration: 0.4,
+            ease: 'power2.out'
+          }, 0);
+
+        console.log('Mobile nav timeline created successfully');
+        
+        // ScrollTrigger for direction detection
+        mobileNavScrollTrigger = ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          onUpdate: (self) => {
+            const direction = self.direction;
+            const scrollY = window.scrollY;
+            
+            console.log('Scroll direction:', direction, 'ScrollY:', scrollY, 'isExpanded:', isExpanded);
+            
+            // Expand on downward scroll
+            if (direction === 1 && scrollY > 30 && !isExpanded) {
+              console.log('Expanding mobile nav');
+              mobileNavExpandTimeline?.play();
+              isExpanded = true;
+            }
+            // Contract on upward scroll when near top
+            else if (direction === -1 && scrollY < 50 && isExpanded) {
+              console.log('Contracting mobile nav');
+              mobileNavExpandTimeline?.reverse();
+              isExpanded = false;
+            }
+          }
+        });
+      } 
+    });
 
     // Main scroll-triggered animation with optimized update function
     const mainTl = gsap.timeline({
@@ -309,7 +374,6 @@ export default function Home() {
           const progress = self.progress;
           gsap.set(backgroundModelRef.current, {
             x: `${-25 - (progress * 100)}%`,
-            scale: 1 - (progress * 0.5),
             // opacity: 1 - progress,
             ease: "expo.out",
 
@@ -743,6 +807,14 @@ export default function Home() {
       // Kill all ScrollTriggers
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       
+      // Mobile Navigation Cleanup
+      if (mobileNavExpandTimeline) {
+        mobileNavExpandTimeline.kill();
+      }
+      if (mobileNavScrollTrigger) {
+        mobileNavScrollTrigger.kill();
+      }
+      
       // Remove event listeners
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -760,11 +832,17 @@ export default function Home() {
     <main>
       <div className={styles.MobileNav} style={{visibility: isMobile ? 'visible' : 'hidden'}}>
         <div className={styles.SocialsContainer}>
-          <a href="https://discord.gg/A8ANRdfMWJ" target="_blank" rel="noopener noreferrer">
-            <FaDiscord className={styles.SocialIcon} id={styles.Discord} />
-          </a>
-          <FaTelegram className={styles.SocialIcon} id={styles.Telegram} />
-          <FaTwitter className={styles.SocialIcon} id={styles.Twitter} />
+          <div className={styles.StackedIcons}>
+            <a href="https://discord.gg/A8ANRdfMWJ" target="_blank" rel="noopener noreferrer" ref={discordRef}>
+              <FaDiscord className={styles.SocialIcon} id={styles.Discord}  />
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" ref={telegramRef}>
+              <FaTelegram className={styles.SocialIcon} id={styles.Telegram}  />
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" ref={twitterRef}>
+              <FaTwitter className={styles.SocialIcon} id={styles.Twitter} />
+            </a>
+          </div>
         </div>
       </div>
       
@@ -781,10 +859,10 @@ export default function Home() {
           <button className={styles.HeroButton}></button>
           <div className={styles.HeroTextContainer}>
             <div className={styles.HeroTitle} ref={heroTitleRef}>
-              <span>THE MOST EFFICIENT NODES ON <span className={styles.SolanaGradient}>SOLANA</span></span>
+              <span><h1>THE MOST EFFICIENT NODES ON <span className={styles.SolanaGradient}>SOLANA</span></h1></span>
             </div>
             <div className={styles.HeroSubtitle} ref={heroSubtitleRef}>
-              {"["}The first fully owned, performance-optimized RPC infrastructure built for Web3{"]"}
+              <h2>{"["}The first fully owned, performance-optimized RPC infrastructure built for Web3{"]"}</h2>
             </div>
           </div>
         </div>
