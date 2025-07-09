@@ -61,6 +61,8 @@ export default function Home() {
   const DifferencesAccordionContainerRef = useRef<HTMLDivElement>(null);
   const CTABoldTextRef = useRef<HTMLDivElement>(null);
   const CTABoldTextSpanRef = useRef<HTMLSpanElement>(null);
+  const secondaryDescriptionRef = useRef<HTMLDivElement>(null);
+  const primaryDescriptionRef = useRef<HTMLDivElement>(null);
 
   const cachedElements = useRef<{
     backgroundModelContainer: Element | null;
@@ -311,6 +313,15 @@ export default function Home() {
       rotate: -45,
     });
 
+    gsap.set(secondaryDescriptionRef.current, {
+      height: "0%",
+      opacity: 0,
+    });
+    gsap.set(primaryDescriptionRef.current, {
+      height: "0%",
+      opacity: 0,
+    });
+
     featuresTL
       .to(split.words, {
         opacity: 1,
@@ -320,6 +331,19 @@ export default function Home() {
         ease: "expo.out",
         stagger: 0.05,
       })
+      .to(primaryDescriptionRef.current, {
+        height: "35%",
+        ease: "power2.out",
+        duration: 0.5,
+        opacity: 1,
+      })
+      .to(secondaryDescriptionRef.current, {
+        height: "35%",
+        ease: "power2.out",
+        duration: 0.5,
+        opacity: 1,
+      })
+
 
     
    
@@ -723,9 +747,9 @@ export default function Home() {
         <div className={styles.FeaturesBackgroundModel} ref={backgroundModelFeatRef}>
           <div className={styles.FeaturesCard} ref={featuresCardRef}>
             <div className={styles.FeaturesCardContent}>
-              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.SecondaryDescription} ref={secondaryDescriptionRef}><h3 className="split">Centralized infra introduces single points of failure, performance bottlenecks, and censorship risk.</h3></div>
               <div className={styles.FeaturesCardTitle} ref={featuresCardTitleRef} ><h2> WEB3 IS STILL HEAVILY RELYING ON WEB2</h2></div>
-              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription}><h3 className="split">Most &quot;decentralized&quot; projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
+              <div className={styles.FeaturesCardDescription} id={styles.PrimaryDescription} ref={primaryDescriptionRef}><h3 className="split">Most &quot;decentralized&quot; projects rely on cloud providers like AWS of GCP. When those go down, so do their nodes.</h3></div>
             </div>
           </div>
         </div>

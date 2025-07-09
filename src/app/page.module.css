@@ -2,6 +2,7 @@
     opacity: 0;
     will-change: transform;
     rotate: -30deg;
+    overflow: hidden;
 }
 
 .MobileNav {
@@ -300,6 +301,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     
 }
 
@@ -336,6 +338,7 @@
     justify-content: center;
     max-width: 95%;
     text-align: center;
+    overflow: hidden;
 }
 
 .ComparisonTableSection {
@@ -689,6 +692,12 @@
     width: auto;
     height: auto;
     margin: 0 1rem; 
+}
+
+.LogoCarousel:before {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 
