@@ -16,6 +16,11 @@ type ServerModel3DRef = {
   getServerObject: () => THREE.Group | null;
 };
 
+// Interface for SplitText characters with original text property
+interface SplitTextChar extends HTMLElement {
+  orig?: string | null;
+}
+
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export default function Home() {
@@ -194,6 +199,9 @@ export default function Home() {
     // Store lenis reference for cleanup
     animationsRef.current.lenis = lenis;
 
+    // Capture animation references for cleanup
+    const currentAnimations = animationsRef.current;
+
     // Set initial mobile state
     setIsMobile(window.innerWidth <= 1023);
     window.addEventListener('resize', handleResize);
@@ -323,15 +331,16 @@ export default function Home() {
 
     if (serverModelContainerRef.current) {
       gsap.set(serverModelContainerRef.current, {
-        y: "100%",
+        x: "-150%",
       })
 
       gsap.to(serverModelContainerRef.current, {
         scrollTrigger: {
           trigger: featuresSectionRef.current,
           start: "top top",
+          toggleActions: "play none none reverse",
         },
-        y: "0%",
+        x: "0%",
         duration: 1.2,
         ease: "power2.out",
       })
@@ -606,7 +615,7 @@ export default function Home() {
       charsClass: "char",
     })
 
-    DifferencesSubtitleSplit.chars.forEach((char) => (char as any).orig = char.textContent)
+    DifferencesSubtitleSplit.chars.forEach((char) => (char as SplitTextChar).orig = char.textContent)
 
     const upperAndLowerCase = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const getRandomLetter = () => upperAndLowerCase[Math.floor(Math.random() * upperAndLowerCase.length)];
@@ -669,11 +678,11 @@ export default function Home() {
               if (this.progress() < 0.8) {
                 char.textContent = getRandomLetter();
               } else {
-                char.textContent = (char as any).orig;
+                char.textContent = (char as SplitTextChar).orig ?? null;
               }
             },
             onComplete: function() {
-              char.textContent = (char as any).orig;
+              char.textContent = (char as SplitTextChar).orig ?? null;
             }
           });
         });
@@ -714,21 +723,21 @@ export default function Home() {
       }
       
       // Cancel RAF
-      if (animationsRef.current.rafId) {
-        cancelAnimationFrame(animationsRef.current.rafId);
+      if (currentAnimations.rafId) {
+        cancelAnimationFrame(currentAnimations.rafId);
       }
       
       // Kill timelines
-      if (animationsRef.current.mainTimeline) {
-        animationsRef.current.mainTimeline.kill();
+      if (currentAnimations.mainTimeline) {
+        currentAnimations.mainTimeline.kill();
       }
-      if (animationsRef.current.comparisonTimeline) {
-        animationsRef.current.comparisonTimeline.kill();
+      if (currentAnimations.comparisonTimeline) {
+        currentAnimations.comparisonTimeline.kill();
       }
       
       // Destroy lenis
-      if (animationsRef.current.lenis) {
-        animationsRef.current.lenis.destroy();
+      if (currentAnimations.lenis) {
+        currentAnimations.lenis.destroy();
       }
       
       // Kill all ScrollTriggers

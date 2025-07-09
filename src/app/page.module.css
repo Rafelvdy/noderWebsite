@@ -218,6 +218,9 @@
     position: relative;
     will-change: transform;
     z-index: 0;
+    /* border-top: 1px solid #E5E7EB;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px; */
 }
 
 .FeaturesBackgroundModel {
