@@ -9,6 +9,7 @@ import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import ServerModel3D from "../components/ServerModel";
 import * as THREE from "three";
 import * as React from "react";
+import Image from "next/image";
 
 // Import the ref type
 type ServerModel3DRef = {
@@ -821,16 +822,26 @@ export default function Home() {
           </div>
           <div className={styles.LogosCarousel}>
             <div className={styles.LogoSlide}>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
-              <div className={styles.logo}></div>
+              <Image src="/logo-carousel/Allianz.png" alt="Allianz" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/apple.png" alt="Apple" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Cloudflare_Logo.png" alt="Cloudflare" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Colt.png" alt="Colt" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Logonetflix.png" alt="Netflix" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Meta.png" alt="Meta" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Oracle.png" alt="Oracle" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Riot.png" alt="Riot" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/WeChat.png" alt="WeChat" width={100} height={100} objectFit="contain" className={styles.Logo} />
+            </div>
+            <div className={styles.LogoSlide}>
+              <Image src="/logo-carousel/Allianz.png" alt="Allianz" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/apple.png" alt="Apple" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Cloudflare_Logo.png" alt="Cloudflare" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Colt.png" alt="Colt" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Logonetflix.png" alt="Netflix" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Meta.png" alt="Meta" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Oracle.png" alt="Oracle" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/Riot.png" alt="Riot" width={100} height={100} objectFit="contain" className={styles.Logo} />
+              <Image src="/logo-carousel/WeChat.png" alt="WeChat" width={100} height={100} objectFit="contain" className={styles.Logo} />
             </div>
           </div>
           <div className={styles.TestimonialContainer}>

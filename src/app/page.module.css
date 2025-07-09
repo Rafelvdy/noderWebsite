@@ -648,27 +648,47 @@
     max-width: 500px;
 }
 
+@keyframes slide {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
 .LogosCarousel {
     width: 100%;
     height: 200px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* background: black; */
+    overflow: hidden;
+    padding: 1rem 0;
+    white-space: nowrap;
 }
 
 .LogoSlide {
     width: 100%;
     height: 100%;
-    white-space: nowrap;
-    display: flex;
+    display: inline-flex;
+    animation: slide 10s linear infinite;
 }
 
-.logo {
-    width: 100px;
-    height: 100px;
-    background: red;
-    border: 1px solid white;
+.LogosCarousel:hover {
+    .LogoSlide {
+        animation-play-state: paused;
+    }
+}
+
+.Logo {
+    object-fit: contain;
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    margin: 0 1rem; 
 }
 
 
