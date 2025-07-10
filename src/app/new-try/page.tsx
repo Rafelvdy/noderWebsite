@@ -34,6 +34,7 @@ export default function NewTry() {
     const server2ModelRef = useRef<ServerModel3DRef>(null);
     const server2ModelContainerRef = useRef<HTMLDivElement>(null);
     const server2BlurOverlayRef = useRef<HTMLDivElement>(null);
+    const server2InfiniteRotationRef = useRef<gsap.core.Tween | null>(null);
     const animateServerEntrance = useCallback(() => {
         const serverObject = serverModelRef.current?.getServerObject();
         
@@ -94,17 +95,36 @@ export default function NewTry() {
                                 backdropFilter: "blur(3px)",
                                 background: "rgba(255, 255, 255, 0.4)",
                                 duration: 0.8,
-                                ease: "power2.out"
+                                ease: "power2.out",
+                                onComplete: () => {
+                                    // Start infinite rotation after both entrance and blur animations complete
+                                    if (serverObject) {
+                                        console.log("Server2: Starting infinite rotation");
+                                        
+                                        // Kill any existing infinite rotation
+                                        if (server2InfiniteRotationRef.current) {
+                                            server2InfiniteRotationRef.current.kill();
+                                        }
+                                        
+                                        // Start infinite rotation while maintaining the corner tilt
+                                        server2InfiniteRotationRef.current = gsap.to(serverObject.rotation, {
+                                            y: "-=6.28", // 2π radians = full rotation
+                                            duration: 8, // 8 seconds per rotation for smooth, elegant motion
+                                            ease: "none", // Linear rotation
+                                            repeat: -1, // Infinite rotation
+                                        });
+                                    }
+                                }
                             });
                         }
                     }
                 });
 
-                // Animate server rotation
+                // Animate server rotation to corner position
                 if (serverObject) {
                     gsap.to(serverObject.rotation, {
                         y: 0,
-                        z: 0.1,
+                        z: 0.1, // Maintain the slight corner tilt
                         duration: 2,
                         ease: "power2.inOut",
                     });
@@ -114,6 +134,12 @@ export default function NewTry() {
             // Reverse animation (scrolling back up past section 2)
             onLeaveBack: () => {
                 console.log("Server2: Leaving section 2 upward (scrolling up)");
+                
+                // Stop infinite rotation immediately
+                if (server2InfiniteRotationRef.current) {
+                    server2InfiniteRotationRef.current.kill();
+                    server2InfiniteRotationRef.current = null;
+                }
                 
                 // Immediately hide blur overlay when leaving
                 if (server2BlurOverlayRef.current) {
@@ -169,6 +195,17 @@ export default function NewTry() {
                         background: "rgba(255, 255, 255, 0.4)"
                     });
                 }
+                
+                // Ensure infinite rotation continues when past section 2
+                if (serverObject && !server2InfiniteRotationRef.current) {
+                    console.log("Server2: Restarting infinite rotation when past section 2");
+                    server2InfiniteRotationRef.current = gsap.to(serverObject.rotation, {
+                        y: "+=6.28",
+                        duration: 8,
+                        ease: "none",
+                        repeat: -1,
+                    });
+                }
             },
             
             // Handle scrolling back up from below section 2
@@ -187,6 +224,17 @@ export default function NewTry() {
                         opacity: 1,
                         backdropFilter: "blur(3px)",
                         background: "rgba(255, 255, 255, 0.4)"
+                    });
+                }
+                
+                // Ensure infinite rotation continues when returning to section 2
+                if (serverObject && !server2InfiniteRotationRef.current) {
+                    console.log("Server2: Restarting infinite rotation when returning to section 2");
+                    server2InfiniteRotationRef.current = gsap.to(serverObject.rotation, {
+                        y: "-=6.28",
+                        duration: 8,
+                        ease: "none",
+                        repeat: -1,
                     });
                 }
             }
@@ -339,12 +387,13 @@ export default function NewTry() {
             </section>
 
             <div className={styles.Section2Server} ref={server2ModelContainerRef}>
-                <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
+                
                     <ServerModel3D 
                     className={styles.Server2Model3D}
                     ref={server2ModelRef}
                     onModelLoaded={animateServer2Entrance}
                 />
+                <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
             </div>
 
             <section className={`${styles.Section} ${styles.Section2}`} ref={section2Ref}>
