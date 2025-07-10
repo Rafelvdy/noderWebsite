@@ -2,6 +2,7 @@
     width: 100%;
     min-height: 100dvh;
     position: relative;
+    overflow: hidden;
 }
 
 .Section1 {
@@ -138,20 +139,21 @@
     background: #010101;
     /* background: white; */
     height: 100dvh;
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
 }
 
 .Section2Server {
-    position: fixed;
-    top: 50%;
-    right: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;    
+    height: 100%;
     width: 100%;
-    height: 100dvh;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 3;
-    transform: translateY(-50%);
-    pointer-events: none;
 }
 
 .Section2Server .BlurOverlay {
@@ -160,7 +162,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 4;
+    z-index: 2;
     background: rgba(255, 255, 255, 0);
     backdrop-filter: blur(0px);
     opacity: 0;
@@ -168,29 +170,57 @@
 }
 
 .Server2Model3D {
+    background: red;
     width: 85%;
     height: 85%;
-    filter: invert(100%);
+    /* filter: invert(100%); */
     /* filter: invert(28%) sepia(53%) saturate(7314%) hue-rotate(238deg) brightness(104%) contrast(100%); */
-    position: relative;
-    z-index: 2;
     /* background: red; */
 }
 
 .Section2Inner {
+    position: relative;
     width: 100%;
     height: 100%;
-    
+    /* background: blue; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.Section2TitleCard {
+    background: #4A4AFF;
+    height: 150px;
+    width: 3000px;
+    z-index: 200;
+    position: relative;
+    margin-top: 80px;
+    border-radius: 10px;
+}
+
+.Section2Content {
+    background: #E5E5FF;
+    height: 200px;
+    width: 300px;
+    z-index: 200;
+    position: relative;
+    margin-bottom: 50%;
 }
 
 .Section3 {
     background: #222;
+    position: relative;
+    z-index: 200;
 }
 
 .Section4 {
     background: #333;
+    position: relative;
+    z-index: 200;
 }
 
 .Section5 {
     background: #444;
+    position: relative;
+    z-index: 200;
 }

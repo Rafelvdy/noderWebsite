@@ -8,11 +8,15 @@ import ServerModel3D from "@/components/ServerModel";
 import * as THREE from "three";
 import * as React from "react";
 import Lenis from "lenis";
+import { memoryMonitor } from "@/utils/MemoryMonitor";
+import { modelManager } from "@/utils/ModelManager";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 type ServerModel3DRef = {
     getServerObject: () => THREE.Group | null;
+    pauseRendering: () => void;
+    resumeRendering: () => void;
   };
 
 export default function NewTry() {
@@ -250,6 +254,15 @@ export default function NewTry() {
         // Store initial viewport height to prevent scaling issues when dvh changes on mobile
         initialViewportHeightRef.current = window.innerHeight;
         
+        // Start memory monitoring for optimization tracking
+        console.log('🚀 Starting memory optimization tracking');
+        const initialSnapshot = memoryMonitor.takeSnapshot();
+        memoryMonitor.startMonitoring(10000); // Monitor every 10 seconds
+        
+        // Log initial state
+        console.log('Initial memory state:', memoryMonitor.getMemoryStats());
+        console.log('ModelManager cache state:', modelManager.getCacheStats());
+        
         // Force Lenis to start at top position
         lenis.scrollTo(0, { immediate: true });
     
@@ -366,6 +379,25 @@ export default function NewTry() {
             }
         })
         
+        // Cleanup function
+        return () => {
+            // Stop memory monitoring and log results
+            memoryMonitor.stopMonitoring();
+            const finalSnapshot = memoryMonitor.takeSnapshot();
+            
+            console.log('🎯 Memory optimization session complete');
+            console.log('Final memory state:', memoryMonitor.getMemoryStats());
+            console.log('ModelManager final state:', modelManager.getCacheStats());
+            
+            // Log performance improvements
+            if (initialSnapshot && finalSnapshot) {
+                console.group('📊 Memory Optimization Summary');
+                console.log('Session duration:', Math.round((finalSnapshot.timestamp - initialSnapshot.timestamp) / 1000), 'seconds');
+                console.log('Models cached:', modelManager.getCacheStats().cachedModels);
+                console.groupEnd();
+            }
+        };
+        
     }, [])
     return (
         <main className={styles.SectionsContainer} ref={sectionsContainerRef}>
@@ -390,23 +422,27 @@ export default function NewTry() {
                 </div>
             </section>
 
-            <div className={styles.Section2Server} ref={server2ModelContainerRef}>
-                
+            
+
+            <section className={`${styles.Section} ${styles.Section2}`} ref={section2Ref}>
+            {/* <div className={styles.Section2Server} ref={server2ModelContainerRef}>
                     <ServerModel3D 
                     className={styles.Server2Model3D}
                     ref={server2ModelRef}
                     onModelLoaded={animateServer2Entrance}
+                    zIndex={2}
                     cameraConfig={{
                         fov: 18, // Wider field of view to prevent corner clipping during rotation
                         position: { z: 13 }
                     }}
                 />
                 <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
-            </div>
-
-            <section className={`${styles.Section} ${styles.Section2}`} ref={section2Ref}>
+            </div> */}
                 <div className={styles.Section2Inner} ref={section2InnerRef}>
-                    
+                    <div className={styles.Section2TitleCard}>
+                        <h1>WEB3</h1>
+                    </div>
+                    <div className={styles.Section2Content}></div>
                 </div>
             </section>
 
@@ -425,6 +461,8 @@ export default function NewTry() {
 
                 </div>
             </section>
+
+            
         </main>
     )
 }

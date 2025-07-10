@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { modelManager } from "@/utils/ModelManager";
+import { useModelVisibility } from "@/hooks/useVisibilityTracking";
 
 interface CameraConfig {
   fov?: number;
@@ -16,21 +18,61 @@ interface ServerModel3DProps {
   style?: React.CSSProperties;
   onModelLoaded?: () => void;
   cameraConfig?: CameraConfig;
+  zIndex?: number;
+  enableConditionalRendering?: boolean; // New prop to control conditional rendering
 }
 
 interface ServerModel3DRef {
   getServerObject: () => THREE.Group | null;
+  pauseRendering: () => void;
+  resumeRendering: () => void;
 }
 
-const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style, onModelLoaded, cameraConfig }, ref) => {
+const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ 
+  className, 
+  style, 
+  onModelLoaded, 
+  cameraConfig,
+  zIndex = 2,
+  enableConditionalRendering = true // Default to enabled
+}, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
-  // const heroRef = useRef<HTMLDivElement>(null);
   const serverRef = useRef<THREE.Group | null>(null);
+  const renderingPausedRef = useRef(false);
+  const animationIdRef = useRef<number>(0);
 
-  // Expose server object to parent component
+  // Track visibility for conditional rendering
+  const { isVisible, intersectionRatio } = useModelVisibility(containerRef as React.RefObject<Element>);
+
+  // Automatically pause/resume rendering based on visibility
+  useEffect(() => {
+    if (!enableConditionalRendering) return;
+    
+    if (isVisible && intersectionRatio > 0.1) {
+      renderingPausedRef.current = false;
+      console.log(`ServerModel3D: Auto-resumed rendering (${Math.round(intersectionRatio * 100)}% visible)`);
+    } else if (!isVisible || intersectionRatio < 0.05) {
+      renderingPausedRef.current = true;
+      console.log('ServerModel3D: Auto-paused rendering (not visible)');
+    }
+  }, [isVisible, intersectionRatio, enableConditionalRendering]);
+
+  // Expose server object and control methods to parent component
   useImperativeHandle(ref, () => ({
-    getServerObject: () => serverRef.current
+    getServerObject: () => serverRef.current,
+    pauseRendering: () => {
+      renderingPausedRef.current = true;
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = 0;
+      }
+      console.log('ServerModel3D: Rendering paused');
+    },
+    resumeRendering: () => {
+      renderingPausedRef.current = false;
+      console.log('ServerModel3D: Rendering resumed');
+    }
   }), []);
 
   useEffect(() => {
@@ -40,6 +82,8 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     let mounted = true;
     let animationId: number;
     let server: THREE.Group | null = null;
+    let renderer: THREE.WebGLRenderer;
+    let composer: EffectComposer;
 
     // Extract camera configuration with defaults
     const {
@@ -63,65 +107,57 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     );
 
     const scene = new THREE.Scene();
-    const loader = new GLTFLoader();
 
     // Prevent multiple simultaneous loads
     if (modelLoadedRef.current) return;
     modelLoadedRef.current = true;
 
-    // Load the 3D model
-    loader.load(
+    // Use ModelManager for efficient model loading
+    console.log('ServerModel3D: Loading model using ModelManager');
+    modelManager.loadModel(
       '/models/server_racking_system.glb',
-      function (gltf) {
-        if (!mounted) return;
-
-        server = gltf.scene;
-        serverRef.current = server; // Store server reference for parent access
-
-        // Optimize model for better performance
-        server.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            child.frustumCulled = true;
-            if (child.material instanceof THREE.MeshStandardMaterial) {
-              child.material.needsUpdate = false;
-              child.material.precision = 'mediump';
-            }
-          }
-        });
-
-        // Center and position the model
-        const box = new THREE.Box3().setFromObject(server);
-        const center = box.getCenter(new THREE.Vector3());
-        server.position.sub(center);
-
-        server.position.x = 0;
-        server.rotation.y = 5;
-        scene.add(server);
-
-        console.log('Model loaded successfully', gltf.animations);
-        
-        // Notify parent component that model is loaded and ready for animation
-        if (onModelLoaded) {
-          onModelLoaded();
-        }
-      },
-      function (progress) {
+      (progress) => {
         console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
-      },
-      function (error) {
-        console.error('Error loading model:', error);
-        if (error instanceof Error) {
-          console.error('Error details:', {
-            message: error.message,
-            stack: error.stack,
-            type: error.constructor.name
-          });
-        }
       }
-    );
+    )
+    .then((loadedModel) => {
+      if (!mounted) return;
+
+      server = loadedModel;
+      serverRef.current = server;
+
+      // Center and position the model
+      const box = new THREE.Box3().setFromObject(server);
+      const center = box.getCenter(new THREE.Vector3());
+      server.position.sub(center);
+
+      server.position.x = 0;
+      server.rotation.y = 5;
+      scene.add(server);
+
+      console.log('ServerModel3D: Model loaded successfully via ModelManager');
+      
+      // Log memory usage for debugging
+      const memoryStats = modelManager.getMemoryUsage();
+      console.log('ModelManager memory usage:', memoryStats);
+      
+      if (onModelLoaded) {
+        onModelLoaded();
+      }
+    })
+    .catch((error) => {
+      console.error('ServerModel3D: Error loading model via ModelManager:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+          type: error.constructor.name
+        });
+      }
+    });
 
     // Initialize renderer
-    const renderer = new THREE.WebGLRenderer({
+    renderer = new THREE.WebGLRenderer({
       alpha: false,
       antialias: true,
       powerPreference: "high-performance",
@@ -141,11 +177,15 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // Set up post-processing
-    const composer = new EffectComposer(renderer);
+    composer = new EffectComposer(renderer);
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 
     containerRef.current.appendChild(renderer.domElement);
+
+    // Set canvas z-index directly
+    renderer.domElement.style.zIndex = zIndex.toString();
+    renderer.domElement.style.position = 'relative';
 
     // Add lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
@@ -155,15 +195,23 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     topLight.position.set(500, 500, 500);
     scene.add(topLight);
 
-    // Animation loop
+    // Optimized animation loop with conditional rendering
     const reRender3D = () => {
       if (!mounted) return;
+      
+      // Skip rendering if conditionally paused and not visible
+      if (enableConditionalRendering && renderingPausedRef.current) {
+        animationIdRef.current = requestAnimationFrame(reRender3D);
+        return;
+      }
+      
       animationId = requestAnimationFrame(reRender3D);
+      animationIdRef.current = animationId;
       composer.render();
     };
     reRender3D();
 
-    // Handle resize with throttling to prevent excessive calls during animations
+    // Handle resize with throttling
     let resizeTimeout: NodeJS.Timeout;
     function onContainerResize() {
       if (!containerRef.current || !mounted) return;
@@ -182,7 +230,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-      }, 16); // Throttle to ~60fps
+      }, 16);
     }
 
     const resizeObserver = new ResizeObserver(() => {
@@ -195,7 +243,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     return () => {
       mounted = false;
       modelLoadedRef.current = false;
-      serverRef.current = null; // Clear server reference
+      serverRef.current = null;
 
       if (animationId) {
         cancelAnimationFrame(animationId);
@@ -237,11 +285,10 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
       scene.clear();
       console.log('Three.js resources cleaned up');
     };
-  }, []);
+  }, [zIndex, enableConditionalRendering]); // Add zIndex and enableConditionalRendering to dependency array
 
   const setRefs = (element: HTMLDivElement | null) => {
     containerRef.current = element;
-    // Note: imperative handle ref is managed by useImperativeHandle, not here
   };
 
   return (
