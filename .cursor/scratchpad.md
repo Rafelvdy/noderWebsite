@@ -198,71 +198,31 @@ gsap.to(server2ModelContainerRef.current, {
 
 ### **🚨 URGENT - HIGH PRIORITY**
 - [x] **Task 1**: Fix Server2 Model Scroll Animation Bug - **COMPLETED** ✅
-- [x] **Task 2**: Fix Mobile Viewport Height Scaling Issue - **COMPLETED** ✅
+- [ ] **Task 1.1**: Fix Server2 Corner Clipping During Rotation - **IN PROGRESS** 🔄
+  - Issue: Server 2 corners get cut off during infinite rotation
+  - Solution: Modify ServerModel3D to accept camera FOV props
+  - Status: Implementing camera configuration props for Server 2
 
-**Task 2 Solution Details:**
-- **Problem**: First server model scaling was recalculating when mobile browser UI showed/hid, changing `100dvh` values
-- **Root Cause**: ScrollTrigger using `end: "bottom top"` which recalculated when section height changed with `dvh`
-- **Solution**: Store initial viewport height in `initialViewportHeightRef` and use `end: () => \`+=\${initialViewportHeightRef.current}\`` for fixed pixel-based end point
-- **Result**: Sections still grow/shrink with `dvh` as intended, but server model scaling remains consistent regardless of mobile UI changes
-- **Files Modified**: `src/app/new-try/page.tsx` (lines 39, 244, 260)
-
-### Backlog (Dynamic Text Color Feature)
-- [ ] **Task 2**: Research and Architecture Design
+### **📋 MEDIUM PRIORITY** 
+- [ ] **Task 2**: Research and Architecture Design (Dynamic Text Color)
 - [ ] **Task 3**: 3D Model Geometry Analysis System  
 - [ ] **Task 4**: Text Element Collision Detection
 - [ ] **Task 5**: Dynamic Text Color System
 - [ ] **Task 6**: Performance Optimization
 - [ ] **Task 7**: Integration and Testing
 
-### In Progress
-- Planning phase for urgent animation fix
-
-### Complete
-- ✅ Codebase analysis  
-- ✅ 3D model implementation understanding
-- ✅ Current text and animation system analysis
-- ✅ Server2 animation bug identification and root cause analysis
-
-## Current Status / Progress Tracking
-
-**🚨 URGENT PRIORITY**: Server2 Model Animation Bug Fix
-**Current Phase**: **EXECUTION - Implementing Animation Fix**
-**Next Action**: Starting with Phase 1 - Analyzing current ScrollTrigger configuration
-
-**Execution Progress**:
-- ✅ **Phase 1**: Analyzing current ScrollTrigger configuration and mapping scroll behaviors
-- ✅ **Phase 2**: Implement scroll direction detection with proper state management  
-- ✅ **Phase 3**: Create reverse animation logic using ScrollTrigger callbacks
-- ✅ **Phase 4**: Test animation transitions and performance validation
-- ✅ **BONUS**: Added enhanced scaling for large screens (≥1440px)
-
-**COMPLETED FIXES**:
-- ✅ Server2 now animates smoothly from right → center when scrolling down to section 2
-- ✅ Server2 now animates smoothly from center → right (off-screen) when scrolling up past section 2
-- ✅ Added proper bidirectional ScrollTrigger logic with onEnter/onLeaveBack callbacks
-- ✅ Maintained transparent server background as requested
-- ✅ No interference with existing animations
-- ✅ Enhanced scaling and centering for large desktop screens (≥1440px)
-
-**Technical Implementation**:
-- Used ScrollTrigger.create() with proper callback functions
-- Added console logging for debugging scroll behavior
-- Implemented smooth GSAP animations for both directions
-- Created responsive scaling system: Mobile (0.8x) → Tablet (2.3x) → Desktop (3.4x → 5x → 6.5x)
-- Enhanced centering offsets for better positioning on large screens
-
-**Previous Project Questions for User** (Dynamic Text Color):
-1. **Accuracy vs Performance**: Do you prefer pixel-perfect detection or is region-based detection acceptable?
-2. **Text Rendering**: Are you open to Canvas-based text rendering for more control, or must we keep HTML text?
-3. **Browser Support**: Should this work on mobile devices immediately or can we start with desktop?
-4. **Fallback Behavior**: What should happen on devices that can't handle the effect smoothly?
-
 ## Executor's Feedback or Assistance Requests
 
-*Waiting for user approval to proceed with urgent animation fix*
+**Current Task**: Implementing camera configuration props for ServerModel3D component
+- Adding optional camera props (FOV, position, zoom) to ServerModel3D interface
+- This will allow Server 2 to have wider field of view without affecting Server 1
+- Expected solution: Wider FOV (18-20°) for Server 2 vs current 12° FOV
 
-**Request**: User confirmation to proceed with Server2 animation bug fix as highest priority before continuing with dynamic text color feature.
+**Next Steps**: 
+1. Modify ServerModel3D props interface
+2. Update camera initialization to use props or defaults
+3. Update Server 2 usage to pass wider FOV
+4. Test rotation without corner clipping
 
 ## Lessons
 

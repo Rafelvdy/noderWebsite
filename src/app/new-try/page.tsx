@@ -396,6 +396,10 @@ export default function NewTry() {
                     className={styles.Server2Model3D}
                     ref={server2ModelRef}
                     onModelLoaded={animateServer2Entrance}
+                    cameraConfig={{
+                        fov: 18, // Wider field of view to prevent corner clipping during rotation
+                        position: { z: 13 }
+                    }}
                 />
                 <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
             </div>

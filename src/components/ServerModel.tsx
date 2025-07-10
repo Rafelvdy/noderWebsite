@@ -4,17 +4,25 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 
+interface CameraConfig {
+  fov?: number;
+  position?: { x?: number; y?: number; z?: number };
+  near?: number;
+  far?: number;
+}
+
 interface ServerModel3DProps {
   className?: string;
   style?: React.CSSProperties;
   onModelLoaded?: () => void;
+  cameraConfig?: CameraConfig;
 }
 
 interface ServerModel3DRef {
   getServerObject: () => THREE.Group | null;
 }
 
-const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style, onModelLoaded }, ref) => {
+const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ className, style, onModelLoaded, cameraConfig }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const modelLoadedRef = useRef(false);
   // const heroRef = useRef<HTMLDivElement>(null);
@@ -33,14 +41,26 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({ classN
     let animationId: number;
     let server: THREE.Group | null = null;
 
-    // Initialize Three.js scene
+    // Extract camera configuration with defaults
+    const {
+      fov = 12,
+      position = { x: 0, y: 0, z: 13 },
+      near = 0.1,
+      far = 1000
+    } = cameraConfig || {};
+
+    // Initialize Three.js scene with configurable camera
     const camera = new THREE.PerspectiveCamera(
-      12,
+      fov,
       containerRef.current.clientWidth / containerRef.current.clientHeight,
-      0.1,
-      1000
+      near,
+      far
     );
-    camera.position.z = 13;
+    camera.position.set(
+      position.x ?? 0,
+      position.y ?? 0,
+      position.z ?? 13
+    );
 
     const scene = new THREE.Scene();
     const loader = new GLTFLoader();
