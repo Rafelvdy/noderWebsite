@@ -214,9 +214,9 @@ export default function NewTry() {
                         }
                     } else {
                         // Desktop screens >= 1024px: Scale up while moving to center
-                        if (serverModelContainerRef.current) {
+                        if (serverModelContainerRef.current && window.innerWidth >= 1024) {
                             gsap.set(serverModelContainerRef.current, {
-                                scale: 1 + (progress * 3.5),
+                                scale: 1 + (progress * 5),
                             });
                         }
                     }
@@ -226,7 +226,7 @@ export default function NewTry() {
                             serverObject.rotation.y = progress * Math.PI * 1.5;
                         
                             if (window.innerWidth >= 1024 && serverModelContainerRef.current) {
-                                const centeringOffset = progress * 105;
+                                const centeringOffset = progress * 153;
                                 gsap.set(serverModelContainerRef.current, {
                                     x: `-${centeringOffset}%`,
                                 });
