@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, useEffect, useCallback } from "react";
+import { useFrame } from "@react-three/fiber";
 import ServerModel3D from "@/components/ServerModel";
 import * as THREE from "three";
 import * as React from "react";
@@ -59,20 +60,53 @@ export default function NewTry() {
         
         if (serverObject && server2ModelContainerRef.current) {
           
-          // Use a timeline for better performance
-          const entranceTl = gsap.timeline();
-          
-          entranceTl
-            .to(server2ModelContainerRef.current, {
-              duration: 1.2,
-              left: "0%",
-              ease: "expo.out",
+        // Initial entrance animation - move from right to center
+        gsap.to(server2ModelContainerRef.current, {
+            scrollTrigger: {
+                trigger: section2Ref.current,
+                start: "30% bottom",
+                end: "30% center",
+                scrub: false,
+            },
+            right: "50%",
+            transform: "translateX(50%) translateY(-50%)",
+            ease: "power2.inOut",
+            duration: 1.5,
+        });
+
+        // Server rotation animation
+        if (serverObject) {
+            gsap.to(serverObject.rotation, {
+                scrollTrigger: {
+                    trigger: section2Ref.current,
+                    start: "30% bottom",
+                    end: "30% center",
+                    scrub: false,
+                },
+                y: 0,
+                z: 0.1,
+                duration: 2,
+                ease: "power2.inOut",
             })
-            .to(serverObject.rotation, {
-              duration: 1.2,
-              y: 0,
-              ease: "expo.out",
-            }, "<"); // Start at the same time as previous animation
+        }
+
+        // Keep the server sticky and centered as user scrolls past section 2
+        gsap.to(server2ModelContainerRef.current, {
+            scrollTrigger: {
+                trigger: section2Ref.current,
+                start: "bottom center",
+                end: "bottom top",
+                scrub: false,
+                onEnter: () => {
+                    // Ensure it stays centered
+                    gsap.set(server2ModelContainerRef.current, {
+                        position: "fixed",
+                        right: "50%",
+                        transform: "translateX(50%) translateY(-50%)",
+                    });
+                },
+            },
+        });
         }
       }, []);
 
@@ -176,13 +210,9 @@ export default function NewTry() {
                 end: "+=300",
                 pin: true,
                 anticipatePin: 1,
-                markers: true,
+                markers: false,
                 onUpdate: (self) => {
                     const progress = self.progress;
-
-                    if (server2ModelContainerRef.current && progress > 0.1) {
-                        animateServer2Entrance();
-                    }
                 }
             }
         })
@@ -211,15 +241,17 @@ export default function NewTry() {
                 </div>
             </section>
 
+            <div className={styles.Section2Server} ref={server2ModelContainerRef}>
+                    <ServerModel3D 
+                    className={styles.Server2Model3D}
+                    ref={server2ModelRef}
+                    onModelLoaded={animateServer2Entrance}
+                />
+            </div>
+
             <section className={`${styles.Section} ${styles.Section2}`} ref={section2Ref}>
                 <div className={styles.Section2Inner} ref={section2InnerRef}>
-                    <div className={styles.Section2Server} ref={server2ModelContainerRef}>
-                        <ServerModel3D 
-                            className={styles.Server2Model3D}
-                            ref={server2ModelRef}
-                            onModelLoaded={animateServerEntrance}
-                        />
-                    </div>
+                    
                 </div>
             </section>
 

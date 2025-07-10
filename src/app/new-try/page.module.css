@@ -141,17 +141,24 @@
 }
 
 .Section2Server {
-    position: absolute;
-    top: 0;
-    left: 100%;
+    position: fixed;
+    top: 50%;
+    right: 100%;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 .Server2Model3D {
-    width: 100%;
-    height: 100%;
-    filter: invert(1);
+    width: 85%;
+    height: 85%;
+    /* filter: invert(28%) sepia(53%) saturate(7314%) hue-rotate(238deg) brightness(104%) contrast(100%); */
+    
     /* background: red; */
 }
 
