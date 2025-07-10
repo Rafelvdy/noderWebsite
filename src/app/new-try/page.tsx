@@ -4,7 +4,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, useEffect, useCallback } from "react";
-import { useFrame } from "@react-three/fiber";
 import ServerModel3D from "@/components/ServerModel";
 import * as THREE from "three";
 import * as React from "react";
@@ -356,9 +355,9 @@ export default function NewTry() {
                 pin: true,
                 anticipatePin: 1,
                 markers: false,
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                }
+                // onUpdate: (self) => {
+                //     const progress = self.progress;
+                // }
             }
         })
         
