@@ -69,7 +69,7 @@ export default function NewTry() {
         }
         requestAnimationFrame(raf);
 
-        const section1TL = gsap.timeline({
+        gsap.timeline({
             scrollTrigger: {
                 trigger: section1Ref.current,
                 start: "top top",
