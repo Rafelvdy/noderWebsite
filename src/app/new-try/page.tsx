@@ -60,52 +60,85 @@ export default function NewTry() {
         
         if (serverObject && server2ModelContainerRef.current) {
           
-        // Initial entrance animation - move from right to center
-        gsap.to(server2ModelContainerRef.current, {
-            scrollTrigger: {
-                trigger: section2Ref.current,
-                start: "30% bottom",
-                end: "30% center",
-                scrub: false,
+        // Main ScrollTrigger for bidirectional server2 animation
+        ScrollTrigger.create({
+            trigger: section2Ref.current,
+            start: "30% bottom",
+            end: "30% center",
+            
+            // Forward animation (scrolling down into section 2)
+            onEnter: () => {
+                console.log("Server2: Entering section 2 (scrolling down)");
+                
+                // Animate container from right to center
+                gsap.to(server2ModelContainerRef.current, {
+                    right: "50%",
+                    transform: "translateX(50%) translateY(-50%)",
+                    ease: "power2.inOut",
+                    duration: 1.5,
+                });
+
+                // Animate server rotation
+                if (serverObject) {
+                    gsap.to(serverObject.rotation, {
+                        y: 0,
+                        z: 0.1,
+                        duration: 2,
+                        ease: "power2.inOut",
+                    });
+                }
             },
-            right: "50%",
-            transform: "translateX(50%) translateY(-50%)",
-            ease: "power2.inOut",
-            duration: 1.5,
+            
+            // Reverse animation (scrolling back up past section 2)
+            onLeaveBack: () => {
+                console.log("Server2: Leaving section 2 upward (scrolling up)");
+                
+                // Animate container from center back to right (off-screen)
+                gsap.to(server2ModelContainerRef.current, {
+                    right: "100%",
+                    transform: "translateY(-50%)",
+                    ease: "power2.inOut",
+                    duration: 1.5,
+                });
+
+                // Reset server rotation
+                if (serverObject) {
+                    gsap.to(serverObject.rotation, {
+                        y: 5, // Reset to initial rotation
+                        z: 0,
+                        duration: 2,
+                        ease: "power2.inOut",
+                    });
+                }
+            }
         });
 
-        // Server rotation animation
-        if (serverObject) {
-            gsap.to(serverObject.rotation, {
-                scrollTrigger: {
-                    trigger: section2Ref.current,
-                    start: "30% bottom",
-                    end: "30% center",
-                    scrub: false,
-                },
-                y: 0,
-                z: 0.1,
-                duration: 2,
-                ease: "power2.inOut",
-            })
-        }
-
-        // Keep the server sticky and centered as user scrolls past section 2
-        gsap.to(server2ModelContainerRef.current, {
-            scrollTrigger: {
-                trigger: section2Ref.current,
-                start: "bottom center",
-                end: "bottom top",
-                scrub: false,
-                onEnter: () => {
-                    // Ensure it stays centered
-                    gsap.set(server2ModelContainerRef.current, {
-                        position: "fixed",
-                        right: "50%",
-                        transform: "translateX(50%) translateY(-50%)",
-                    });
-                },
+        // Secondary ScrollTrigger for maintaining center position when scrolling past section 2
+        ScrollTrigger.create({
+            trigger: section2Ref.current,
+            start: "bottom center",
+            end: "bottom top",
+            
+            onEnter: () => {
+                console.log("Server2: Maintaining center position past section 2");
+                // Ensure it stays centered when scrolling down past section 2
+                gsap.set(server2ModelContainerRef.current, {
+                    position: "fixed",
+                    right: "50%",
+                    transform: "translateX(50%) translateY(-50%)",
+                });
             },
+            
+            // Handle scrolling back up from below section 2
+            onLeaveBack: () => {
+                console.log("Server2: Returning to section 2 from below");
+                // Maintain center position when coming back up from lower sections
+                gsap.set(server2ModelContainerRef.current, {
+                    position: "fixed",
+                    right: "50%",
+                    transform: "translateX(50%) translateY(-50%)",
+                });
+            }
         });
         }
       }, []);

@@ -1,7 +1,31 @@
-# Noder Landing Page - Dynamic Text Color Based on 3D Model Collision
+# Noder Landing Page - Server Model Animation Fix + Dynamic Text Color
 
 ## Background and Motivation
 
+**URGENT: New Critical Animation Issue Identified**
+
+The second server model (server2ModelRef) has a scroll animation bug where it correctly animates from right to center when scrolling down to section 2, but when scrolling back up past section 2, it remains stuck in the center instead of animating back off-screen.
+
+**Current Behavior**: 
+- ✅ Server animates from right side to center when entering section 2 (scrolling down)
+- ❌ Server stays in center when scrolling back up past section 2 (should exit off-screen)
+- ❌ No reverse animation logic for upward scrolling
+
+**Root Cause Analysis**:
+1. `animateServer2Entrance` function only handles forward scroll direction
+2. ScrollTrigger animations are one-directional - no exit animations
+3. Server position gets "stuck" in center position after initial entrance
+4. Missing scroll trigger for reverse animation when leaving section 2 upward
+
+**Desired State**: 
+- Server should smoothly animate back off-screen (to right side) when scrolling up past section 2
+- All existing animations should remain intact and functional
+- Server background should remain transparent as requested
+- No negative impact on other scroll animations or 3D model behaviors
+
+---
+
+**Previous Project Context** (Dynamic Text Color Feature):
 The user wants to implement an advanced visual effect where text elements dynamically change to white color only in the areas where the actual 3D server model shape is positioned behind them. This should work with the precise geometry of the 3D model, not just its container boundaries.
 
 **Current State**: 
@@ -49,8 +73,32 @@ serverObject.rotation.y = progress * Math.PI * 2;
 x: `-${progress * 150}%`
 ```
 
+**Server2 Animation Issue** (from animateServer2Entrance function):
+```javascript
+// Current entrance animation - only handles forward direction
+gsap.to(server2ModelContainerRef.current, {
+    scrollTrigger: {
+        trigger: section2Ref.current,
+        start: "30% bottom",
+        end: "30% center",
+        scrub: false,
+    },
+    right: "50%",
+    transform: "translateX(50%) translateY(-50%)",
+    // No reverse animation when scrolling back up
+});
+```
+
 ## Key Challenges and Analysis
 
+**URGENT ANIMATION FIX CHALLENGES:**
+1. **Bidirectional Scroll Handling**: Current ScrollTrigger setup only handles downward scrolling
+2. **Animation State Management**: Need to track and manage server position state properly
+3. **Smooth Transitions**: Ensure seamless animation in both directions
+4. **Performance**: Avoid conflicting animations or janky transitions
+5. **Scroll Direction Detection**: Implement proper scroll direction awareness
+
+**DYNAMIC TEXT COLOR CHALLENGES** (Previous Project):
 1. **3D-to-2D Projection Complexity**: Converting 3D model geometry to screen coordinates for collision detection
 2. **Real-time Performance**: Collision detection must run at 60fps during scroll animations  
 3. **Pixel-Level Accuracy**: Need precise detection of model shape, not just bounding boxes
@@ -61,7 +109,39 @@ x: `-${progress * 150}%`
 
 ## High-level Task Breakdown
 
-### Task 1: Research and Architecture Design
+### **URGENT TASK 1: Fix Server2 Model Scroll Animation Bug** 🚨
+**Objective**: Implement proper bidirectional animation for server2 model
+**Success Criteria**: 
+- Server animates from right to center when scrolling down to section 2
+- Server animates from center back to right when scrolling up past section 2
+- Smooth transitions in both directions
+- No interference with existing animations
+- Server background remains transparent
+
+**Sub-tasks**:
+1. **Analyze current ScrollTrigger configuration**
+   - Map all current scroll triggers and their behaviors
+   - Identify conflicts or gaps in animation coverage
+   
+2. **Implement scroll direction detection**
+   - Add proper scroll direction tracking
+   - Create conditional animation logic for up vs down scrolling
+   
+3. **Create reverse animation logic**
+   - Add ScrollTrigger for upward scroll past section 2
+   - Ensure smooth transition from center back to off-screen right
+   
+4. **Test animation state management**
+   - Verify no animation conflicts or stuck states
+   - Test rapid scroll direction changes
+   - Validate performance impact
+
+**Technical Approach**:
+- Use ScrollTrigger's `onEnter`, `onLeave`, `onEnterBack`, `onLeaveBack` callbacks
+- Implement proper animation timelines for both directions
+- Add scroll progress tracking for smooth transitions
+
+### Task 2: Research and Architecture Design (Dynamic Text Color)
 **Objective**: Determine the optimal technical approach for 3D-2D collision detection
 **Success Criteria**: 
 - Research Three.js raycasting and screen projection methods
@@ -74,7 +154,7 @@ x: `-${progress * 150}%`
 - What's the priority: pixel-perfect accuracy vs performance?
 - Should this work on mobile devices or desktop-only initially?
 
-### Task 2: 3D Model Geometry Analysis System
+### Task 3: 3D Model Geometry Analysis System
 **Objective**: Create system to analyze 3D model geometry and project to screen coordinates
 **Success Criteria**:
 - Function to get model vertices in world space
@@ -82,7 +162,7 @@ x: `-${progress * 150}%`
 - Account for camera position, perspective, and viewport
 - Real-time projection updates during model animations
 
-### Task 3: Text Element Collision Detection
+### Task 4: Text Element Collision Detection
 **Objective**: Implement collision detection between projected 3D geometry and text elements
 **Success Criteria**:
 - Accurate bounding box detection for text characters/words
@@ -90,7 +170,7 @@ x: `-${progress * 150}%`
 - Efficient algorithm that runs smoothly during animations
 - Support for different text sizes and font metrics
 
-### Task 4: Dynamic Text Color System
+### Task 5: Dynamic Text Color System
 **Objective**: Implement the visual text color change mechanism
 **Success Criteria**:
 - Smooth transition between normal and white text color
@@ -98,7 +178,7 @@ x: `-${progress * 150}%`
 - Maintains text readability during transitions
 - Compatible with existing GSAP animations
 
-### Task 5: Performance Optimization
+### Task 6: Performance Optimization
 **Objective**: Ensure smooth performance during complex scroll animations
 **Success Criteria**:
 - Maintains 60fps during scroll with collision detection active
@@ -106,7 +186,7 @@ x: `-${progress * 150}%`
 - Optimized update frequency (not every frame if unnecessary)
 - Fallback mechanisms for lower-performance devices
 
-### Task 6: Integration and Testing
+### Task 7: Integration and Testing
 **Objective**: Integrate with existing animation system and test thoroughly
 **Success Criteria**:
 - Works seamlessly with existing GSAP scroll animations
@@ -116,28 +196,55 @@ x: `-${progress * 150}%`
 
 ## Project Status Board
 
-### Backlog
-- [ ] **Task 1**: Research and Architecture Design
-- [ ] **Task 2**: 3D Model Geometry Analysis System  
-- [ ] **Task 3**: Text Element Collision Detection
-- [ ] **Task 4**: Dynamic Text Color System
-- [ ] **Task 5**: Performance Optimization
-- [ ] **Task 6**: Integration and Testing
+### **🚨 URGENT - HIGH PRIORITY**
+- [x] **Task 1**: Fix Server2 Model Scroll Animation Bug - **IN PROGRESS**
+  - [ ] 1.1: Analyze current ScrollTrigger configuration
+  - [ ] 1.2: Implement scroll direction detection  
+  - [ ] 1.3: Create reverse animation logic
+  - [ ] 1.4: Test animation state management
+
+### Backlog (Dynamic Text Color Feature)
+- [ ] **Task 2**: Research and Architecture Design
+- [ ] **Task 3**: 3D Model Geometry Analysis System  
+- [ ] **Task 4**: Text Element Collision Detection
+- [ ] **Task 5**: Dynamic Text Color System
+- [ ] **Task 6**: Performance Optimization
+- [ ] **Task 7**: Integration and Testing
 
 ### In Progress
-- Planning and analysis phase
+- Planning phase for urgent animation fix
 
 ### Complete
 - ✅ Codebase analysis  
 - ✅ 3D model implementation understanding
 - ✅ Current text and animation system analysis
+- ✅ Server2 animation bug identification and root cause analysis
 
 ## Current Status / Progress Tracking
 
-**Current Phase**: Planning - Architecture Design Questions
-**Next Action**: Need user input on technical approach preferences before proceeding
+**🚨 URGENT PRIORITY**: Server2 Model Animation Bug Fix
+**Current Phase**: **EXECUTION - Implementing Animation Fix**
+**Next Action**: Starting with Phase 1 - Analyzing current ScrollTrigger configuration
 
-**Key Questions for User:**
+**Execution Progress**:
+- 🔄 **Phase 1**: Analyzing current ScrollTrigger configuration and mapping scroll behaviors
+- ⏳ **Phase 2**: Implement scroll direction detection with proper state management  
+- ⏳ **Phase 3**: Create reverse animation logic using ScrollTrigger callbacks
+- ⏳ **Phase 4**: Test animation transitions and performance validation
+
+**Critical Issue Summary**:
+- Server2 model animates correctly when scrolling down to section 2
+- Server2 model does NOT animate back off-screen when scrolling up past section 2
+- Root cause: Missing reverse animation logic in `animateServer2Entrance` function
+- Impact: Poor user experience, animation feels incomplete/broken
+
+**Proposed Solution**: 
+1. Add bidirectional ScrollTrigger logic with proper callbacks
+2. Implement scroll direction detection
+3. Create smooth reverse animation from center to off-screen right
+4. Ensure no conflicts with existing animations
+
+**Previous Project Questions for User** (Dynamic Text Color):
 1. **Accuracy vs Performance**: Do you prefer pixel-perfect detection or is region-based detection acceptable?
 2. **Text Rendering**: Are you open to Canvas-based text rendering for more control, or must we keep HTML text?
 3. **Browser Support**: Should this work on mobile devices immediately or can we start with desktop?
@@ -145,7 +252,9 @@ x: `-${progress * 150}%`
 
 ## Executor's Feedback or Assistance Requests
 
-*This section will be updated by the Executor during implementation*
+*Waiting for user approval to proceed with urgent animation fix*
+
+**Request**: User confirmation to proceed with Server2 animation bug fix as highest priority before continuing with dynamic text color feature.
 
 ## Lessons
 
@@ -155,6 +264,8 @@ x: `-${progress * 150}%`
 - Read the file before trying to edit it  
 - If there are vulnerabilities that appear in the terminal, run npm audit before proceeding
 - Always ask before using the -force git command 
+- **NEW**: ScrollTrigger animations need proper bidirectional handling - always consider both scroll directions
+- **NEW**: Test scroll animations in both directions during development to catch stuck states early 
 
 
 
