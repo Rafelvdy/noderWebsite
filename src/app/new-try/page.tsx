@@ -34,6 +34,8 @@ export default function NewTry() {
     const server2ModelContainerRef = useRef<HTMLDivElement>(null);
     const server2BlurOverlayRef = useRef<HTMLDivElement>(null);
     const server2InfiniteRotationRef = useRef<gsap.core.Tween | null>(null);
+    // Store initial viewport height to prevent scaling changes when dvh changes on mobile
+    const initialViewportHeightRef = useRef<number>(0);
     const animateServerEntrance = useCallback(() => {
         const serverObject = serverModelRef.current?.getServerObject();
         
@@ -245,6 +247,9 @@ export default function NewTry() {
 
         const lenis = new Lenis();
     
+        // Store initial viewport height to prevent scaling issues when dvh changes on mobile
+        initialViewportHeightRef.current = window.innerHeight;
+        
         // Force Lenis to start at top position
         lenis.scrollTo(0, { immediate: true });
     
@@ -261,7 +266,7 @@ export default function NewTry() {
             scrollTrigger: {
                 trigger: section1Ref.current,
                 start: "top top",
-                end: "bottom top",
+                end: () => `+=${initialViewportHeightRef.current}`, // Use fixed pixel value instead of "bottom top"
                 scrub: true,
                 pin: section1Ref.current,
                 anticipatePin: 1,

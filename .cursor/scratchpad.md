@@ -198,11 +198,14 @@ gsap.to(server2ModelContainerRef.current, {
 
 ### **🚨 URGENT - HIGH PRIORITY**
 - [x] **Task 1**: Fix Server2 Model Scroll Animation Bug - **COMPLETED** ✅
-  - [x] 1.1: Analyze current ScrollTrigger configuration
-  - [x] 1.2: Implement scroll direction detection  
-  - [x] 1.3: Create reverse animation logic
-  - [x] 1.4: Test animation state management
-  - [x] **BONUS**: Enhanced large screen (≥1440px) scaling for first server model
+- [x] **Task 2**: Fix Mobile Viewport Height Scaling Issue - **COMPLETED** ✅
+
+**Task 2 Solution Details:**
+- **Problem**: First server model scaling was recalculating when mobile browser UI showed/hid, changing `100dvh` values
+- **Root Cause**: ScrollTrigger using `end: "bottom top"` which recalculated when section height changed with `dvh`
+- **Solution**: Store initial viewport height in `initialViewportHeightRef` and use `end: () => \`+=\${initialViewportHeightRef.current}\`` for fixed pixel-based end point
+- **Result**: Sections still grow/shrink with `dvh` as intended, but server model scaling remains consistent regardless of mobile UI changes
+- **Files Modified**: `src/app/new-try/page.tsx` (lines 39, 244, 260)
 
 ### Backlog (Dynamic Text Color Feature)
 - [ ] **Task 2**: Research and Architecture Design
