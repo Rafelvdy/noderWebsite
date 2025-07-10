@@ -33,6 +33,7 @@ export default function NewTry() {
     const blurOverlayRef = useRef<HTMLDivElement>(null);
     const server2ModelRef = useRef<ServerModel3DRef>(null);
     const server2ModelContainerRef = useRef<HTMLDivElement>(null);
+    const server2BlurOverlayRef = useRef<HTMLDivElement>(null);
     const animateServerEntrance = useCallback(() => {
         const serverObject = serverModelRef.current?.getServerObject();
         
@@ -60,6 +61,15 @@ export default function NewTry() {
         
         if (serverObject && server2ModelContainerRef.current) {
           
+        // Initially hide the blur overlay
+        if (server2BlurOverlayRef.current) {
+            gsap.set(server2BlurOverlayRef.current, {
+                opacity: 0,
+                backdropFilter: "blur(0px)",
+                background: "rgba(255, 255, 255, 0)"
+            });
+        }
+
         // Main ScrollTrigger for bidirectional server2 animation
         ScrollTrigger.create({
             trigger: section2Ref.current,
@@ -76,6 +86,18 @@ export default function NewTry() {
                     transform: "translateX(50%) translateY(-50%)",
                     ease: "power2.inOut",
                     duration: 1.5,
+                    onComplete: () => {
+                        // Animate blur overlay in after server entrance completes
+                        if (server2BlurOverlayRef.current) {
+                            gsap.to(server2BlurOverlayRef.current, {
+                                opacity: 1,
+                                backdropFilter: "blur(3px)",
+                                background: "rgba(255, 255, 255, 0.4)",
+                                duration: 0.8,
+                                ease: "power2.out"
+                            });
+                        }
+                    }
                 });
 
                 // Animate server rotation
@@ -92,6 +114,17 @@ export default function NewTry() {
             // Reverse animation (scrolling back up past section 2)
             onLeaveBack: () => {
                 console.log("Server2: Leaving section 2 upward (scrolling up)");
+                
+                // Immediately hide blur overlay when leaving
+                if (server2BlurOverlayRef.current) {
+                    gsap.to(server2BlurOverlayRef.current, {
+                        opacity: 0,
+                        backdropFilter: "blur(0px)",
+                        background: "rgba(255, 255, 255, 0)",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
                 
                 // Animate container from center back to right (off-screen)
                 gsap.to(server2ModelContainerRef.current, {
@@ -127,6 +160,15 @@ export default function NewTry() {
                     right: "50%",
                     transform: "translateX(50%) translateY(-50%)",
                 });
+                
+                // Maintain blur overlay when past section 2
+                if (server2BlurOverlayRef.current) {
+                    gsap.set(server2BlurOverlayRef.current, {
+                        opacity: 1,
+                        backdropFilter: "blur(3px)",
+                        background: "rgba(255, 255, 255, 0.4)"
+                    });
+                }
             },
             
             // Handle scrolling back up from below section 2
@@ -138,6 +180,15 @@ export default function NewTry() {
                     right: "50%",
                     transform: "translateX(50%) translateY(-50%)",
                 });
+                
+                // Maintain blur overlay when returning to section 2
+                if (server2BlurOverlayRef.current) {
+                    gsap.set(server2BlurOverlayRef.current, {
+                        opacity: 1,
+                        backdropFilter: "blur(3px)",
+                        background: "rgba(255, 255, 255, 0.4)"
+                    });
+                }
             }
         });
         }
@@ -288,6 +339,7 @@ export default function NewTry() {
             </section>
 
             <div className={styles.Section2Server} ref={server2ModelContainerRef}>
+                <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
                     <ServerModel3D 
                     className={styles.Server2Model3D}
                     ref={server2ModelRef}
