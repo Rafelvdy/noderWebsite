@@ -1,127 +1,147 @@
-# Noder Landing Page - CTA Hover Animation Enhancement
+# Noder Landing Page - Dynamic Text Color Based on 3D Model Collision
 
 ## Background and Motivation
 
-The user wants to enhance the existing CTA (Call To Action) section with an advanced hover animation. Currently, there's a basic hover effect that moves the text with `yPercent: 100`. The goal is to create a sophisticated text transformation where "DEPLOY" changes to "DEPLOY NODES" with smooth animations:
+The user wants to implement an advanced visual effect where text elements dynamically change to white color only in the areas where the actual 3D server model shape is positioned behind them. This should work with the precise geometry of the 3D model, not just its container boundaries.
 
-- **Current State**: Static "DEPLOY" text with basic yPercent animation on hover
-- **Desired State**: "DEPLOY" transforms to "DEPLOY NODES" with "NODES" dropping down and background extending
-- **Technology Stack**: GSAP for animations, Next.js/React for structure, CSS Modules for styling
+**Current State**: 
+- Text elements have static colors (black for titles, gray for subtitles)
+- 3D server models move and scale during scroll animations
+- Text and models are layered using CSS z-index
+
+**Desired State**: 
+- Text turns white dynamically where the 3D model geometry is behind it
+- Only the specific parts of text overlapping with the model should change color
+- Effect should work smoothly during scroll animations and model transformations
+
+**Technology Requirements**: 
+- Three.js for 3D geometry analysis and projection
+- Canvas-based text rendering or WebGL shaders for pixel-level control
+- Real-time collision detection between 3D model and 2D text bounds
+- Performance optimization for smooth 60fps animation
 
 ### Current Implementation Analysis
 
-**Existing Structure** (from page.tsx):
+**3D Model Structure** (from ServerModel.tsx):
 ```tsx
-<div className={styles.CTABoldText} ref={CTABoldTextRef}>
-  <span ref={CTABoldTextSpanRef}>DEPLOY</span>
+// Models load GLB file and expose serverObject reference
+const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(...)
+// Provides getServerObject() method returning THREE.Group
+```
+
+**Text Elements** (from page.tsx):
+```tsx
+// Hero title with ref for animations
+<div className={styles.HeroTitle} ref={heroTitleRef}>
+  <h1>THE MOST EFFICIENT NODES ON <span className={styles.SolanaGradient}>SOLANA</span></h1>
+</div>
+// Hero subtitle with ref
+<div className={styles.HeroSubtitle} ref={heroSubtitleRef}>
+  <h2>[The first fully owned, performance-optimized RPC infrastructure built for Web3]</h2>
 </div>
 ```
 
-**Current Animation** (from page.tsx):
+**Current Animation System** (from page.tsx):
 ```javascript
-CTABoldTextRef.current?.addEventListener("mouseenter", () => {
-  gsap.to(CTABoldTextSpanRef.current, {
-    yPercent: 100,
-  })
-})
-```
-
-**Current CSS** (from page.module.css):
-```css
-.CTABoldText {
-    font-weight: 700;
-    display: inline;
-    border-bottom: 1px solid #c1c1c1;
-    border-right: 1px solid #c1c1c1;
-    padding-right: 5px;
-    width: fit-content;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
+// Models rotate and move during scroll
+serverObject.rotation.y = progress * Math.PI * 2;
+// Text moves horizontally during scroll
+x: `-${progress * 150}%`
 ```
 
 ## Key Challenges and Analysis
 
-1. **Text Structure Complexity**: Need to handle two separate words with different animation timing
-2. **Dynamic Width Management**: Background/border needs to expand smoothly to accommodate "NODES"
-3. **Overflow Control**: Ensure "NODES" drops in cleanly without affecting layout
-4. **Performance Optimization**: Use efficient GSAP methods and avoid layout thrashing
-5. **Accessibility**: Maintain readable states during animation transitions
-6. **Reversibility**: Smooth reverse animation on mouse leave
+1. **3D-to-2D Projection Complexity**: Converting 3D model geometry to screen coordinates for collision detection
+2. **Real-time Performance**: Collision detection must run at 60fps during scroll animations  
+3. **Pixel-Level Accuracy**: Need precise detection of model shape, not just bounding boxes
+4. **Text Rendering Method**: Choose between Canvas masking, CSS clip-path, or WebGL shaders
+5. **Dynamic Text Splitting**: Text may need to be split into smaller segments for granular color control
+6. **Browser Compatibility**: Solution must work across modern browsers
+7. **Memory Management**: Avoid memory leaks from frequent collision calculations
 
 ## High-level Task Breakdown
 
-### Task 1: HTML Structure Redesign
-**Objective**: Restructure the CTA text to support dual-word animation
+### Task 1: Research and Architecture Design
+**Objective**: Determine the optimal technical approach for 3D-2D collision detection
 **Success Criteria**: 
-- Two separate text elements for "DEPLOY" and "NODES"
-- Proper container hierarchy for animation control
-- Maintains current styling and layout
-- No layout shifts during initial load
+- Research Three.js raycasting and screen projection methods
+- Choose between Canvas masking vs CSS masking vs WebGL approaches
+- Define performance targets (60fps during animations)
+- Create technical architecture document
 
-### Task 2: CSS Foundation Setup
-**Objective**: Create CSS foundation for the animation effects
-**Success Criteria**:
-- Hidden "NODES" text positioned correctly for drop-down effect
-- Container with overflow hidden to prevent layout disruption
-- Smooth width transition capability for background extension
-- Preserved existing visual styling (borders, shadows, padding)
+**Questions for User:**
+- Are you open to using Canvas-based text rendering instead of HTML text?
+- What's the priority: pixel-perfect accuracy vs performance?
+- Should this work on mobile devices or desktop-only initially?
 
-### Task 3: GSAP Animation Implementation - Hover In
-**Objective**: Implement the forward hover animation using GSAP timeline
+### Task 2: 3D Model Geometry Analysis System
+**Objective**: Create system to analyze 3D model geometry and project to screen coordinates
 **Success Criteria**:
-- "NODES" drops down smoothly from hidden state
-- Background/container width expands to fit new text
-- Animation timing feels natural and responsive
-- Uses performance-optimized GSAP methods (transforms over layout properties)
+- Function to get model vertices in world space
+- Convert 3D coordinates to screen pixel coordinates  
+- Account for camera position, perspective, and viewport
+- Real-time projection updates during model animations
 
-### Task 4: GSAP Animation Implementation - Hover Out
-**Objective**: Implement the reverse animation for mouse leave
+### Task 3: Text Element Collision Detection
+**Objective**: Implement collision detection between projected 3D geometry and text elements
 **Success Criteria**:
-- Smooth reversal of all hover effects
-- "NODES" animates back to hidden state
-- Container width returns to original size
-- Timeline cleanup prevents animation conflicts
+- Accurate bounding box detection for text characters/words
+- Pixel-level or region-level collision detection
+- Efficient algorithm that runs smoothly during animations
+- Support for different text sizes and font metrics
 
-### Task 5: Performance Optimization & Testing
-**Objective**: Ensure smooth 60fps animation performance
+### Task 4: Dynamic Text Color System
+**Objective**: Implement the visual text color change mechanism
 **Success Criteria**:
-- No layout thrashing during animations
-- Consistent frame rate across different devices
-- Memory efficient (no animation leaks)
-- Compatible with existing scroll animations
+- Smooth transition between normal and white text color
+- Support for partial text coloring (only overlapping parts)
+- Maintains text readability during transitions
+- Compatible with existing GSAP animations
 
-### Task 6: Edge Case Handling & Polish
-**Objective**: Handle rapid hover/unhover and edge cases
+### Task 5: Performance Optimization
+**Objective**: Ensure smooth performance during complex scroll animations
 **Success Criteria**:
-- Proper animation interruption handling
-- Smooth transitions when rapidly hovering/unhovering
-- Accessibility considerations (reduced motion preference)
-- Clean integration with existing page animations
+- Maintains 60fps during scroll with collision detection active
+- Efficient memory usage without leaks
+- Optimized update frequency (not every frame if unnecessary)
+- Fallback mechanisms for lower-performance devices
+
+### Task 6: Integration and Testing
+**Objective**: Integrate with existing animation system and test thoroughly
+**Success Criteria**:
+- Works seamlessly with existing GSAP scroll animations
+- Compatible with both hero section and features section models
+- Smooth behavior on different screen sizes
+- No interference with other page interactions
 
 ## Project Status Board
 
 ### Backlog
-- [ ] **Task 1**: HTML Structure Redesign
-- [ ] **Task 2**: CSS Foundation Setup  
-- [ ] **Task 3**: GSAP Animation Implementation - Hover In
-- [ ] **Task 4**: GSAP Animation Implementation - Hover Out
-- [ ] **Task 5**: Performance Optimization & Testing
-- [ ] **Task 6**: Edge Case Handling & Polish
+- [ ] **Task 1**: Research and Architecture Design
+- [ ] **Task 2**: 3D Model Geometry Analysis System  
+- [ ] **Task 3**: Text Element Collision Detection
+- [ ] **Task 4**: Dynamic Text Color System
+- [ ] **Task 5**: Performance Optimization
+- [ ] **Task 6**: Integration and Testing
 
 ### In Progress
 - Planning and analysis phase
 
 ### Complete
-- ✅ Codebase analysis
-- ✅ Feature requirements gathering
-- ✅ Task breakdown planning
+- ✅ Codebase analysis  
+- ✅ 3D model implementation understanding
+- ✅ Current text and animation system analysis
 
 ## Current Status / Progress Tracking
 
-**Current Phase**: Planning Complete
-**Next Action**: Awaiting approval to proceed with Task 1 (HTML Structure Redesign)
+**Current Phase**: Planning - Architecture Design Questions
+**Next Action**: Need user input on technical approach preferences before proceeding
 
-The plan focuses on building the animation incrementally, starting with the structural foundation and progressively adding the animation layers. Each task has clear success criteria that can be tested before moving to the next phase.
+**Key Questions for User:**
+1. **Accuracy vs Performance**: Do you prefer pixel-perfect detection or is region-based detection acceptable?
+2. **Text Rendering**: Are you open to Canvas-based text rendering for more control, or must we keep HTML text?
+3. **Browser Support**: Should this work on mobile devices immediately or can we start with desktop?
+4. **Fallback Behavior**: What should happen on devices that can't handle the effect smoothly?
 
 ## Executor's Feedback or Assistance Requests
 
@@ -135,3 +155,6 @@ The plan focuses on building the animation incrementally, starting with the stru
 - Read the file before trying to edit it  
 - If there are vulnerabilities that appear in the terminal, run npm audit before proceeding
 - Always ask before using the -force git command 
+
+
+

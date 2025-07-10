@@ -30,7 +30,8 @@ export default function NewTry() {
     const heroTitleRef = useRef<HTMLDivElement>(null);
     const heroSubtitleRef = useRef<HTMLDivElement>(null);
     const blurOverlayRef = useRef<HTMLDivElement>(null);
-
+    const server2ModelRef = useRef<ServerModel3DRef>(null);
+    const server2ModelContainerRef = useRef<HTMLDivElement>(null);
     const animateServerEntrance = useCallback(() => {
         const serverObject = serverModelRef.current?.getServerObject();
         
@@ -41,6 +42,28 @@ export default function NewTry() {
           
           entranceTl
             .to(serverModelContainerRef.current, {
+              duration: 1.2,
+              left: "0%",
+              ease: "expo.out",
+            })
+            .to(serverObject.rotation, {
+              duration: 1.2,
+              y: 0,
+              ease: "expo.out",
+            }, "<"); // Start at the same time as previous animation
+        }
+      }, []);
+
+      const animateServer2Entrance = useCallback(() => {
+        const serverObject = server2ModelRef.current?.getServerObject();
+        
+        if (serverObject && server2ModelContainerRef.current) {
+          
+          // Use a timeline for better performance
+          const entranceTl = gsap.timeline();
+          
+          entranceTl
+            .to(server2ModelContainerRef.current, {
               duration: 1.2,
               left: "0%",
               ease: "expo.out",
@@ -133,7 +156,7 @@ export default function NewTry() {
                       
                     const serverObject = serverModelRef.current?.getServerObject();
                         if (serverObject) {
-                            serverObject.rotation.y = progress * Math.PI * 2.5;
+                            serverObject.rotation.y = progress * Math.PI * 1.5;
                         
                             if (window.innerWidth >= 1024 && serverModelContainerRef.current) {
                                 const centeringOffset = progress * 105;
@@ -144,6 +167,24 @@ export default function NewTry() {
                         }
                 }
             },
+        })
+
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: section2Ref.current,
+                start: "top top",
+                end: "+=300",
+                pin: true,
+                anticipatePin: 1,
+                markers: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+
+                    if (server2ModelContainerRef.current && progress > 0.1) {
+                        animateServer2Entrance();
+                    }
+                }
+            }
         })
         
     }, [])
@@ -172,7 +213,13 @@ export default function NewTry() {
 
             <section className={`${styles.Section} ${styles.Section2}`} ref={section2Ref}>
                 <div className={styles.Section2Inner} ref={section2InnerRef}>
-                    
+                    <div className={styles.Section2Server} ref={server2ModelContainerRef}>
+                        <ServerModel3D 
+                            className={styles.Server2Model3D}
+                            ref={server2ModelRef}
+                            onModelLoaded={animateServerEntrance}
+                        />
+                    </div>
                 </div>
             </section>
 
