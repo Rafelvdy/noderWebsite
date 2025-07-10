@@ -3,6 +3,7 @@
     min-height: 100dvh;
     position: relative;
     overflow: hidden;
+    z-index: 1;
 }
 
 .Section1 {
@@ -84,6 +85,7 @@
     max-width: 500px;
     text-wrap: wrap;
     margin-bottom: 1rem;
+    overflow: hidden;
 }
 
 .HeroSubtitle {
@@ -187,24 +189,340 @@
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    overflow: hidden;
+    z-index: 2;
 }
 .Section2TitleCard {
-    background: #4A4AFF;
+    /* background: #F5F2E8; */
+    background: #2C3E50;
     height: 150px;
-    width: 3000px;
+    width: 80%;
     z-index: 200;
     position: relative;
     margin-top: 80px;
-    border-radius: 10px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.Section2TitleCard h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #8B7355;
+    font-family: var(--font-space-grotesk);
+    max-width: 90%;
+    text-align: left;
+    
 }
 
 .Section2Content {
-    background: #E5E5FF;
+    background: #2C3E50;
     height: 200px;
     width: 300px;
     z-index: 200;
     position: relative;
-    margin-bottom: 50%;
+    z-index: 3;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Section2Content h2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #F0F4F8;
+    font-family: var(--font-inter);
+    max-width: 90%;
+}
+
+.Section2Quote {
+    /*   */
+    height: 100px;
+    width: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.Section2Quote p {
+    font-size: 15px;
+    font-weight: 400;
+    color: black;
+    font-family: var(--font-ibm-plex-mono);
+    max-width: 90%;
+}
+
+.ComparisonTableCard {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: black;
+    height: 90%;
+    width: 90%;
+    z-index: 10;
+    border-radius: 30px;
+}
+
+.ComparisonTableContainer {
+    /* background: white; */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    will-change: transform;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.ComparisonTableHeader {
+    /* background: red; */
+    width: 90%;
+    height: 100px;
+    color: #F5F2E8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-bottom: 1.5px solid #545556;
+}
+
+.ComparisonTableHeader h1 {
+    font-size: clamp(20px, 6vw, 30px);
+    text-align: center;
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    
+}
+
+.ComparisonTableBody {
+    /* background: blue; */
+    width: 90%;
+    height: 400px; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.ComparisonRow {
+    /* background: green; */
+    width: 90%;
+    height: 120px;
+    /* border-bottom: 1px solid #E5E7EB; */
+}
+
+.SpacerContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1.5px solid #c1c1c1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.SpacerLine {
+    background: white;
+    width: 33.3%;
+    height: 0%;
+    z-index: 10;
+    transform-origin: top;
+    
+}
+
+.ComparisonRowContent {
+    /* background: red; */
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.CompetitorName {
+    /* background: blue; */
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* color: #4A4AFF; */
+    color: #6B7280;
+    overflow: hidden;
+}
+
+.CompetitorName h2 {
+    font-size: clamp(20px, 5vw, 20px);
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+#NoderName {
+    color: white;
+}
+
+.CompetitorData {
+    /* background: green; */
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.CompetitorTimeContainer {
+    /* background: yellow; */
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.SpeedBar {
+    border: 2px solid white;
+    height: 40%;
+    width: 80%;
+    margin-right: 20px;
+}
+
+.CompetitorTime {
+    background: white;
+    width: 50px;
+    height: 25px;
+    margin-right: 20px;
+    /* border-radius: 5px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    font-size: clamp(12px, 3vw, 14px);
+}
+
+.SpeedBarFill {
+    background: #4A4AFF;
+    height: 100%;
+}
+
+#NoderFill {
+    width: 25.6%;
+}
+
+#CompetitorTFill {
+    width: 51.2%;
+}
+
+#CompetitorQFill {
+    width: 76.8%;
+}
+
+
+.ComparisonTableFooter {
+    width: 90%;
+    height: 100px;
+    position: relative;
+    margin-top: 10px;
+    z-index: 1;
+}
+
+.MultiplierContainer {
+    width: 100%;
+    height: 100%;
+    border: 2px solid white;  
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.MultiplierBackground {
+    width: 1000%;
+    height: 1000%;
+    background:
+    conic-gradient(at 2px,black 75%, #6B7280 0)
+    10px/calc(10px + 2px) 12px;
+    transform: rotate(45deg);
+    position: absolute;
+    top: -450%;
+    left: -450%;
+    z-index: 1;
+}
+
+@media (min-width: 1302px) {
+    .MultiplierBackground {
+        height: 1200%;
+        width: 1200%;
+        top: -550%;
+        left: -550%;
+    }
+}
+
+@media (min-width: 1632px) {
+    .MultiplierBackground {
+        height: 1900%;
+        width: 1900%;
+        top: -900%;
+        left: -900%; 
+    }
+}
+ 
+.MultiplierTextContainer {
+    /* background: black; */
+    width: 100%;
+    height: 50%;
+    z-index: 2;
+    position: relative;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.MultiplierTextContainer h2 {
+    font-size: clamp(20px, 10vw, 40px);
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.MultiplierSubTextContainer {
+    position: relative;
+    width: 100%;
+    height: 30%;
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: clamp(12px, 4vw, 25px);
+    color: black    ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background: white;
+    overflow: hidden;
 }
 
 .Section3 {

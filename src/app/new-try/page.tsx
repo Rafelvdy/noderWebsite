@@ -38,6 +38,24 @@ export default function NewTry() {
     const server2ModelContainerRef = useRef<HTMLDivElement>(null);
     const server2BlurOverlayRef = useRef<HTMLDivElement>(null);
     const server2InfiniteRotationRef = useRef<gsap.core.Tween | null>(null);
+    const spacerLine1Ref = useRef<HTMLDivElement>(null);
+    const spacerLine2Ref = useRef<HTMLDivElement>(null);
+    const spacerLine3Ref = useRef<HTMLDivElement>(null);
+    const spacerLine4Ref = useRef<HTMLDivElement>(null);
+    const spacerLine5Ref = useRef<HTMLDivElement>(null);
+    const spacerLine6Ref = useRef<HTMLDivElement>(null);
+    const spacerLine7Ref = useRef<HTMLDivElement>(null);
+    const spacerLine8Ref = useRef<HTMLDivElement>(null);
+    const spacerLine9Ref = useRef<HTMLDivElement>(null);
+    const noderSpeedBarRef = useRef<HTMLDivElement>(null);
+    const competitorTime1Ref = useRef<HTMLDivElement>(null);
+    const competitorTime2Ref = useRef<HTMLDivElement>(null);
+    const competitorTime3Ref = useRef<HTMLDivElement>(null);
+    const competitorTFillRef = useRef<HTMLDivElement>(null);
+    const competitorQFillRef = useRef<HTMLDivElement>(null);
+    const multiplierSubTextRef = useRef<HTMLDivElement>(null);
+    
+
     // Store initial viewport height to prevent scaling changes when dvh changes on mobile
     const initialViewportHeightRef = useRef<number>(0);
     const animateServerEntrance = useCallback(() => {
@@ -439,15 +457,107 @@ export default function NewTry() {
                 <div className={styles.BlurOverlay} ref={server2BlurOverlayRef}></div>
             </div> */}
                 <div className={styles.Section2Inner} ref={section2InnerRef}>
+                    {/* <div className={styles.BlurOverlay}></div> */}
                     <div className={styles.Section2TitleCard}>
-                        <h1>WEB3</h1>
+                        <h1>{"//  "}WEB3 IS STILL HEAVILY RELYING ON WEB2</h1>
                     </div>
-                    <div className={styles.Section2Content}></div>
+                    <div className={styles.Section2Content}>
+                        <h2>{"{"}Most "decentralised" projects rely on cloud providers like AWS or GCP. When those
+                            go down, so do their nodes. Centralised infra introduces single points of failure, performance bottlenecks, and censorship risk.{"}"}</h2>
+                    </div>
+                    <div className={styles.Section2Quote}>
+                        <p>"You can't scale what you dont own."</p>
+                    </div>
+                    <div className={styles.ComparisonTableCard}>
+                    <div className={styles.ComparisonTableContainer}>
+                        <div className={styles.ComparisonTableHeader}>
+                            <h1>Our Average Confirmation Latency</h1>
+                        </div>
+                        <div className={styles.ComparisonTableBody}>
+                            <div className={styles.ComparisonRow} id={styles.NoderRow}>
+                            <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine1} ref={spacerLine1Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine2} ref={spacerLine2Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine3} ref={spacerLine3Ref}></div>
+                            <div className={styles.ComparisonRowContent}>
+                                <div className={styles.CompetitorName} id={styles.NoderName}>
+                                <h2>Noder</h2>
+                                </div>
+                                <div className={styles.CompetitorData}>
+                                <div className={styles.SpeedBar}>
+                                    <div className={styles.SpeedBarFill} id={styles.NoderFill} ref={noderSpeedBarRef}></div>
+                                </div>
+                                </div>
+                                <div className={styles.CompetitorTimeContainer}>
+                                <div className={styles.CompetitorTime} ref={competitorTime1Ref}>0.00s</div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+
+                            <div className={styles.ComparisonRow}>
+                            <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine4} ref={spacerLine4Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine5} ref={spacerLine5Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine6} ref={spacerLine6Ref}></div>
+                            <div className={styles.ComparisonRowContent}>
+                                <div className={styles.CompetitorName}>
+                                <h2>Competitor T</h2>
+                                </div>
+                                <div className={styles.CompetitorData}>
+                                <div className={styles.SpeedBar}>
+                                    <div className={styles.SpeedBarFill} id={styles.CompetitorTFill} ref={competitorTFillRef}></div>
+                                </div>
+                                </div>
+                                <div className={styles.CompetitorTimeContainer}>
+                                <div className={styles.CompetitorTime} ref={competitorTime2Ref}>0.00s</div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+
+                            <div className={styles.ComparisonRow}>
+                            <div className={styles.SpacerContainer} id={styles.SpacerContainer1}>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine7} ref={spacerLine7Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine8} ref={spacerLine8Ref}></div>
+                                <div className={styles.SpacerLine} id={styles.SpacerLine9} ref={spacerLine9Ref}></div>
+                            <div className={styles.ComparisonRowContent}>
+                                <div className={styles.CompetitorName}>
+                                <h2>Competitor Q</h2>
+                                </div>
+                                <div className={styles.CompetitorData}>
+                                <div className={styles.SpeedBar}>
+                                    <div className={styles.SpeedBarFill} id={styles.CompetitorQFill} ref={competitorQFillRef}></div>
+                                </div>
+                                </div>
+                                <div className={styles.CompetitorTimeContainer}>
+                                <div className={styles.CompetitorTime} ref={competitorTime3Ref}>0.00s</div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div className={styles.ComparisonTableFooter}>
+                            <div className={styles.MultiplierContainer}>
+                                <div className={styles.MultiplierBackground}></div>
+                            </div>
+                            <div className={styles.MultiplierTextContainer}>
+                                {/* <h2><span>10x</span></h2> */}
+                                <h2>?x</h2>
+                            </div>
+                            <div className={styles.MultiplierSubTextContainer} ref={multiplierSubTextRef}>
+                                FASTER THAN THE COMPETITION
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <section className={`${styles.Section} ${styles.Section3}`} ref={section3Ref}>
-                
+                <div className={styles.BlurOverlay}></div>
+                <div className={styles.Section3Inner}></div>
+
             </section>
 
             <section className={`${styles.Section} ${styles.Section4}`} ref={section4Ref}>
