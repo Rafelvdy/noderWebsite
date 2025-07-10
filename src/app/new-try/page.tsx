@@ -85,41 +85,63 @@ export default function NewTry() {
                           x: `-${progress * 150}%`,
                           opacity: 1 - progress,
                         });
-                      }
+                    }
+                    
+                    if (heroSubtitleRef.current) {
+                    gsap.set(heroSubtitleRef.current, {
+                        x: `-${(progress * 100) - 10}%`,
+                        opacity: 1 - progress,
+                    });
+                    }
                       
-                      if (heroSubtitleRef.current) {
-                        gsap.set(heroSubtitleRef.current, {
-                          x: `-${(progress * 100) - 10}%`,
-                          opacity: 1 - progress,
-                        });
-                      }
-                      
-                      // Blur overlay animation
-                      if (blurOverlayRef.current) {
-                        gsap.set(blurOverlayRef.current, {
-                          backdropFilter: `blur(${2 - (progress * 2)}px)`,
-                          background: `rgba(255, 255, 255, ${0.4 - (progress * 0.4)})`,
-                        });
-                      }
-                      
-                      // 3D model container scaling
-                      if (serverModelContainerRef.current) {
-                        gsap.set(serverModelContainerRef.current, {
-                          scale: 1 + (progress * 0.5),
-                        });
+                    // Blur overlay animation
+                    if (blurOverlayRef.current) {
+                    gsap.set(blurOverlayRef.current, {
+                        backdropFilter: `blur(${2 - (progress * 2)}px)`,
+                        background: `rgba(255, 255, 255, ${0.4 - (progress * 0.4)})`,
+                    });
                     }
 
-                    const serverObject = serverModelRef.current?.getServerObject();
-                    if (serverObject) {
-                        serverObject.rotation.y = progress * Math.PI * 2.5;
-                        
-                        if (window.innerWidth >= 1024 && serverModelContainerRef.current) {
-                            const centeringOffset = progress * 25;
+                    if (window.innerWidth <= 425) {
+                        // 3D model container scaling
+                        if (serverModelContainerRef.current) {
                             gsap.set(serverModelContainerRef.current, {
-                                x: `-${centeringOffset}%`,
+                                scale: 1 + (progress * 0.8),
+                            });
+                        }
+
+                    } else if (window.innerWidth <= 768) {
+                        if (serverModelContainerRef.current) {
+                            gsap.set(serverModelContainerRef.current, {
+                                scale: 1 + (progress * 2.3),
+                            });
+                        }
+                    } else if (window.innerWidth < 1024) {
+                        if (serverModelContainerRef.current) {
+                            gsap.set(serverModelContainerRef.current, {
+                                scale: 1 + (progress * 3.4),
+                            });
+                        }
+                    } else {
+                        // Desktop screens >= 1024px: Scale up while moving to center
+                        if (serverModelContainerRef.current) {
+                            gsap.set(serverModelContainerRef.current, {
+                                scale: 1 + (progress * 3.5),
                             });
                         }
                     }
+                      
+                    const serverObject = serverModelRef.current?.getServerObject();
+                        if (serverObject) {
+                            serverObject.rotation.y = progress * Math.PI * 2.5;
+                        
+                            if (window.innerWidth >= 1024 && serverModelContainerRef.current) {
+                                const centeringOffset = progress * 105;
+                                gsap.set(serverModelContainerRef.current, {
+                                    x: `-${centeringOffset}%`,
+                                });
+                            }
+                        }
                 }
             },
         })
