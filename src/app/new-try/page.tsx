@@ -212,11 +212,18 @@ export default function NewTry() {
                                 scale: 1 + (progress * 3.4),
                             });
                         }
-                    } else {
-                        // Desktop screens >= 1024px: Scale up while moving to center
+                    } else if (window.innerWidth < 1440) {
+                        // Desktop screens 1024px to 1439px: Scale up while moving to center
                         if (serverModelContainerRef.current && window.innerWidth >= 1024) {
                             gsap.set(serverModelContainerRef.current, {
                                 scale: 1 + (progress * 5),
+                            });
+                        }
+                    } else {
+                        // Large desktop screens >= 1440px: Enhanced scale and positioning
+                        if (serverModelContainerRef.current) {
+                            gsap.set(serverModelContainerRef.current, {
+                                scale: 1 + (progress * 9.3),
                             });
                         }
                     }
@@ -225,8 +232,14 @@ export default function NewTry() {
                         if (serverObject) {
                             serverObject.rotation.y = progress * Math.PI * 1.5;
                         
-                            if (window.innerWidth >= 1024 && serverModelContainerRef.current) {
+                            if (window.innerWidth >= 1024 && window.innerWidth < 1440 && serverModelContainerRef.current) {
                                 const centeringOffset = progress * 153;
+                                gsap.set(serverModelContainerRef.current, {
+                                    x: `-${centeringOffset}%`,
+                                });
+                            } else if (window.innerWidth >= 1440 && serverModelContainerRef.current) {
+                                // Enhanced centering offset for large screens
+                                const centeringOffset = progress * 260;
                                 gsap.set(serverModelContainerRef.current, {
                                     x: `-${centeringOffset}%`,
                                 });
