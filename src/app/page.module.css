@@ -10,9 +10,11 @@
     width: 100%;
     height: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 999;
     /* background: green; */
 }
@@ -28,12 +30,13 @@
 .SocialsContainer {
     /* background: green; */
     height: 100%;
-    width: 250px;
+    width: clamp(150px, 45vw, 220px);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: relative;
-    transform: translateX(50%);
+    margin-left: 1rem;
+    /* Removed: transform: translateX(50%); */
 }
 
 .StackedIcons {
@@ -41,7 +44,7 @@
     align-items: center;
     position: relative;
     height: 40px;
-    padding: 0 15px;
+    padding: 0 clamp(8px, 2vw, 15px);
 }
 
 .SocialIcon {
@@ -66,13 +69,15 @@
 
 .StackedIcons a:nth-child(2),
 .StackedIcons .SocialIcon:nth-child(2) {
-  transform: translateX(-15px); /* Use transform instead of margin for GSAP compatibility */
+  /* Removed default stacked position - now controlled by JavaScript */
+  /* transform: translateX(-15px); */
   z-index: 2;
 }
 
 .StackedIcons a:nth-child(3),
 .StackedIcons .SocialIcon:nth-child(3) {
-  transform: translateX(-30px); /* Stack the third icon further back */
+  /* Removed default stacked position - now controlled by JavaScript */
+  /* transform: translateX(-30px); */
   z-index: 1;
 }
 

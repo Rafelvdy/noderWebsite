@@ -217,7 +217,8 @@ export default function Home() {
     // Mobile Navigation variables
     let mobileNavExpandTimeline: gsap.core.Timeline | null = null;
     let mobileNavScrollTrigger: ScrollTrigger | null = null;
-    let isExpanded = false;
+    let isExpanded = true; // Start expanded by default
+    let hasScrolledUp = false; // Track if user has scrolled up yet
 
     // Set initial mobile state
     setIsMobile(window.innerWidth <= 1023);
@@ -243,27 +244,33 @@ export default function Home() {
     requestAnimationFrame(() => {
       // Mobile Navigation Expansion Logic - check window width directly to avoid race condition
       if (window.innerWidth <= 1023) {        
-        // Create the expansion timeline
+        // Create the collapse timeline (since we start expanded)
         mobileNavExpandTimeline = gsap.timeline({ paused: true });
         
+        // Set initial expanded state (icons at position 0)
+        gsap.set([discordRef.current, telegramRef.current, twitterRef.current], {
+          transform: 'translateX(0px)'
+        });
+        
+        // Animation moves icons TO their collapsed (stacked) positions
         mobileNavExpandTimeline
-          .to(discordRef.current, {
-            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+          .to(twitterRef.current, {
+            transform: 'translateX(-30px)', // Move to stacked position
             duration: 0.4,
             ease: 'power2.out'
           }, 0)
           .to(telegramRef.current, {
-            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+            transform: 'translateX(-15px)', // Move to stacked position
             duration: 0.4,
             ease: 'power2.out'
           }, 0)
-          .to(twitterRef.current, {
-            transform: 'translateX(0px)', // Move from -15px (CSS) to 0px (15px expansion)
+          .to(discordRef.current, {
+            transform: 'translateX(0px)', // Discord stays in place (frontmost)
             duration: 0.4,
             ease: 'power2.out'
           }, 0);
 
-        console.log('Mobile nav timeline created successfully');
+        console.log('Mobile nav timeline created successfully - starting expanded');
         
         // ScrollTrigger for direction detection
         mobileNavScrollTrigger = ScrollTrigger.create({
@@ -274,19 +281,28 @@ export default function Home() {
             const direction = self.direction;
             const scrollY = window.scrollY;
             
-            console.log('Scroll direction:', direction, 'ScrollY:', scrollY, 'isExpanded:', isExpanded);
+            console.log('Scroll direction:', direction, 'ScrollY:', scrollY, 'isExpanded:', isExpanded, 'hasScrolledUp:', hasScrolledUp);
             
-            // Expand on downward scroll
-            if (direction === 1 && scrollY > 30 && !isExpanded) {
-              console.log('Expanding mobile nav');
+            // Collapse on first upward scroll
+            if (direction === -1 && scrollY > 30 && isExpanded && !hasScrolledUp) {
+              console.log('Collapsing mobile nav on first upward scroll');
               mobileNavExpandTimeline?.play();
-              isExpanded = true;
-            }
-            // Contract on upward scroll when near top
-            else if (direction === -1 && isExpanded) {
-              console.log('Contracting mobile nav');
-              mobileNavExpandTimeline?.reverse();
               isExpanded = false;
+              hasScrolledUp = true;
+            }
+            
+            // Reset hasScrolledUp flag when user scrolls down significantly after collapsing
+            // This allows the nav to expand again on the next scroll sequence
+            if (direction === 1 && scrollY > 100 && hasScrolledUp && !isExpanded) {
+              console.log('Resetting hasScrolledUp flag - nav can expand again on next up-scroll');
+              hasScrolledUp = false;
+            }
+            
+            // Expand when scrolling down after hasScrolledUp has been reset
+            if (direction === 1 && scrollY > 30 && !isExpanded && !hasScrolledUp) {
+              console.log('Expanding mobile nav on downward scroll');
+              mobileNavExpandTimeline?.reverse();
+              isExpanded = true;
             }
           }
         });
