@@ -470,7 +470,7 @@ export default function Home() {
       scrollTrigger: {
         trigger: socialProofSectionRef.current,
         start: "top top",
-        end: "300% bottom",
+        end: "500% bottom",
         pin: true,
         scrub: true,
         markers: false,
@@ -478,50 +478,60 @@ export default function Home() {
     })
 
     gsap.set(textCarouselRef.current, {
-      transform: "translateX(100%)",
+      transform: "translateX(150%)",
     })
 
     gsap.set(logosCarouselRef.current, {
-      transform: "translateX(-100%)",
+      transform: "translateX(-150%)",
     })
 
     // gsap.set(testimonial1Ref.current, {
     //   transform: "translateY(150%)",
     // })
 
+
     SocialProofTL
       .to(textCarouselRef.current, {
         transform: "translateX(0%)",
+        duration: 1,
       })
       .to(logosCarouselRef.current, {
         transform: "translateX(0%)",
+        duration: 1,
       }, "<")
-      .to(testimonial1Ref.current, {
-        bottom: "25%",
-        duration: 0.5,
-      })
       .to({}, {duration: 0.5})
       .to(testimonial1Ref.current, {
-        bottom: "100%",
-        duration: 0.5,
+        top: "50%",
+        transform: "translateY(-50%)",
+        duration: 1,
+      })
+      .to({}, {duration: 0.5})
+      .to(testimonial1Ref.current, {
+        top: "-100%",
+        transform: "translateY(0%)",
+        duration: 1,
       })
       .to(testimonial2Ref.current, {
-        bottom: "25%",
-        duration: 0.5,
+        top: "50%",
+        transform: "translateY(-50%)",
+        duration: 1,
       })
       .to({}, {duration: 0.5})
       .to(testimonial2Ref.current, {
-        bottom: "100%",
-        duration: 0.5,
-      })
+        top: "-100%",
+        transform: "translateY(0%)",
+        duration: 1,
+        })
       .to(testimonial3Ref.current, {
-        bottom: "25%",
-        duration: 0.5,
+        top: "50%",
+        transform: "translateY(-50%)",
+        duration: 1,
       })
       .to({}, {duration: 0.5})
       .to(testimonial3Ref.current, {
-        bottom: "100%",
-        duration: 0.5,
+        top: "-100%",
+        transform: "translateY(0%)",
+        duration: 1,
       })
 
 
