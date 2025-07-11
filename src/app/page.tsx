@@ -972,9 +972,9 @@ export default function Home() {
       
       <section className={styles.SocialProofSection} ref={socialProofSectionRef}>
         <div className={styles.SocialProofContent}>
-          <div className={styles.SocialProofTitleContainer}>
-            {/* <h1 className={styles.SocialProofTitle} ref={socialProofTitleRef}>Trusted by leading builders in Web3.</h1> */}
-            <div className={styles.TextCarousel}>
+        <div className={styles.SocialProofTitleContainer}>
+          <div className={styles.TextCarousel}>
+            <div className={styles.TextSlideWrapper}>
               <div className={styles.TextSlide}>
                 <h1>TRUSTED BY LEADING BUILDERS IN WEB3.</h1>
               </div>
@@ -983,7 +983,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className={styles.LogosCarousel}>
+        </div>
+        <div className={styles.LogosCarousel}>
+          <div className={styles.LogoSlideWrapper}>
             <div className={styles.LogoSlide}>
               <Image src="/logo-carousel/Allianz.png" alt="Allianz" width={100} height={100} objectFit="contain" className={styles.Logo} />
               <Image src="/logo-carousel/apple.png" alt="Apple" width={100} height={100} objectFit="contain" className={styles.Logo} />
@@ -1007,6 +1009,7 @@ export default function Home() {
               <Image src="/logo-carousel/WeChat.png" alt="WeChat" width={100} height={100} objectFit="contain" className={styles.Logo} />
             </div>
           </div>
+        </div>
           <div className={styles.TestimonialContainer}>
 
           </div>
