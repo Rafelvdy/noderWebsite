@@ -396,6 +396,17 @@ export default function NewTry() {
                 // }
             }
         })
+
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: section3Ref.current,
+                start: "top top",
+                end: "+=300",
+                pin: true,
+                anticipatePin: 1,
+                markers: false,
+            }
+        })
         
         // Cleanup function
         return () => {

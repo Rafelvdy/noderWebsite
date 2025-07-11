@@ -942,7 +942,7 @@ export default function Home() {
               <div className={styles.ComparisonRowContent}>
                 <div className={styles.CompetitorName}>
                   <h2>Competitor Q</h2>
-                </div>
+                </div> 
                 <div className={styles.CompetitorData}>
                   <div className={styles.SpeedBar}>
                     <div className={styles.SpeedBarFill} id={styles.CompetitorQFill} ref={competitorQFillRef}></div>
@@ -973,7 +973,15 @@ export default function Home() {
       <section className={styles.SocialProofSection} ref={socialProofSectionRef}>
         <div className={styles.SocialProofContent}>
           <div className={styles.SocialProofTitleContainer}>
-            <h1 className={styles.SocialProofTitle} ref={socialProofTitleRef}>Trusted by leading builders in Web3.</h1>
+            {/* <h1 className={styles.SocialProofTitle} ref={socialProofTitleRef}>Trusted by leading builders in Web3.</h1> */}
+            <div className={styles.TextCarousel}>
+              <div className={styles.TextSlide}>
+                <h1>TRUSTED BY LEADING BUILDERS IN WEB3.</h1>
+              </div>
+              <div className={styles.TextSlide}>
+                <h1>TRUSTED BY LEADING BUILDERS IN WEB3.</h1>
+              </div>
+            </div>
           </div>
           <div className={styles.LogosCarousel}>
             <div className={styles.LogoSlide}>

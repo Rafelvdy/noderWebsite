@@ -690,7 +690,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 
 .SocialProofTitle {
@@ -715,13 +715,25 @@
     }
 }
 
+
+
+
 .LogosCarousel {
     width: 100%;
     height: 200px;
-    /* background: black; */
+    background: black;
     overflow: hidden;
     padding: 1rem 0;
     white-space: nowrap;
+}
+
+.TextCarousel {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    /* padding: 1rem 0; */
+    white-space: nowrap;
+    background: red;
 }
 
 .LogoSlide {
@@ -731,8 +743,35 @@
     animation: slide 10s linear infinite;
 }
 
+.TextSlide {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: slide 10s linear infinite reverse;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.TextSlide h1 {
+    font-size: 65px;
+    letter-spacing: 0.7rem;
+    font-family: var(--font-inter);
+    font-weight: 700;
+}
+
+
+
+
+
 .LogosCarousel:hover {
     .LogoSlide {
+        animation-play-state: paused;
+    }
+
+.TextSlide {
         animation-play-state: paused;
     }
 }
@@ -748,14 +787,15 @@
     margin: 0 1rem; 
 }
 
-.LogoCarousel:before {
+/* .LogosCarousel:before {
     position: absolute;
     top: 0;
     left: 0;
-}
+} */
 
 
 .TestimonialContainer {
+
     background: blue;
     width: 100%;
     height: 175px;
