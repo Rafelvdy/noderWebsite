@@ -1,6 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+// import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { modelManager } from "@/utils/ModelManager";
@@ -82,8 +82,6 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({
     let mounted = true;
     let animationId: number;
     let server: THREE.Group | null = null;
-    let renderer: THREE.WebGLRenderer;
-    let composer: EffectComposer;
 
     // Extract camera configuration with defaults
     const {
@@ -157,7 +155,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({
     });
 
     // Initialize renderer
-    renderer = new THREE.WebGLRenderer({
+      const renderer = new THREE.WebGLRenderer({
       alpha: false,
       antialias: true,
       powerPreference: "high-performance",
@@ -177,7 +175,7 @@ const ServerModel3D = forwardRef<ServerModel3DRef, ServerModel3DProps>(({
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // Set up post-processing
-    composer = new EffectComposer(renderer);
+    const composer = new EffectComposer(renderer);
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 

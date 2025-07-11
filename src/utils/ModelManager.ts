@@ -189,7 +189,7 @@ class ModelManager {
     let totalTriangles = 0;
     let totalMaterials = 0;
 
-    this.models.forEach((model, url) => {
+    this.models.forEach((model) => {
       model.traverse((child) => {
         if (child instanceof THREE.Mesh && child.geometry) {
           const positions = child.geometry.attributes.position;

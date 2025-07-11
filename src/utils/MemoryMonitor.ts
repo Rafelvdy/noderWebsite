@@ -50,8 +50,10 @@ class MemoryMonitor {
    * Get current memory usage information
    */
   getCurrentMemoryUsage(): MemoryInfo {
-    // @ts-ignore - performance.memory is not in TypeScript definitions but exists in Chrome
-    const memory = (performance as any).memory;
+    /**
+     * Get current memory usage information
+     */
+    const memory = (performance as Performance & { memory: MemoryInfo }).memory;
     
     if (memory) {
       return {
@@ -81,7 +83,7 @@ class MemoryMonitor {
   /**
    * Take a snapshot of current performance metrics
    */
-  takeSnapshot(renderer?: THREE.WebGLRenderer, modelManagerStats?: any): PerformanceMetrics {
+  takeSnapshot(renderer?: THREE.WebGLRenderer, modelManagerStats?: {cachedModels: number, estimatedMemoryMB: number}): PerformanceMetrics {
     const snapshot: PerformanceMetrics = {
       timestamp: Date.now(),
       memoryUsage: this.getCurrentMemoryUsage(),

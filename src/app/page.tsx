@@ -11,10 +11,11 @@ import * as THREE from "three";
 import * as React from "react";
 import Image from "next/image";
 
+
 // Import the ref type
-type ServerModel3DRef = {
-  getServerObject: () => THREE.Group | null;
-};
+// type ServerModel3DRef = {
+//   getServerObject: () => THREE.Group | null;
+// };
 
 // Interface for SplitText characters with original text property
 interface SplitTextChar extends HTMLElement {
@@ -30,8 +31,8 @@ export default function Home() {
   const heroTitleRef = useRef<HTMLDivElement>(null);
   const heroSubtitleRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
-  const serverModelRef = useRef<ServerModel3DRef>(null);
-  const serverModelFeatRef = useRef<ServerModel3DRef>(null);
+  const serverModelRef = useRef<React.ElementRef<typeof ServerModel3D>>(null);
+  const serverModelFeatRef = useRef<React.ElementRef<typeof ServerModel3D>>(null);
   const featuresSectionRef = useRef<HTMLDivElement>(null);
   const comparisonTableRef = useRef<HTMLDivElement>(null);
   const backgroundModelRef = useRef<HTMLDivElement>(null);
