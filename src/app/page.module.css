@@ -685,7 +685,7 @@
 
 .SocialProofTitleContainer {
     width: 100%;
-    height: 250px;
+    height: fit-content;
     /* border: 1px solid red; */
     display: flex;
     align-items: flex-end;
@@ -721,7 +721,7 @@
 .LogosCarousel {
     width: 100%;
     height: fit-content;
-    background: black;
+    /* background: black; */
     overflow: hidden;
     padding: 1rem 0;
     white-space: nowrap;
@@ -825,12 +825,44 @@
 
 
 .TestimonialContainer {
-
     background: blue;
     width: 100%;
-    height: 175px;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding: 1rem;
+    overflow: hidden;
+    position: relative;
 }
 
+.TestimonialBox {
+    width: 80%;
+    aspect-ratio: 16/9;
+    /* background: red; */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: column;
+    position: absolute;
+    bottom: -100%;
+
+}
+
+.TestimonialText {
+    font-family: var(--font-space-grotesk);
+    font-size: clamp(16px, 3vw, 118px);
+}
+
+.TestimonialAuthor {
+    background: black;
+    color: white;
+    font-family: var(--font-ibm-plex-mono);
+    font-size: clamp(12px, 3vw, 14px);
+    padding: 0.2rem;
+}
 
 
 

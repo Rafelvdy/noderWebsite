@@ -74,6 +74,11 @@ export default function Home() {
   const discordRef = useRef<HTMLAnchorElement>(null);
   const telegramRef = useRef<HTMLAnchorElement>(null);
   const twitterRef = useRef<HTMLAnchorElement>(null);
+  const testimonial1Ref = useRef<HTMLDivElement>(null);
+  const testimonial2Ref = useRef<HTMLDivElement>(null);
+  const testimonial3Ref = useRef<HTMLDivElement>(null);
+  const textCarouselRef = useRef<HTMLDivElement>(null);
+  const logosCarouselRef = useRef<HTMLDivElement>(null);
 
 
   const cachedElements = useRef<{
@@ -461,40 +466,64 @@ export default function Home() {
    
 
     gsap.set(socialProofTitleRef.current, { opacity: 1 });
-    const SocialProofSplit = SplitText.create(socialProofTitleRef.current, {
-      type: "lines",
-      linesClass: "line",
-      autoSplit: true,
-      onSplit: (self) => {
-        console.log('SplitText created:', self.lines.length, 'lines'); // Debug log
-        gsap.set(self.lines, {
-          yPercent: 100,
-          opacity: 1,
-          overflow: "hidden",
-          position: "relative",
-        })
-      }
-    })
-
     const SocialProofTL = gsap.timeline({
       scrollTrigger: {
         trigger: socialProofSectionRef.current,
         start: "top top",
-        end: "200% bottom",
+        end: "300% bottom",
         pin: true,
         scrub: true,
         markers: false,
       }
     })
 
+    gsap.set(textCarouselRef.current, {
+      transform: "translateX(100%)",
+    })
+
+    gsap.set(logosCarouselRef.current, {
+      transform: "translateX(-100%)",
+    })
+
+    // gsap.set(testimonial1Ref.current, {
+    //   transform: "translateY(150%)",
+    // })
+
     SocialProofTL
-      .to(SocialProofSplit.lines, {
-        yPercent: 0,
-        opacity: 1,
-        duration: 0.3,
-        ease: "expo.out",
-        stagger: 0.15,
+      .to(textCarouselRef.current, {
+        transform: "translateX(0%)",
       })
+      .to(logosCarouselRef.current, {
+        transform: "translateX(0%)",
+      }, "<")
+      .to(testimonial1Ref.current, {
+        bottom: "25%",
+        duration: 0.5,
+      })
+      .to({}, {duration: 0.5})
+      .to(testimonial1Ref.current, {
+        bottom: "100%",
+        duration: 0.5,
+      })
+      .to(testimonial2Ref.current, {
+        bottom: "25%",
+        duration: 0.5,
+      })
+      .to({}, {duration: 0.5})
+      .to(testimonial2Ref.current, {
+        bottom: "100%",
+        duration: 0.5,
+      })
+      .to(testimonial3Ref.current, {
+        bottom: "25%",
+        duration: 0.5,
+      })
+      .to({}, {duration: 0.5})
+      .to(testimonial3Ref.current, {
+        bottom: "100%",
+        duration: 0.5,
+      })
+
 
     const ComparisonTableTL = gsap.timeline({
       scrollTrigger: {
@@ -974,7 +1003,7 @@ export default function Home() {
       <section className={styles.SocialProofSection} ref={socialProofSectionRef}>
         <div className={styles.SocialProofContent}>
         <div className={styles.SocialProofTitleContainer}>
-          <div className={styles.TextCarousel}>
+          <div className={styles.TextCarousel} ref={textCarouselRef}>
             <div className={styles.TextSlideWrapper}>
               <div className={styles.TextSlide}>
                 <h1>TRUSTED BY LEADING BUILDERS IN WEB3.</h1>
@@ -985,7 +1014,21 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className={styles.LogosCarousel}>
+        <div className={styles.TestimonialContainer}>
+          <div className={styles.TestimonialBox} ref={testimonial1Ref}>
+            <p className={styles.TestimonialText}>&quot;We went from 0 to 100 real fast. By real fast, I mean instantly. Because this is a demo and that&apos;s how demos work.&quot;</p>
+            <div className={styles.TestimonialAuthor}>Theo Fisher Lee</div>
+          </div>
+          <div className={styles.TestimonialBox} ref={testimonial2Ref}>
+            <p className={styles.TestimonialText}>&quot;If this were a real testimonial, I&apos;d be genuinely impressed. But hey, it still looks great!&quot;</p>
+            <div className={styles.TestimonialAuthor}>Michael Hardingding</div>
+          </div>
+          <div className={styles.TestimonialBox} ref={testimonial3Ref}>
+            <p className={styles.TestimonialText}>&quot;We went from 0 to 100 real fast. By real fast, I mean instantly. Because this is a demo and that&apos;s how demos work.&quot;</p>
+            <div className={styles.TestimonialAuthor}>Theo Fisher Lee</div>
+          </div>
+        </div>
+        <div className={styles.LogosCarousel} ref={logosCarouselRef}>
           <div className={styles.LogoSlideWrapper}>
             <div className={styles.LogoSlide}>
               <Image src="/logo-carousel/Allianz.png" alt="Allianz" width={100} height={100} objectFit="contain" className={styles.Logo} />
@@ -1011,9 +1054,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-          <div className={styles.TestimonialContainer}>
-
-          </div>
+          
         </div>
       </section>
 
