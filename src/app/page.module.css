@@ -314,13 +314,22 @@
 
 @media (min-width: 768px) {
     .FeaturesCardContent {
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
-        height: 800px;
+        height: fit-content;
     }
 
     .FeaturesCard {
         width: 500px;
+        justify-content: center;
+    }
+
+    .FeaturesCardTitle {
+        height: fit-content;
+    }
+
+    .FeaturesCardDescription {
+        height: fit-content;
     }
 }
 
@@ -404,6 +413,10 @@
     will-change: transform;
     z-index: 1;
     filter: invert(1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .ComparisonTableContainer {
@@ -693,10 +706,6 @@
     flex-direction: column;
     overflow: hidden;
     /* padding: 1rem; */
-}
-
-@media (min-width: 768px) {
-    
 }
 
 /* Desktop layout - testimonials on right half */
